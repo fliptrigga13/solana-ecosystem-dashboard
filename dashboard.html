@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solana Ecosystem Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  :root { --bg:#0b0f1a; --card:#111827; --border:#1f2937; --brand:#9945FF; --green:#14F195; --text:#e2e8f0; --muted:#94a3b8;}
+  * { margin:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:system-ui,-apple-system,sans-serif; padding:24px; }
+  h1 { font-size:1.6rem; } .sub { color:var(--muted); font-size:.8rem; font-family:monospace; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin:20px 0; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px; }
+  .stat .v { font-size:2rem; font-weight:700; color:var(--green); }
+  .stat .l { color:var(--muted); font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; }
+  table { width:100%; border-collapse:collapse; }
+  th,td { padding:10px; text-align:left; border-bottom:1px solid var(--border); font-size:.85rem;}
+  th { color:var(--muted); text-transform:uppercase; font-size:.7rem; }
+</style></head><body>
+<h1>🟣 Solana Ecosystem Dashboard</h1>
+<p class="sub">Auto-updated: 2026-08-24T19:28:50.625791+00:00</p>
+<div class="grid">
+  <div class="card stat"><div class="v">4,395.0</div><div class="l">Avg TPS (5h)</div></div>
+  <div class="card stat"><div class="v">5,014.0</div><div class="l">Peak TPS</div></div>
+  <div class="card stat"><div class="v">90.54%</div><div class="l">Epoch 1021 progress</div></div>
+  <div class="card stat"><div class="v">$95.75</div><div class="l">SOL price (24h: 0.78%)</div></div>
+  <div class="card stat"><div class="v">685</div><div class="l">Active validators</div></div>
+  <div class="card stat"><div class="v">10</div><div class="l">Delinquent</div></div>
+</div>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+  <div class="card"><h3>Top Validators by Stake</h3>
+    <table id="validators"><tr><th>Validator</th><th>Stake (M SOL)</th><th>Commission</th></tr></table></div>
+  <div class="card"><canvas id="stakeChart"></canvas></div>
+</div>
+<script>
+const data = {"collected_at": "2026-08-24T19:28:50.625791+00:00", "network": {"slot": 441463135, "block_height": 419512066, "epoch": 1021, "epoch_progress_pct": 90.54, "avg_tps_5h": 4395.0, "max_tps_5h": 5014.0, "validators_active": 685, "validators_delinquent": 10, "total_stake_sol_million": 433.0, "top_validators": [{"name": "Fd7btgySsrju\u2026", "stake_sol_million": 17.0, "commission": 7}, {"name": "HEL1USMZKAL2\u2026", "stake_sol_million": 16.0, "commission": 0}, {"name": "DRpbCBMxVnDK\u2026", "stake_sol_million": 12.2, "commission": 0}, {"name": "JUPiTERrZqgf\u2026", "stake_sol_million": 11.7, "commission": 5}, {"name": "C8Bey3LKVJHV\u2026", "stake_sol_million": 9.2, "commission": 7}, {"name": "CAo1dCGYrB6N\u2026", "stake_sol_million": 8.9, "commission": 10}, {"name": "E1r4Psq84tHf\u2026", "stake_sol_million": 8.5, "commission": 0}, {"name": "EvnRmnMrd69k\u2026", "stake_sol_million": 7.9, "commission": 7}, {"name": "9eGrDohdNTAo\u2026", "stake_sol_million": 7.4, "commission": 5}, {"name": "Awes4Tr6TX8J\u2026", "stake_sol_million": 6.6, "commission": 0}]}, "economic": {"defi_tvl_billion": null, "sol_price_usd": 95.75, "sol_price_change_24h_pct": 0.78, "sol_market_cap_billion": 55.85}};
+const vt = document.getElementById('validators');
+data.network.top_validators.forEach(v => {
+  vt.insertAdjacentHTML('beforeend', `<tr><td>${v.name}</td><td>${v.stake_sol_million.toLocaleString()}</td><td>${v.commission}%</td></tr>`);
+});
+new Chart(document.getElementById('stakeChart'), {
+  type: 'bar',
+  data: { labels: data.network.top_validators.map(v=>v.name),
+    datasets: [{ label: 'Stake (M SOL)', data: data.network.top_validators.map(v=>v.stake_sol_million),
+      backgroundColor: '#9945FF' }]},
+  options: { plugins:{legend:{display:false}}, scales:{ x:{ticks:{color:'#94a3b8'}}, y:{ticks:{color:'#94a3b8'}} } }
+});
+</script></body></html>

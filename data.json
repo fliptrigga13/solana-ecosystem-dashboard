@@ -1,0 +1,72 @@
+{
+ "collected_at": "2026-08-24T19:28:50.625791+00:00",
+ "network": {
+  "slot": 441463135,
+  "block_height": 419512066,
+  "epoch": 1021,
+  "epoch_progress_pct": 90.54,
+  "avg_tps_5h": 4395.0,
+  "max_tps_5h": 5014.0,
+  "validators_active": 685,
+  "validators_delinquent": 10,
+  "total_stake_sol_million": 433.0,
+  "top_validators": [
+   {
+    "name": "Fd7btgySsrju\u2026",
+    "stake_sol_million": 17.0,
+    "commission": 7
+   },
+   {
+    "name": "HEL1USMZKAL2\u2026",
+    "stake_sol_million": 16.0,
+    "commission": 0
+   },
+   {
+    "name": "DRpbCBMxVnDK\u2026",
+    "stake_sol_million": 12.2,
+    "commission": 0
+   },
+   {
+    "name": "JUPiTERrZqgf\u2026",
+    "stake_sol_million": 11.7,
+    "commission": 5
+   },
+   {
+    "name": "C8Bey3LKVJHV\u2026",
+    "stake_sol_million": 9.2,
+    "commission": 7
+   },
+   {
+    "name": "CAo1dCGYrB6N\u2026",
+    "stake_sol_million": 8.9,
+    "commission": 10
+   },
+   {
+    "name": "E1r4Psq84tHf\u2026",
+    "stake_sol_million": 8.5,
+    "commission": 0
+   },
+   {
+    "name": "EvnRmnMrd69k\u2026",
+    "stake_sol_million": 7.9,
+    "commission": 7
+   },
+   {
+    "name": "9eGrDohdNTAo\u2026",
+    "stake_sol_million": 7.4,
+    "commission": 5
+   },
+   {
+    "name": "Awes4Tr6TX8J\u2026",
+    "stake_sol_million": 6.6,
+    "commission": 0
+   }
+  ]
+ },
+ "economic": {
+  "defi_tvl_billion": null,
+  "sol_price_usd": 95.75,
+  "sol_price_change_24h_pct": 0.78,
+  "sol_market_cap_billion": 55.85
+ }
+}
