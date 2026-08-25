@@ -1,13 +1,13 @@
 # Solana Ecosystem Report
-*Auto-generated: 2026-08-25T20:44:57.856826+00:00*
+*Auto-generated: 2026-08-25T20:48:14.589482+00:00*
 
 ## Network Performance
-- **Slot:** 441,711,779 · **Block height:** 419,760,417
-- **Epoch:** 1022 (48.1% complete)
-- **Avg TPS (5h):** 4,473 · **Peak:** 5,059
+- **Slot:** 441,712,315 Â· **Block height:** 419,760,949
+- **Epoch:** 1022 (48.22% complete)
+- **Avg TPS (5h):** 4,500 Â· **Peak:** 5,085
 
 ## Validators
-- **Active:** 683 · **Delinquent:** 12
+- **Active:** 683 Â· **Delinquent:** 12
 - **Total stake:** 433.7M SOL
 
 | Validator | Stake (M SOL) | Commission |
@@ -24,8 +24,8 @@
 | Awes4Tr6TX8J… | 6.6 | 0% |
 
 ## Economic Indicators
-- **SOL price:** $97.05 (0.49% 24h)
-- **Market cap:** $56.62B
+- **SOL price:** $97.03 (0.53% 24h)
+- **Market cap:** $56.61B
 - **DeFi TVL:** $5.632B
 
 ## DeFi Depth
@@ -33,7 +33,7 @@
 - **DEX volume (24h):** $2.996B (2.0% 1d)
 - **Fees (24h):** $14.49M
 - **REV (24h):** $5.79M
-- **Avg fee per transaction (derived: 24h fees ÷ est. daily txns):** $0.0375
+- **Avg fee per transaction (derived: 24h fees Ã· est. daily txns):** $0.0373
 
 ## Tokenized Assets on Solana
 - **Top-6 RWA TVL on Solana:** $1.68B
@@ -43,5 +43,5 @@
   - Hastra: $0.164B
 
 ## Upcoming Network Upgrades
-- **[Alpenglow](https://solana.com/upgrades/alpenglow)** — Votor consensus + Rotor propagation; finality ~12.8s → ~150ms · Mainnet target Q3 2026 · BLS/VAT prereq live since Jul 22, 2026
-- **[SIMD-0525 · Reduced Slot Times](https://solana.com/upgrades/reduced-slot-times)** — Slot time 400ms → 200ms in four feature-gated steps · Step 1 activated on testnet Aug 5, 2026
+- **[Alpenglow](https://solana.com/upgrades/alpenglow)** â€” Votor consensus + Rotor propagation; finality ~12.8s → ~150ms Â· Mainnet target Q3 2026 · BLS/VAT prereq live since Jul 22, 2026
+- **[SIMD-0525 · Reduced Slot Times](https://solana.com/upgrades/reduced-slot-times)** â€” Slot time 400ms → 200ms in four feature-gated steps Â· Step 1 activated on testnet Aug 5, 2026
