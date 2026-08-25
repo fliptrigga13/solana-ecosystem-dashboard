@@ -1,16 +1,16 @@
 {
- "collected_at": "2026-08-25T21:48:02.192149+00:00",
+ "collected_at": "2026-08-25T22:48:01.182453+00:00",
  "network": {
-  "slot": 441722127,
-  "block_height": 419770757,
+  "slot": 441731988,
+  "block_height": 419780594,
   "epoch": 1022,
-  "epoch_progress_pct": 50.49,
-  "avg_tps_5h": 4434.0,
-  "max_tps_5h": 5703.0,
-  "est_daily_txns": 383102544,
-  "validators_active": 686,
-  "validators_delinquent": 9,
-  "total_stake_sol_million": 435.0,
+  "epoch_progress_pct": 52.77,
+  "avg_tps_5h": 4087.0,
+  "max_tps_5h": 4751.0,
+  "est_daily_txns": 353126880,
+  "validators_active": 682,
+  "validators_delinquent": 13,
+  "total_stake_sol_million": 434.0,
   "top_validators": [
    {
     "name": "Fd7btgySsrju\u2026",
@@ -65,10 +65,10 @@
   ]
  },
  "economic": {
-  "defi_tvl_billion": 5.631,
-  "sol_price_usd": 97.08,
-  "sol_price_change_24h_pct": 0.14,
-  "sol_market_cap_billion": 56.63
+  "defi_tvl_billion": 5.579,
+  "sol_price_usd": 97.3,
+  "sol_price_change_24h_pct": -0.38,
+  "sol_market_cap_billion": 56.76
  },
  "defi": {
   "stablecoin_supply_billion": 16.343,
@@ -76,10 +76,10 @@
   "dex_volume_change_24h_pct": 2.0,
   "fees_24h_million": 14.49,
   "rev_24h_million": 5.79,
-  "avg_fee_per_txn_usd": 0.0378
+  "avg_fee_per_txn_usd": 0.041
  },
  "rwa": {
-  "tokenized_assets_billion": 1.68,
+  "tokenized_assets_billion": 1.679,
   "rwa_top": {
    "BlackRock BUIDL": 0.876,
    "xStocks": 0.431,
@@ -89,12 +89,6 @@
  },
  "news": {
   "items": [
-   {
-    "source": "Decrypt",
-    "title": "Solana Just Got Faster\u2014Is It Bullish for SOL?",
-    "link": "https://decrypt.co/376245/solana-faster-bullish-sol-price",
-    "date": "2026-08-21"
-   },
    {
     "source": "Solana Forums",
     "title": "Decreasing number of validators, centralizing steak, and overall network health / resilience under extreme events",
@@ -136,6 +130,12 @@
     "title": "State of tinydancer / light clients on Solana",
     "link": "https://forum.solana.com/t/state-of-tinydancer-light-clients-on-solana/4762",
     "date": "2026-05-03"
+   },
+   {
+    "source": "Solana Forums",
+    "title": "SIMD-0520: On-Chain Agent Identity Standard - request for comments",
+    "link": "https://forum.solana.com/t/simd-0520-on-chain-agent-identity-standard-request-for-comments/4759",
+    "date": "2026-05-02"
    }
   ],
   "feeds_ok": 2,
