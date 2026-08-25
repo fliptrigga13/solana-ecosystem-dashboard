@@ -65,5 +65,5 @@ html = (html
         .replace("__DELINQ__", str(n["validators_delinquent"]))
         .replace("__DATA__", json.dumps(snap)))
 
-open("dashboard.html", "w", encoding="utf-8").write(html)
-print("dashboard.html written,", len(html), "bytes")
+open("index.html", "w", encoding="utf-8").write(html)
+print("index.html written,", len(html), "bytes")

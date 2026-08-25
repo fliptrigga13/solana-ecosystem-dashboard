@@ -1,10 +1,10 @@
 # Solana Ecosystem Report
-*Auto-generated: 2026-08-25T19:07:30.080033+00:00*
+*Auto-generated: 2026-08-25T19:17:37.314203+00:00*
 
 ## Network Performance
-- **Slot:** 441,695,783 · **Block height:** 419,744,453
-- **Epoch:** 1022 (44.39% complete)
-- **Avg TPS (5h):** 4,348 · **Peak:** 4,955
+- **Slot:** 441,697,444 · **Block height:** 419,746,114
+- **Epoch:** 1022 (44.78% complete)
+- **Avg TPS (5h):** 4,234 · **Peak:** 4,930
 
 ## Validators
 - **Active:** 686 · **Delinquent:** 9
@@ -24,6 +24,6 @@
 | Awes4Tr6TX8J… | 6.6 | 0% |
 
 ## Economic Indicators
-- **SOL price:** $98.36 (2.89% 24h)
-- **Market cap:** $57.36B
+- **SOL price:** $98.48 (2.9% 24h)
+- **Market cap:** $57.45B
 - **DeFi TVL:** $5.636B

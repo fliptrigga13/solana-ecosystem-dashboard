@@ -17,12 +17,12 @@
   th { color:var(--muted); text-transform:uppercase; font-size:.7rem; }
 </style></head><body>
 <h1>🟣 Solana Ecosystem Dashboard</h1>
-<p class="sub">Auto-updated: 2026-08-25T19:07:30.080033+00:00</p>
+<p class="sub">Auto-updated: 2026-08-25T19:17:37.314203+00:00</p>
 <div class="grid">
-  <div class="card stat"><div class="v">4,348.0</div><div class="l">Avg TPS (5h)</div></div>
-  <div class="card stat"><div class="v">4,955.0</div><div class="l">Peak TPS</div></div>
-  <div class="card stat"><div class="v">44.39%</div><div class="l">Epoch 1022 progress</div></div>
-  <div class="card stat"><div class="v">$98.36</div><div class="l">SOL price (24h: 2.89%)</div></div>
+  <div class="card stat"><div class="v">4,234.0</div><div class="l">Avg TPS (5h)</div></div>
+  <div class="card stat"><div class="v">4,930.0</div><div class="l">Peak TPS</div></div>
+  <div class="card stat"><div class="v">44.78%</div><div class="l">Epoch 1022 progress</div></div>
+  <div class="card stat"><div class="v">$98.48</div><div class="l">SOL price (24h: 2.9%)</div></div>
   <div class="card stat"><div class="v">686</div><div class="l">Active validators</div></div>
   <div class="card stat"><div class="v">9</div><div class="l">Delinquent</div></div>
 </div>
@@ -32,7 +32,7 @@
   <div class="card"><canvas id="stakeChart"></canvas></div>
 </div>
 <script>
-const data = {"collected_at": "2026-08-25T19:07:30.080033+00:00", "network": {"slot": 441695783, "block_height": 419744453, "epoch": 1022, "epoch_progress_pct": 44.39, "avg_tps_5h": 4348.0, "max_tps_5h": 4955.0, "validators_active": 686, "validators_delinquent": 9, "total_stake_sol_million": 434.9, "top_validators": [{"name": "Fd7btgySsrju\u2026", "stake_sol_million": 17.1, "commission": 7}, {"name": "HEL1USMZKAL2\u2026", "stake_sol_million": 16.0, "commission": 0}, {"name": "DRpbCBMxVnDK\u2026", "stake_sol_million": 12.3, "commission": 0}, {"name": "JUPiTERrZqgf\u2026", "stake_sol_million": 11.7, "commission": 5}, {"name": "C8Bey3LKVJHV\u2026", "stake_sol_million": 9.2, "commission": 7}, {"name": "CAo1dCGYrB6N\u2026", "stake_sol_million": 8.9, "commission": 10}, {"name": "E1r4Psq84tHf\u2026", "stake_sol_million": 8.6, "commission": 0}, {"name": "EvnRmnMrd69k\u2026", "stake_sol_million": 8.0, "commission": 7}, {"name": "9eGrDohdNTAo\u2026", "stake_sol_million": 7.3, "commission": 5}, {"name": "Awes4Tr6TX8J\u2026", "stake_sol_million": 6.6, "commission": 0}]}, "economic": {"defi_tvl_billion": 5.636, "sol_price_usd": 98.36, "sol_price_change_24h_pct": 2.89, "sol_market_cap_billion": 57.36}};
+const data = {"collected_at": "2026-08-25T19:17:37.314203+00:00", "network": {"slot": 441697444, "block_height": 419746114, "epoch": 1022, "epoch_progress_pct": 44.78, "avg_tps_5h": 4234.0, "max_tps_5h": 4930.0, "validators_active": 686, "validators_delinquent": 9, "total_stake_sol_million": 434.9, "top_validators": [{"name": "Fd7btgySsrju\u2026", "stake_sol_million": 17.1, "commission": 7}, {"name": "HEL1USMZKAL2\u2026", "stake_sol_million": 16.0, "commission": 0}, {"name": "DRpbCBMxVnDK\u2026", "stake_sol_million": 12.3, "commission": 0}, {"name": "JUPiTERrZqgf\u2026", "stake_sol_million": 11.7, "commission": 5}, {"name": "C8Bey3LKVJHV\u2026", "stake_sol_million": 9.2, "commission": 7}, {"name": "CAo1dCGYrB6N\u2026", "stake_sol_million": 8.9, "commission": 10}, {"name": "E1r4Psq84tHf\u2026", "stake_sol_million": 8.6, "commission": 0}, {"name": "EvnRmnMrd69k\u2026", "stake_sol_million": 8.0, "commission": 7}, {"name": "9eGrDohdNTAo\u2026", "stake_sol_million": 7.3, "commission": 5}, {"name": "Awes4Tr6TX8J\u2026", "stake_sol_million": 6.6, "commission": 0}]}, "economic": {"defi_tvl_billion": 5.636, "sol_price_usd": 98.48, "sol_price_change_24h_pct": 2.9, "sol_market_cap_billion": 57.45}};
 const vt = document.getElementById('validators');
 data.network.top_validators.forEach(v => {
   vt.insertAdjacentHTML('beforeend', `<tr><td>${v.name}</td><td>${v.stake_sol_million.toLocaleString()}</td><td>${v.commission}%</td></tr>`);
