@@ -8,7 +8,10 @@ import json
 import urllib.request
 from datetime import datetime, timezone
 
-RPC = "https://api.mainnet-beta.solana.com"
+RPC_ENDPOINTS = [
+    "https://api.mainnet-beta.solana.com",
+    "https://solana-rpc.publicnode.com",  # fallback if primary rate-limits
+]
 DEFILLAMA = "https://api.llama.fi"
 COINGECKO = "https://api.coingecko.com/api/v3"
 UA = {"User-Agent": "solana-dashboard/1.0", "Accept": "application/json"}
@@ -25,11 +28,18 @@ def _get_json(url: str, body: dict | None = None, timeout: int = 20):
 
 
 def rpc(method: str, params: list | None = None) -> dict:
-    res = _get_json(RPC, {"jsonrpc": "2.0", "id": 1,
-                          "method": method, "params": params or []})
-    if "error" in res:
-        raise RuntimeError(f"RPC error {method}: {res['error']}")
-    return res["result"]
+    last_err: Exception | None = None
+    for base in RPC_ENDPOINTS:
+        try:
+            res = _get_json(base, {"jsonrpc": "2.0", "id": 1,
+                                   "method": method, "params": params or []})
+            if "error" in res:
+                raise RuntimeError(f"RPC error {method}: {res['error']}")
+            return res["result"]
+        except Exception as exc:  # try next endpoint
+            last_err = exc
+    raise RuntimeError(f"all {len(RPC_ENDPOINTS)} RPC endpoints failed "
+                       f"for {method}: {last_err}")
 
 
 def collect_network() -> dict:
@@ -67,10 +77,13 @@ def collect_network() -> dict:
 def collect_economic() -> dict:
     out = {}
     try:
-        dl = _get_json(DEFILLAMA + "/protocols/solana")
-        out["defi_tvl_billion"] = round(dl.get("tvl", 0) / 1e9, 3)
-    except Exception:
-        out["defi_tvl_billion"] = None
+        # /v2/historicalChainTvl/<chain> — last point is current TVL.
+        # NOTE: /protocols/solana 404s (endpoint doesn't exist); that was the
+        # cause of the silent defi_tvl_billion=null on Aug 24.
+        dl = _get_json(DEFILLAMA + "/v2/historicalChainTvl/Solana")
+        out["defi_tvl_billion"] = round(dl[-1].get("tvl", 0) / 1e9, 3)
+    except Exception as exc:
+        raise RuntimeError(f"DeFiLlama TVL fetch failed: {exc}") from exc
     try:
         cg = _get_json(COINGECKO + "/simple/price?ids=solana&vs_currencies=usd"
                        "&include_24hr_change=true&include_market_cap=true")
@@ -86,7 +99,33 @@ def collect_economic() -> dict:
 def collect_all() -> dict:
     snapshot = {"collected_at": datetime.now(timezone.utc).isoformat(),
                 "network": collect_network(), "economic": collect_economic()}
+    assert_snapshot_complete(snapshot)
     return snapshot
+
+
+def assert_snapshot_complete(snapshot: dict) -> None:
+    """Loud-failure gate: refuse to publish a partial snapshot.
+
+    Every run must produce real values for the core metrics; a missing one
+    means a source broke and the pipeline should fail loudly, not silently
+    write nulls (which is how the Aug 24 TVL bug hid for a full day).
+    """
+    n, e = snapshot["network"], snapshot["economic"]
+    required = {
+        "network.slot": n.get("slot"),
+        "network.block_height": n.get("block_height"),
+        "network.epoch": n.get("epoch"),
+        "network.avg_tps_5h": n.get("avg_tps_5h"),
+        "network.validators_active": n.get("validators_active"),
+        "network.total_stake_sol_million": n.get("total_stake_sol_million"),
+        "economic.defi_tvl_billion": e.get("defi_tvl_billion"),
+        "economic.sol_price_usd": e.get("sol_price_usd"),
+    }
+    missing = [k for k, v in required.items()
+               if not isinstance(v, (int, float)) or isinstance(v, bool)
+               or v <= 0]
+    if missing:
+        raise RuntimeError(f"incomplete snapshot — missing/invalid: {missing}")
 
 
 if __name__ == "__main__":

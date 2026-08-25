@@ -1,0 +1,37 @@
+name: hourly-update
+
+on:
+  schedule:
+    - cron: '0 * * * *'   # hourly; GitHub can delay runs by a few minutes
+  workflow_dispatch: {}    # manual trigger button
+  push:
+    branches: [main]       # sanity-run on every push to main
+
+permissions:
+  contents: write          # needed to commit refreshed data back to main
+
+concurrency:
+  group: hourly-update
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Refresh data + regenerate outputs
+        id: refresh
+        run: python autoupdate.py
+
+      - name: Commit refreshed outputs
+        run: |
+          git config user.name "solana-dashboard-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data.json report.md dashboard.html data-history.jsonl
+          git diff --cached --quiet && echo "no changes" || git commit -m "data refresh $(date -u +%FT%TZ)"
+          git push

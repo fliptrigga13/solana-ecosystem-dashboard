@@ -12,6 +12,8 @@ import json
 import collector
 import anomaly
 
+MAX_CONSECUTIVE_FAILURES = 3  # loop mode: go loud (nonzero exit) after this many
+
 
 def refresh() -> dict:
     snap = collector.collect_all()
@@ -41,11 +43,23 @@ if __name__ == "__main__":
         except (IndexError, ValueError):
             pass
         print(f"auto-update loop started ({interval}s interval). Ctrl+C to stop.")
+        consecutive_failures = 0
         while True:
             try:
                 refresh()
+                consecutive_failures = 0
             except Exception as exc:
-                print(f"cycle error (continuing): {type(exc).__name__}: {exc}")
+                consecutive_failures += 1
+                print(f"CYCLE FAILURE ({consecutive_failures}/{MAX_CONSECUTIVE_FAILURES}): "
+                      f"{type(exc).__name__}: {exc}", file=sys.stderr, flush=True)
+                if consecutive_failures >= MAX_CONSECUTIVE_FAILURES:
+                    print("too many consecutive failures — exiting nonzero so the "
+                          "scheduler/Actions run shows red", file=sys.stderr)
+                    sys.exit(1)
             time.sleep(interval)
     else:
-        refresh()
+        try:
+            refresh()
+        except Exception as exc:
+            print(f"REFRESH FAILED: {type(exc).__name__}: {exc}", file=sys.stderr)
+            sys.exit(1)
