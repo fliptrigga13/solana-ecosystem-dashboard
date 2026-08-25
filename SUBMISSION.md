@@ -1,53 +1,94 @@
-# Solana Ecosystem Dashboard — Bounty Submission
+# Solana Ecosystem Dashboard — Bounty Submission (v2)
 
-Superteam Canada bounty: "Develop Solana Ecosystem Auto-Updating Report & Interactive Dashboard" (1,000 USDG).
+Superteam Canada bounty: "Develop Solana Ecosystem Auto-Updating Report &
+Interactive Dashboard" ($1,000 USDG · deadline 2026-08-31 23:59 EDT).
 
 ## What this is
 
-An automated, zero-API-key Solana ecosystem monitor producing three output formats:
-- `index.html` — dark-theme interactive dashboard (Chart.js), live on GitHub Pages: https://fliptrigga13.github.io/solana-ecosystem-dashboard/
+An automated, zero-API-key Solana ecosystem monitor producing three output
+formats from every refresh:
+
+- `index.html` — dark-theme interactive dashboard (Chart.js), live on GitHub
+  Pages: https://fliptrigga13.github.io/solana-ecosystem-dashboard/
 - `report.md` — human-readable Markdown report
+  https://github.com/fliptrigga13/solana-ecosystem-dashboard/blob/main/report.md
 - `data.json` — machine-readable snapshot
+  https://github.com/fliptrigga13/solana-ecosystem-dashboard/blob/main/data.json
 
-## Metrics covered
+## Requirements coverage (listing §5)
 
-**Network:** TPS (avg + peak over 5h), slot, block height, epoch progress
-**Validators:** active count, delinquent count, total stake, top-10 by stake with commission
-**Economic:** SOL price + 24h change, market cap, DeFi TVL
-**DeFi depth:** stablecoin circulating supply on Solana, 24h DEX volume (+1d change), 24h protocol fees, 24h REV
-**Tokenized assets (RWA):** per-chain TVL on Solana for the six largest protocols (BlackRock BUIDL, Ondo Yield Assets, xStocks, Hastra, Ondo Global Markets, Invesco USTB)
-**Upcoming upgrades panel:** Alpenglow (Votor + Rotor) and SIMD-0525 reduced slot times, with verified status lines
+| Listing asks | Shipped where |
+|---|---|
+| TPS, slot time, block height, epoch progress | Dashboard stat cards; report "Network Performance"; data.json network.* |
+| Active vs delinquent validators, stake distribution, top validators, commission tracking | Stat cards + top-10 table with commission; report "Validators" |
+| Delinquency alerts | anomaly.py threshold (>100% delinquent surge) fires WARNING/CRITICAL |
+| SOL price movements | Stat card with 24h change; ±10% anomaly threshold |
+| Stablecoin supply | DeFiLlama stablecoincharts/Solana → stat card + report |
+| DEX volume | DeFiLlama overview/dexs/Solana (24h + 1d change) |
+| REV (Real Economic Value) | DeFiLlama dailyRevenue overview → stat card + report |
+| Transaction fees | 24h protocol fees **plus derived avg fee per transaction** (24h fees ÷ est. daily txns) |
+| Tokenized asset volumes (esp. equities) | Per-chain RWA panel: BlackRock BUIDL, xStocks tokenized equities, Ondo, Hastra, Invesco USTB |
+| Ecosystem & community news | Keyless RSS section: official Solana Forums + Decrypt (Solana-filtered), rendered as linked feed |
+| Upcoming upgrades (Alpenglow, SIMD-525) | Upgrades panel with verified status lines + source links |
 
-Anomaly detection compares each run against the trailing snapshot history and
-flags deviations beyond metric-specific thresholds (e.g. ±5% stablecoin supply,
-±10% RWA TVL, ±50% DEX volume) — expanded alongside the new metrics.
+## Automation
+
+- Pipeline: `collector.py` → `anomaly.py` → `generate_report.py` +
+  `generate_dashboard.py`, orchestrated by `autoupdate.py`
+  (loop mode or one-shot per external scheduler trigger).
+- Configurable interval everywhere: `--loop <seconds>`, cron/Task Scheduler,
+  or the repo's GitHub Actions workflow `.github/workflows/update.yml`
+  (`schedule: hourly`).
+- Every refresh appends a full snapshot to `data-history.jsonl` and is
+  committed to `main` — the commit history doubles as an uptime log.
+- Zero API keys, zero third-party dependencies: Python 3.10+ stdlib only.
+
+**Honest status note (Aug 25):** GitHub Actions runs are currently blocked by
+a repository-owner account billing lock ("The job was not started because
+your account is locked due to a billing issue"). The hourly rebuild design is
+fully in place in-repo; until the lock clears, a local Task Scheduler job
+runs the identical pipeline hourly and pushes the same "data refresh"
+commits — see the commit history for real, timestamped hourly-refresh
+evidence. Commit history available on request / visible in-repo either way.
+
+## Anomaly detection
+
+Every refresh compares against a rolling window of the last 20 stored
+snapshots with metric-specific thresholds: TPS ±30%, delinquent validators
++100%, SOL price ±10%, TVL ±15%, stablecoins ±5%, DEX volume ±50%,
+fees/REV ±60%, RWA TVL ±10%. Breaches carry direction, magnitude, and
+WARNING/CRITICAL severity. A missing or zero core metric fails the run
+loudly (named RuntimeError) — partial snapshots are never published silently.
 
 ## Data sources (all free, no API keys)
 
-- Solana public RPC (`api.mainnet-beta.solana.com`): getEpochInfo, getRecentPerformanceSamples, getVoteAccounts, getTokenSupply
-- DeFiLlama public API: DeFi TVL (`api.llama.fi`), DEX volume / fees / revenue overviews (`overview/dexs`, `overview/fees`, `overview/fees?dataType=dailyRevenue`)
-- DeFiLlama stablecoins API: Solana stablecoin circulating supply (`stablecoins.llama.fi`)
-- DeFiLlama protocols + per-protocol chainTvls: tokenized-asset TVL attributed to Solana specifically (not multi-chain totals)
-- CoinGecko public API: SOL price/market cap
+- Solana public RPC `api.mainnet-beta.solana.com` (+ publicnode fallback):
+  getEpochInfo, getRecentPerformanceSamples, getVoteAccounts, getTokenSupply
+- DeFiLlama family: chain TVL, stablecoin supply, DEX volume, fees/revenue,
+  per-chain RWA protocol TVLs
+- CoinGecko public API: SOL price, market cap
+- News RSS: forum.solana.com/latest.rss + decrypt.co/feed (Solana-filtered)
 
-Every collected value passes a loud-failure gate: a missing or zero core
-metric fails the run with a named error instead of silently publishing nulls.
-
-## Run it
+## Setup & run
 
 ```bash
-python collector.py          # collect -> data.json
-python generate_report.py    # data.json -> report.md
-python generate_dashboard.py # data.json -> dashboard.html
-
-# or one-shot refresh:
-python refresh.py
+python autoupdate.py            # one refresh cycle
+python autoupdate.py --loop     # built-in hourly loop
 ```
 
-Schedule hourly via cron/Task Scheduler for an auto-updating report.
+Outputs land in `index.html` / `report.md` / `data.json`. Schedule via cron,
+Windows Task Scheduler (`watch_hourly.cmd` included), or push to GitHub and
+let Actions run it hourly.
 
-## Architecture note
+## QA evidence (executed Aug 25, 2026)
 
-Same proven pattern as Bounty Radar (github.com/fliptrigga13/bounty-radar):
-poll free sources → normalize → persist → deliver in multiple formats.
-Zero third-party dependencies; Python stdlib only.
+- Loud-failure gate: 13/13 core metrics individually nulled → named
+  RuntimeError each (qa_negative_tests.py)
+- News zero-item case → loud failure (dead-feed test)
+- Anomaly fire/quiet: injected -12.9% stablecoin move fired CRITICAL;
+  normal variation stayed silent (qa_anomaly_tests.py)
+- Live render check (dedicated headless Chrome CDP): 13 stat cards,
+  8 news links, RWA + validator tables, upgrades panel, chart canvas,
+  dark theme rgb(11,15,26) — all PASS on the deployed Pages URL
+- Live raw output check: data.json served with news items and
+  avg_fee_per_txn_usd present
