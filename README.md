@@ -19,10 +19,18 @@ Outputs after each cycle:
 
 | File | Format | Purpose |
 |---|---|---|
-| `dashboard.html` | Interactive dark-theme HTML | Human dashboard |
+| `index.html` | Interactive dark-theme HTML | Human dashboard (**live** on GitHub Pages) |
 | `report.md` | Markdown | Human-readable summary |
 | `data.json` | JSON | Machine-readable snapshot |
 | `data-history.jsonl` | JSONL | Historical snapshots for anomaly baseline |
+
+## Live deployment
+
+- **Dashboard:** https://fliptrigga13.github.io/solana-ecosystem-dashboard/
+- **Auto-update:** GitHub Actions rebuilds everything **hourly**
+  (`.github/workflows/update.yml`) and commits fresh outputs to `main` —
+  the commit history is public proof of continuous automated updates.
+- Data sources are free/public; no API keys anywhere.
 
 ## Metrics covered
 

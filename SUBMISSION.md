@@ -5,7 +5,7 @@ Superteam Canada bounty: "Develop Solana Ecosystem Auto-Updating Report & Intera
 ## What this is
 
 An automated, zero-API-key Solana ecosystem monitor producing three output formats:
-- `dashboard.html` — dark-theme interactive dashboard (Chart.js)
+- `index.html` — dark-theme interactive dashboard (Chart.js), live on GitHub Pages: https://fliptrigga13.github.io/solana-ecosystem-dashboard/
 - `report.md` — human-readable Markdown report
 - `data.json` — machine-readable snapshot
 
