@@ -6,7 +6,9 @@ for the dashboard and Markdown report generators.
 """
 import json
 import urllib.request
+import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 
 RPC_ENDPOINTS = [
     "https://api.mainnet-beta.solana.com",
@@ -15,6 +17,14 @@ RPC_ENDPOINTS = [
 DEFILLAMA = "https://api.llama.fi"
 DEFILLAMA_STABLES = "https://stablecoins.llama.fi"
 COINGECKO = "https://api.coingecko.com/api/v3"
+# Keyless news feeds for the ecosystem & community news section.
+NEWS_FEEDS = [
+    {"name": "Solana Forums", "url": "https://forum.solana.com/latest.rss",
+     "filter": None},  # official community forum — take latest topics
+    {"name": "Decrypt", "url": "https://decrypt.co/feed",
+     "filter": "solana"},  # industry feed, Solana mentions only
+]
+NEWS_MAX_ITEMS = 8
 # Top RWA protocols on Solana whose per-chain TVL we track (verified slugs).
 RWA_SLUGS = ["blackrock-buidl", "ondo-yield-assets", "xstocks",
              "hastra", "ondo-global-markets", "invesco-ustb"]
@@ -59,6 +69,10 @@ def collect_network() -> dict:
     delinquent = vote_accounts.get("delinquent", [])
     total_stake = sum(v.get("activatedStake", 0) for v in current) / 1e9  # lamports→SOL
     top_validators = sorted(current, key=lambda v: -v.get("activatedStake", 0))[:10]
+    # Estimated daily transaction count from the same performance samples
+    # (used to derive avg fee per transaction in collect_all).
+    tot_txn = sum(s.get("numTransactions") or 0 for s in perf)
+    tot_secs = sum(s.get("samplePeriodSecs") or 0 for s in perf)
     return {
         "slot": epoch.get("absoluteSlot"),
         "block_height": epoch.get("blockHeight"),
@@ -67,6 +81,7 @@ def collect_network() -> dict:
                                     max(epoch.get("slotsInEpoch", 1), 1), 2),
         "avg_tps_5h": round(sum(tps_samples) / len(tps_samples), 0) if tps_samples else None,
         "max_tps_5h": round(max(tps_samples), 0) if tps_samples else None,
+        "est_daily_txns": round(tot_txn / tot_secs * 86400) if tot_secs else None,
         "validators_active": len(current),
         "validators_delinquent": len(delinquent),
         "total_stake_sol_million": round(total_stake / 1e6, 1),
@@ -155,10 +170,62 @@ def collect_rwa() -> dict:
                                    key=lambda kv: -kv[1])[:4])}
 
 
+def fetch_news() -> dict:
+    """Ecosystem & community news from keyless RSS feeds (stdlib parser only).
+
+    Merges items newest-first, capped at NEWS_MAX_ITEMS. Loud gate: zero
+    items across every feed fails the run — an empty news section must
+    never ship silently.
+    """
+    items, errors = [], []
+    for feed in NEWS_FEEDS:
+        try:
+            req = urllib.request.Request(
+                feed["url"], headers={"User-Agent": UA["User-Agent"]})
+            with urllib.request.urlopen(req, timeout=15) as r:
+                root = ET.fromstring(r.read())
+            for it in root.iter("item"):
+                title = (it.findtext("title") or "").strip()
+                link = (it.findtext("link") or "").strip()
+                pub = (it.findtext("pubDate") or "").strip()
+                desc = (it.findtext("description") or "").strip()
+                if not title or not link:
+                    continue
+                needle = feed.get("filter")
+                if needle and needle not in (title + " " + desc).lower():
+                    continue
+                date_iso = ""
+                if pub:
+                    try:
+                        date_iso = parsedate_to_datetime(pub).date().isoformat()
+                    except (TypeError, ValueError):
+                        pass
+                items.append({"source": feed["name"],
+                              # neutralize angle brackets so titles can't inject markup
+                              "title": title[:140].replace("<", "").replace(">", ""),
+                              "link": link, "date": date_iso})
+        except Exception as exc:
+            errors.append(f"{feed['name']}: {exc}")
+    items.sort(key=lambda x: x.get("date") or "", reverse=True)
+    items = items[:NEWS_MAX_ITEMS]
+    if not items:
+        raise RuntimeError("news feeds returned zero items "
+                           f"(feed errors: {errors or 'none'})")
+    return {"items": items,
+            "feeds_ok": len(NEWS_FEEDS) - len(errors),
+            "errors": errors}
+
+
 def collect_all() -> dict:
     snapshot = {"collected_at": datetime.now(timezone.utc).isoformat(),
                 "network": collect_network(), "economic": collect_economic(),
-                "defi": collect_defi(), "rwa": collect_rwa()}
+                "defi": collect_defi(), "rwa": collect_rwa(),
+                "news": fetch_news()}
+    # Derived metric: average fee per transaction (24h fees ÷ est. daily txns).
+    txns = snapshot["network"].get("est_daily_txns")
+    fees_m = snapshot["defi"].get("fees_24h_million")
+    if isinstance(txns, (int, float)) and txns > 0 and fees_m:
+        snapshot["defi"]["avg_fee_per_txn_usd"] = round(fees_m * 1e6 / txns, 4)
     assert_snapshot_complete(snapshot)
     return snapshot
 

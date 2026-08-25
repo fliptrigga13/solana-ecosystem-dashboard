@@ -1,15 +1,16 @@
 {
- "collected_at": "2026-08-25T20:16:47.085682+00:00",
+ "collected_at": "2026-08-25T20:44:57.856826+00:00",
  "network": {
-  "slot": 441707173,
-  "block_height": 419755831,
+  "slot": 441711779,
+  "block_height": 419760417,
   "epoch": 1022,
-  "epoch_progress_pct": 47.03,
-  "avg_tps_5h": 4254.0,
-  "max_tps_5h": 5159.0,
-  "validators_active": 687,
-  "validators_delinquent": 8,
-  "total_stake_sol_million": 435.0,
+  "epoch_progress_pct": 48.1,
+  "avg_tps_5h": 4473.0,
+  "max_tps_5h": 5059.0,
+  "est_daily_txns": 386476896,
+  "validators_active": 683,
+  "validators_delinquent": 12,
+  "total_stake_sol_million": 433.7,
   "top_validators": [
    {
     "name": "Fd7btgySsrju\u2026",
@@ -64,25 +65,80 @@
   ]
  },
  "economic": {
-  "defi_tvl_billion": 5.63,
-  "sol_price_usd": 97.76,
-  "sol_price_change_24h_pct": 1.72,
-  "sol_market_cap_billion": 56.99
+  "defi_tvl_billion": 5.632,
+  "sol_price_usd": 97.05,
+  "sol_price_change_24h_pct": 0.49,
+  "sol_market_cap_billion": 56.62
  },
  "defi": {
   "stablecoin_supply_billion": 16.343,
   "dex_volume_24h_billion": 2.996,
   "dex_volume_change_24h_pct": 2.0,
   "fees_24h_million": 14.49,
-  "rev_24h_million": 5.79
+  "rev_24h_million": 5.79,
+  "avg_fee_per_txn_usd": 0.0375
  },
  "rwa": {
-  "tokenized_assets_billion": 1.632,
+  "tokenized_assets_billion": 1.68,
   "rwa_top": {
-   "BlackRock BUIDL": 0.829,
+   "BlackRock BUIDL": 0.876,
    "xStocks": 0.431,
    "Ondo Yield Assets": 0.179,
    "Hastra": 0.164
   }
+ },
+ "news": {
+  "items": [
+   {
+    "source": "Decrypt",
+    "title": "Solana Just Got Faster\u2014Is It Bullish for SOL?",
+    "link": "https://decrypt.co/376245/solana-faster-bullish-sol-price",
+    "date": "2026-08-21"
+   },
+   {
+    "source": "Solana Forums",
+    "title": "Decreasing number of validators, centralizing steak, and overall network health / resilience under extreme events",
+    "link": "https://forum.solana.com/t/decreasing-number-of-validators-centralizing-steak-and-overall-network-health-resilience-under-extreme-events/5026",
+    "date": "2026-08-12"
+   },
+   {
+    "source": "Solana Forums",
+    "title": "I lost a significant ammout of solona by mistake to offcurve account",
+    "link": "https://forum.solana.com/t/i-lost-a-significant-ammout-of-solona-by-mistake-to-offcurve-account/4944",
+    "date": "2026-07-04"
+   },
+   {
+    "source": "Solana Forums",
+    "title": "Steak Proposal - A Solana Proposal For Memecoins",
+    "link": "https://forum.solana.com/t/steak-proposal-a-solana-proposal-for-memecoins/4937",
+    "date": "2026-07-02"
+   },
+   {
+    "source": "Solana Forums",
+    "title": "SIMD-0550: Proposal to Double Disinflation",
+    "link": "https://forum.solana.com/t/simd-0550-proposal-to-double-disinflation/4874",
+    "date": "2026-06-02"
+   },
+   {
+    "source": "Solana Forums",
+    "title": "Helius-stream: a small Rust crate I extracted from a mainnet MEV experiment, sharing for feedback",
+    "link": "https://forum.solana.com/t/helius-stream-a-small-rust-crate-i-extracted-from-a-mainnet-mev-experiment-sharing-for-feedback/4810",
+    "date": "2026-05-22"
+   },
+   {
+    "source": "Solana Forums",
+    "title": "A Practical Overview of Scheduler Implementations in Solana Validators",
+    "link": "https://forum.solana.com/t/a-practical-overview-of-scheduler-implementations-in-solana-validators/4803",
+    "date": "2026-05-18"
+   },
+   {
+    "source": "Solana Forums",
+    "title": "State of tinydancer / light clients on Solana",
+    "link": "https://forum.solana.com/t/state-of-tinydancer-light-clients-on-solana/4762",
+    "date": "2026-05-03"
+   }
+  ],
+  "feeds_ok": 2,
+  "errors": []
  }
 }

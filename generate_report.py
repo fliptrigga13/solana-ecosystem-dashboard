@@ -44,6 +44,8 @@ if d.get("fees_24h_million"):
     lines.append(f"- **Fees (24h):** ${d['fees_24h_million']}M")
 if d.get("rev_24h_million"):
     lines.append(f"- **REV (24h):** ${d['rev_24h_million']}M")
+if d.get("avg_fee_per_txn_usd"):
+    lines.append(f"- **Avg fee per transaction (derived: 24h fees ÷ est. daily txns):** ${d['avg_fee_per_txn_usd']}")
 
 lines += ["", "## Tokenized Assets on Solana"]
 if r.get("tokenized_assets_billion"):

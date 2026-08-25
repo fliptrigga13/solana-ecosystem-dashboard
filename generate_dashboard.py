@@ -38,6 +38,7 @@ html = """<!DOCTYPE html>
   <div class="card stat"><div class="v">$__RWA__B</div><div class="l">Tokenized assets (top-6)</div></div>
   <div class="card stat"><div class="v">$__FEES__M</div><div class="l">Fees 24h</div></div>
   <div class="card stat"><div class="v">$__REV__M</div><div class="l">REV 24h</div></div>
+  <div class="card stat"><div class="v">$__FEE_TXN__</div><div class="l">Avg fee / txn (derived)</div></div>
   <div class="card stat"><div class="v">__VALIDATORS__</div><div class="l">Active validators</div></div>
   <div class="card stat"><div class="v">__DELINQ__</div><div class="l">Delinquent</div></div>
 </div>
@@ -51,8 +52,17 @@ html = """<!DOCTYPE html>
     <table id="rwaTable"><tr><th>Asset</th><th>TVL on Solana ($B)</th></tr></table></div>
   <div class="card"><h3>Upcoming Network Upgrades</h3><div id="upgrades"></div></div>
 </div>
+<div class="card" style="margin-top:16px;"><h3>Ecosystem &amp; Community News</h3><div id="news"></div></div>
 <script>
 const data = __DATA__;
+const ns = document.getElementById('news');
+(data.news?.items || []).forEach(item => {
+  ns.insertAdjacentHTML('beforeend',
+    `<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:.85rem;">
+       <a href="${item.link}" target="_blank" rel="noopener" style="color:#e2e8f0;text-decoration:none;">${item.title}</a>
+       <span style="font-size:.72rem;color:#94a3b8;margin-left:6px;">${item.source}${item.date ? ' · ' + item.date : ''}</span>
+     </div>`);
+});
 const vt = document.getElementById('validators');
 data.network.top_validators.forEach(v => {
   vt.insertAdjacentHTML('beforeend', `<tr><td>${v.name}</td><td>${v.stake_sol_million.toLocaleString()}</td><td>${v.commission}%</td></tr>`);
@@ -92,6 +102,7 @@ html = (html
         .replace("__RWA__", str(r.get("tokenized_assets_billion") or "—"))
         .replace("__FEES__", str(d.get("fees_24h_million") or "—"))
         .replace("__REV__", str(d.get("rev_24h_million") or "—"))
+        .replace("__FEE_TXN__", str(d.get("avg_fee_per_txn_usd") or "—"))
         .replace("__VALIDATORS__", f"{n['validators_active']:,}")
         .replace("__DELINQ__", str(n["validators_delinquent"]))
         .replace("__UPGRADES__", json.dumps(UPCOMING_UPDATES))
