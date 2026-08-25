@@ -5,6 +5,8 @@ from datetime import datetime
 
 snap = json.load(open("data.json"))
 n, e = snap["network"], snap["economic"]
+d, r = snap.get("defi", {}), snap.get("rwa", {})
+from collector import UPCOMING_UPDATES
 
 lines = [
     "# Solana Ecosystem Report",
@@ -32,6 +34,26 @@ if e.get("sol_market_cap_billion"):
     lines.append(f"- **Market cap:** ${e['sol_market_cap_billion']}B")
 if e.get("defi_tvl_billion"):
     lines.append(f"- **DeFi TVL:** ${e['defi_tvl_billion']}B")
+
+lines += ["", "## DeFi Depth"]
+if d.get("stablecoin_supply_billion"):
+    lines.append(f"- **Stablecoin supply:** ${d['stablecoin_supply_billion']}B")
+if d.get("dex_volume_24h_billion"):
+    lines.append(f"- **DEX volume (24h):** ${d['dex_volume_24h_billion']}B ({d.get('dex_volume_change_24h_pct','?')}% 1d)")
+if d.get("fees_24h_million"):
+    lines.append(f"- **Fees (24h):** ${d['fees_24h_million']}M")
+if d.get("rev_24h_million"):
+    lines.append(f"- **REV (24h):** ${d['rev_24h_million']}M")
+
+lines += ["", "## Tokenized Assets on Solana"]
+if r.get("tokenized_assets_billion"):
+    lines.append(f"- **Top-6 RWA TVL on Solana:** ${r['tokenized_assets_billion']}B")
+for name, tvl in (r.get("rwa_top") or {}).items():
+    lines.append(f"  - {name}: ${tvl}B")
+
+lines += ["", "## Upcoming Network Upgrades"]
+for u in UPCOMING_UPDATES:
+    lines.append(f"- **[{u['name']}]({u['url']})** — {u['detail']} · {u['status']}")
 
 open("report.md", "w", encoding="utf-8").write("\n".join(lines))
 print("report.md written,", len(lines), "lines")

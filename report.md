@@ -1,10 +1,10 @@
 # Solana Ecosystem Report
-*Auto-generated: 2026-08-25T19:17:37.314203+00:00*
+*Auto-generated: 2026-08-25T19:58:22.395759+00:00*
 
 ## Network Performance
-- **Slot:** 441,697,444 · **Block height:** 419,746,114
-- **Epoch:** 1022 (44.78% complete)
-- **Avg TPS (5h):** 4,234 · **Peak:** 4,930
+- **Slot:** 441,704,160 · **Block height:** 419,752,830
+- **Epoch:** 1022 (46.33% complete)
+- **Avg TPS (5h):** 4,070 · **Peak:** 4,592
 
 ## Validators
 - **Active:** 686 · **Delinquent:** 9
@@ -24,6 +24,23 @@
 | Awes4Tr6TX8J… | 6.6 | 0% |
 
 ## Economic Indicators
-- **SOL price:** $98.48 (2.9% 24h)
-- **Market cap:** $57.45B
-- **DeFi TVL:** $5.636B
+- **SOL price:** $97.76 (1.34% 24h)
+- **Market cap:** $57.04B
+- **DeFi TVL:** $5.635B
+
+## DeFi Depth
+- **Stablecoin supply:** $16.343B
+- **DEX volume (24h):** $2.996B (2.0% 1d)
+- **Fees (24h):** $14.49M
+- **REV (24h):** $5.79M
+
+## Tokenized Assets on Solana
+- **Top-6 RWA TVL on Solana:** $1.632B
+  - BlackRock BUIDL: $0.829B
+  - xStocks: $0.431B
+  - Ondo Yield Assets: $0.179B
+  - Hastra: $0.164B
+
+## Upcoming Network Upgrades
+- **[Alpenglow](https://solana.com/upgrades/alpenglow)** — Votor consensus + Rotor propagation; finality ~12.8s → ~150ms · Mainnet target Q3 2026 · BLS/VAT prereq live since Jul 22, 2026
+- **[SIMD-0525 · Reduced Slot Times](https://solana.com/upgrades/reduced-slot-times)** — Slot time 400ms → 200ms in four feature-gated steps · Step 1 activated on testnet Aug 5, 2026

@@ -16,6 +16,12 @@ THRESHOLDS = {
     "validators_delinquent": 1.0, # 100% increase in delinquent validators
     "sol_price_usd": 0.10,        # 10% SOL price move
     "defi_tvl_billion": 0.15,     # 15% TVL change
+    # expanded metrics (Days 2-5)
+    "stablecoin_supply_billion": 0.05,   # 5% stablecoin supply move (depeg/flight)
+    "dex_volume_24h_billion": 0.50,      # 50% DEX volume move (volume is volatile)
+    "fees_24h_million": 0.60,            # 60% fee move (congestion/lull signal)
+    "rev_24h_million": 0.60,             # 60% REV move
+    "tokenized_assets_billion": 0.10,    # 10% RWA TVL move (mint/redeem events)
 }
 
 
@@ -42,11 +48,17 @@ def append_history(snap: dict) -> None:
 def _flat_metrics(snap: dict) -> dict:
     """Flatten nested snapshot into comparable scalar metrics."""
     n, e = snap.get("network", {}), snap.get("economic", {})
+    d, r = snap.get("defi", {}), snap.get("rwa", {})
     return {
         "avg_tps_5h": n.get("avg_tps_5h"),
         "validators_delinquent": n.get("validators_delinquent"),
         "sol_price_usd": e.get("sol_price_usd"),
         "defi_tvl_billion": e.get("defi_tvl_billion"),
+        "stablecoin_supply_billion": d.get("stablecoin_supply_billion"),
+        "dex_volume_24h_billion": d.get("dex_volume_24h_billion"),
+        "fees_24h_million": d.get("fees_24h_million"),
+        "rev_24h_million": d.get("rev_24h_million"),
+        "tokenized_assets_billion": r.get("tokenized_assets_billion"),
     }
 
 

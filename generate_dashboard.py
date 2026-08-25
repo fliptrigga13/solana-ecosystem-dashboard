@@ -4,6 +4,8 @@ import json
 
 snap = json.load(open("data.json"))
 n, e = snap["network"], snap["economic"]
+d, r = snap.get("defi", {}), snap.get("rwa", {})
+from collector import UPCOMING_UPDATES
 
 html = """<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8">
@@ -30,6 +32,12 @@ html = """<!DOCTYPE html>
   <div class="card stat"><div class="v">__MAX_TPS__</div><div class="l">Peak TPS</div></div>
   <div class="card stat"><div class="v">__EPOCH_PCT__%</div><div class="l">Epoch __EPOCH__ progress</div></div>
   <div class="card stat"><div class="v">$__SOL_PRICE__</div><div class="l">SOL price (24h: __SOL_CHG__%)</div></div>
+  <div class="card stat"><div class="v">$__DEFI_TVL__B</div><div class="l">DeFi TVL</div></div>
+  <div class="card stat"><div class="v">$__STABLES__B</div><div class="l">Stablecoin supply</div></div>
+  <div class="card stat"><div class="v">$__DEX_VOL__B</div><div class="l">DEX volume 24h (__DEX_CHG__%)</div></div>
+  <div class="card stat"><div class="v">$__RWA__B</div><div class="l">Tokenized assets (top-6)</div></div>
+  <div class="card stat"><div class="v">$__FEES__M</div><div class="l">Fees 24h</div></div>
+  <div class="card stat"><div class="v">$__REV__M</div><div class="l">REV 24h</div></div>
   <div class="card stat"><div class="v">__VALIDATORS__</div><div class="l">Active validators</div></div>
   <div class="card stat"><div class="v">__DELINQ__</div><div class="l">Delinquent</div></div>
 </div>
@@ -38,11 +46,27 @@ html = """<!DOCTYPE html>
     <table id="validators"><tr><th>Validator</th><th>Stake (M SOL)</th><th>Commission</th></tr></table></div>
   <div class="card"><canvas id="stakeChart"></canvas></div>
 </div>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px;">
+  <div class="card"><h3>Tokenized Assets on Solana (RWA)</h3>
+    <table id="rwaTable"><tr><th>Asset</th><th>TVL on Solana ($B)</th></tr></table></div>
+  <div class="card"><h3>Upcoming Network Upgrades</h3><div id="upgrades"></div></div>
+</div>
 <script>
 const data = __DATA__;
 const vt = document.getElementById('validators');
 data.network.top_validators.forEach(v => {
   vt.insertAdjacentHTML('beforeend', `<tr><td>${v.name}</td><td>${v.stake_sol_million.toLocaleString()}</td><td>${v.commission}%</td></tr>`);
+});
+const rt = document.getElementById('rwaTable');
+Object.entries(data.rwa?.rwa_top || {}).forEach(([name, tvl]) => {
+  rt.insertAdjacentHTML('beforeend', `<tr><td>${name}</td><td>$${tvl.toLocaleString()}</td></tr>`);
+});
+const up = document.getElementById('upgrades');
+__UPGRADES__.forEach(u => {
+  up.insertAdjacentHTML('beforeend',
+    `<div style="margin-bottom:12px;"><a href="${u.url}" target="_blank" rel="noopener" style="color:#14F195;text-decoration:none;font-weight:600;">${u.name}</a>
+     <div style="font-size:.8rem;color:#e2e8f0;margin-top:2px;">${u.detail}</div>
+     <div style="font-size:.72rem;color:#94a3b8;">${u.status}</div></div>`);
 });
 new Chart(document.getElementById('stakeChart'), {
   type: 'bar',
@@ -61,8 +85,16 @@ html = (html
         .replace("__EPOCH__", str(n["epoch"]))
         .replace("__SOL_PRICE__", str(e.get("sol_price_usd") or "—"))
         .replace("__SOL_CHG__", str(e.get("sol_price_change_24h_pct") or "—"))
+        .replace("__DEFI_TVL__", str(e.get("defi_tvl_billion") or "—"))
+        .replace("__STABLES__", str(d.get("stablecoin_supply_billion") or "—"))
+        .replace("__DEX_VOL__", str(d.get("dex_volume_24h_billion") or "—"))
+        .replace("__DEX_CHG__", str(d.get("dex_volume_change_24h_pct") if d.get("dex_volume_change_24h_pct") is not None else "—"))
+        .replace("__RWA__", str(r.get("tokenized_assets_billion") or "—"))
+        .replace("__FEES__", str(d.get("fees_24h_million") or "—"))
+        .replace("__REV__", str(d.get("rev_24h_million") or "—"))
         .replace("__VALIDATORS__", f"{n['validators_active']:,}")
         .replace("__DELINQ__", str(n["validators_delinquent"]))
+        .replace("__UPGRADES__", json.dumps(UPCOMING_UPDATES))
         .replace("__DATA__", json.dumps(snap)))
 
 open("index.html", "w", encoding="utf-8").write(html)

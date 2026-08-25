@@ -13,7 +13,11 @@ RPC_ENDPOINTS = [
     "https://solana-rpc.publicnode.com",  # fallback if primary rate-limits
 ]
 DEFILLAMA = "https://api.llama.fi"
+DEFILLAMA_STABLES = "https://stablecoins.llama.fi"
 COINGECKO = "https://api.coingecko.com/api/v3"
+# Top RWA protocols on Solana whose per-chain TVL we track (verified slugs).
+RWA_SLUGS = ["blackrock-buidl", "ondo-yield-assets", "xstocks",
+             "hastra", "ondo-global-markets", "invesco-ustb"]
 UA = {"User-Agent": "solana-dashboard/1.0", "Accept": "application/json"}
 
 
@@ -96,11 +100,80 @@ def collect_economic() -> dict:
     return out
 
 
+def collect_defi() -> dict:
+    """DeFi depth metrics from the same zero-key DeFiLlama family of APIs."""
+    out = {}
+    # Stablecoin circulating supply on Solana (last point of the chain chart).
+    dl = _get_json(DEFILLAMA_STABLES + "/stablecoincharts/Solana")
+    peg = (dl[-1].get("totalCirculating") or {}).get("peggedUSD")
+    if not isinstance(peg, (int, float)) or peg <= 0:
+        raise RuntimeError(f"stablecoin supply missing/invalid: {peg!r}")
+    out["stablecoin_supply_billion"] = round(peg / 1e9, 3)
+
+    # DEX volume + fees/revenue overviews share one response shape.
+    dex = _get_json(DEFILLAMA + "/overview/dexs/Solana")
+    if not isinstance(dex.get("total24h"), (int, float)) or dex["total24h"] <= 0:
+        raise RuntimeError(f"DEX volume missing/invalid: {dex.get('total24h')!r}")
+    out["dex_volume_24h_billion"] = round(dex["total24h"] / 1e9, 3)
+    out["dex_volume_change_24h_pct"] = round(dex.get("change_1d") or 0, 1)
+
+    fees = _get_json(DEFILLAMA + "/overview/fees/Solana")
+    rev = _get_json(DEFILLAMA +
+                    "/overview/fees/Solana?dataType=dailyRevenue")
+    for key, payload in (("fees_24h_million", fees), ("rev_24h_million", rev)):
+        v = payload.get("total24h")
+        if not isinstance(v, (int, float)) or v <= 0:
+            raise RuntimeError(f"{key} missing/invalid: {v!r}")
+        out[key] = round(v / 1e6, 2)
+    return out
+
+
+def collect_rwa() -> dict:
+    """Tokenized real-world assets deployed on Solana.
+
+    Uses each protocol's per-chain TVL (chainTvls.Solana), NOT the
+    protocol-total figure — several of these are multi-chain and the total
+    would overcount by ~6x.
+    """
+    protocols = {p.get("slug"): p for p in _get_json(DEFILLAMA + "/protocols")}
+    breakdown, total = {}, 0.0
+    for slug in RWA_SLUGS:
+        p = protocols.get(slug)
+        if not p:
+            continue  # slug renamed upstream; skip rather than fail the run
+        detail = _get_json(f"{DEFILLAMA}/protocol/{slug}")
+        sol_series = ((detail.get("chainTvls") or {}).get("Solana") or {}).get("tvl") or []
+        if not sol_series:
+            raise RuntimeError(f"RWA {slug}: no Solana TVL series")
+        val = sol_series[-1].get("totalLiquidityUSD", 0) / 1e9
+        breakdown[p.get("name", slug)] = round(val, 3)
+        total += val
+    if total <= 0:
+        raise RuntimeError("RWA sum is zero/empty — source likely broken")
+    return {"tokenized_assets_billion": round(total, 3),
+            "rwa_top": dict(sorted(breakdown.items(),
+                                   key=lambda kv: -kv[1])[:4])}
+
+
 def collect_all() -> dict:
     snapshot = {"collected_at": datetime.now(timezone.utc).isoformat(),
-                "network": collect_network(), "economic": collect_economic()}
+                "network": collect_network(), "economic": collect_economic(),
+                "defi": collect_defi(), "rwa": collect_rwa()}
     assert_snapshot_complete(snapshot)
     return snapshot
+
+
+UPCOMING_UPDATES = [
+    # Facts verified 2026-08-25 against solana.com/upgrades pages.
+    {"name": "Alpenglow",
+     "detail": "Votor consensus + Rotor propagation; finality ~12.8s → ~150ms",
+     "status": "Mainnet target Q3 2026 · BLS/VAT prereq live since Jul 22, 2026",
+     "url": "https://solana.com/upgrades/alpenglow"},
+    {"name": "SIMD-0525 · Reduced Slot Times",
+     "detail": "Slot time 400ms → 200ms in four feature-gated steps",
+     "status": "Step 1 activated on testnet Aug 5, 2026",
+     "url": "https://solana.com/upgrades/reduced-slot-times"},
+]
 
 
 def assert_snapshot_complete(snapshot: dict) -> None:
@@ -111,6 +184,7 @@ def assert_snapshot_complete(snapshot: dict) -> None:
     write nulls (which is how the Aug 24 TVL bug hid for a full day).
     """
     n, e = snapshot["network"], snapshot["economic"]
+    d, r = snapshot.get("defi", {}), snapshot.get("rwa", {})
     required = {
         "network.slot": n.get("slot"),
         "network.block_height": n.get("block_height"),
@@ -120,6 +194,11 @@ def assert_snapshot_complete(snapshot: dict) -> None:
         "network.total_stake_sol_million": n.get("total_stake_sol_million"),
         "economic.defi_tvl_billion": e.get("defi_tvl_billion"),
         "economic.sol_price_usd": e.get("sol_price_usd"),
+        "defi.stablecoin_supply_billion": d.get("stablecoin_supply_billion"),
+        "defi.dex_volume_24h_billion": d.get("dex_volume_24h_billion"),
+        "defi.fees_24h_million": d.get("fees_24h_million"),
+        "defi.rev_24h_million": d.get("rev_24h_million"),
+        "rwa.tokenized_assets_billion": r.get("tokenized_assets_billion"),
     }
     missing = [k for k, v in required.items()
                if not isinstance(v, (int, float)) or isinstance(v, bool)
