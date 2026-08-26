@@ -1,14 +1,14 @@
 # Solana Ecosystem Report
-*Auto-generated: 2026-08-26T19:48:37.643030+00:00*
+*Auto-generated: 2026-08-26T20:48:03.658316+00:00*
 
 ## Network Performance
-- **Slot:** 441,939,027 Â· **Block height:** 419,987,436
-- **Epoch:** 1023 (0.7% complete)
-- **Avg TPS (5h):** 4,416 Â· **Peak:** 5,143
+- **Slot:** 441,948,724 Â· **Block height:** 419,997,108
+- **Epoch:** 1023 (2.95% complete)
+- **Avg TPS (5h):** 4,651 Â· **Peak:** 5,136
 
 ## Validators
-- **Active:** 685 Â· **Delinquent:** 11
-- **Total stake:** 436.6M SOL
+- **Active:** 684 Â· **Delinquent:** 12
+- **Total stake:** 436.5M SOL
 
 | Validator | Stake (M SOL) | Commission |
 |---|---|---|
@@ -24,23 +24,23 @@
 | Awes4Tr6TX8J… | 6.6 | 0% |
 
 ## Economic Indicators
-- **SOL price:** $96.65 (-1.05% 24h)
+- **SOL price:** $96.64 (-0.15% 24h)
 - **Market cap:** $56.44B
-- **DeFi TVL:** $5.568B
+- **DeFi TVL:** $5.59B
 
 ## DeFi Depth
 - **Stablecoin supply:** $16.229B
 - **DEX volume (24h):** $2.935B (-2.0% 1d)
 - **Fees (24h):** $13.24M
 - **REV (24h):** $5.82M
-- **Avg fee per transaction (derived: 24h fees Ã· est. daily txns):** $0.0347
+- **Avg fee per transaction (derived: 24h fees Ã· est. daily txns):** $0.0329
 
 ## Tokenized Assets on Solana
-- **Top-6 RWA TVL on Solana:** $1.686B
+- **Top-6 RWA TVL on Solana:** $1.685B
   - BlackRock BUIDL: $0.886B
-  - xStocks: $0.426B
+  - xStocks: $0.427B
   - Ondo Yield Assets: $0.179B
-  - Hastra: $0.165B
+  - Hastra: $0.162B
 
 ## Upcoming Network Upgrades
 - **[Alpenglow](https://solana.com/upgrades/alpenglow)** â€” Votor consensus + Rotor propagation; finality ~12.8s → ~150ms Â· Mainnet target Q3 2026 · BLS/VAT prereq live since Jul 22, 2026
