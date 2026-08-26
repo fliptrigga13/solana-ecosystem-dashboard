@@ -1,16 +1,16 @@
 {
- "collected_at": "2026-08-26T17:48:01.232499+00:00",
+ "collected_at": "2026-08-26T18:48:01.485346+00:00",
  "network": {
-  "slot": 441919252,
-  "block_height": 419967717,
+  "slot": 441929100,
+  "block_height": 419977553,
   "epoch": 1022,
-  "epoch_progress_pct": 96.12,
-  "avg_tps_5h": 4266.0,
-  "max_tps_5h": 5445.0,
-  "est_daily_txns": 368598864,
+  "epoch_progress_pct": 98.4,
+  "avg_tps_5h": 4342.0,
+  "max_tps_5h": 5263.0,
+  "est_daily_txns": 375143736,
   "validators_active": 686,
   "validators_delinquent": 9,
-  "total_stake_sol_million": 434.9,
+  "total_stake_sol_million": 434.8,
   "top_validators": [
    {
     "name": "Fd7btgySsrju\u2026",
@@ -65,10 +65,10 @@
   ]
  },
  "economic": {
-  "defi_tvl_billion": 5.551,
-  "sol_price_usd": 97.17,
-  "sol_price_change_24h_pct": -0.85,
-  "sol_market_cap_billion": 56.75
+  "defi_tvl_billion": 5.554,
+  "sol_price_usd": 96.74,
+  "sol_price_change_24h_pct": -2.0,
+  "sol_market_cap_billion": 56.5
  },
  "defi": {
   "stablecoin_supply_billion": 16.229,
@@ -76,19 +76,25 @@
   "dex_volume_change_24h_pct": -2.0,
   "fees_24h_million": 13.24,
   "rev_24h_million": 5.82,
-  "avg_fee_per_txn_usd": 0.0359
+  "avg_fee_per_txn_usd": 0.0353
  },
  "rwa": {
-  "tokenized_assets_billion": 1.671,
+  "tokenized_assets_billion": 1.672,
   "rwa_top": {
    "BlackRock BUIDL": 0.876,
-   "xStocks": 0.425,
+   "xStocks": 0.426,
    "Ondo Yield Assets": 0.179,
    "Hastra": 0.16
   }
  },
  "news": {
   "items": [
+   {
+    "source": "Decrypt",
+    "title": "Solana Treasury Firm Invites Investors to Look 'Beyond the Price of SOL'",
+    "link": "https://decrypt.co/376619/solana-treasury-sol-data-beyond-price",
+    "date": "2026-08-26"
+   },
    {
     "source": "Solana Forums",
     "title": "Decreasing number of validators, centralizing steak, and overall network health / resilience under extreme events",
@@ -130,12 +136,6 @@
     "title": "State of tinydancer / light clients on Solana",
     "link": "https://forum.solana.com/t/state-of-tinydancer-light-clients-on-solana/4762",
     "date": "2026-05-03"
-   },
-   {
-    "source": "Solana Forums",
-    "title": "SIMD-0520: On-Chain Agent Identity Standard - request for comments",
-    "link": "https://forum.solana.com/t/simd-0520-on-chain-agent-identity-standard-request-for-comments/4759",
-    "date": "2026-05-02"
    }
   ],
   "feeds_ok": 2,
