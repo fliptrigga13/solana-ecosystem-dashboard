@@ -1,16 +1,16 @@
 {
- "collected_at": "2026-08-26T18:48:01.485346+00:00",
+ "collected_at": "2026-08-26T19:48:37.643030+00:00",
  "network": {
-  "slot": 441929100,
-  "block_height": 419977553,
-  "epoch": 1022,
-  "epoch_progress_pct": 98.4,
-  "avg_tps_5h": 4342.0,
-  "max_tps_5h": 5263.0,
-  "est_daily_txns": 375143736,
-  "validators_active": 686,
-  "validators_delinquent": 9,
-  "total_stake_sol_million": 434.8,
+  "slot": 441939027,
+  "block_height": 419987436,
+  "epoch": 1023,
+  "epoch_progress_pct": 0.7,
+  "avg_tps_5h": 4416.0,
+  "max_tps_5h": 5143.0,
+  "est_daily_txns": 381535920,
+  "validators_active": 685,
+  "validators_delinquent": 11,
+  "total_stake_sol_million": 436.6,
   "top_validators": [
    {
     "name": "Fd7btgySsrju\u2026",
@@ -29,7 +29,7 @@
    },
    {
     "name": "JUPiTERrZqgf\u2026",
-    "stake_sol_million": 11.7,
+    "stake_sol_million": 11.8,
     "commission": 5
    },
    {
@@ -38,18 +38,18 @@
     "commission": 7
    },
    {
+    "name": "E1r4Psq84tHf\u2026",
+    "stake_sol_million": 9.1,
+    "commission": 0
+   },
+   {
     "name": "CAo1dCGYrB6N\u2026",
     "stake_sol_million": 8.9,
     "commission": 10
    },
    {
-    "name": "E1r4Psq84tHf\u2026",
-    "stake_sol_million": 8.6,
-    "commission": 0
-   },
-   {
     "name": "EvnRmnMrd69k\u2026",
-    "stake_sol_million": 8.0,
+    "stake_sol_million": 7.8,
     "commission": 7
    },
    {
@@ -65,10 +65,10 @@
   ]
  },
  "economic": {
-  "defi_tvl_billion": 5.554,
-  "sol_price_usd": 96.74,
-  "sol_price_change_24h_pct": -2.0,
-  "sol_market_cap_billion": 56.5
+  "defi_tvl_billion": 5.568,
+  "sol_price_usd": 96.65,
+  "sol_price_change_24h_pct": -1.05,
+  "sol_market_cap_billion": 56.44
  },
  "defi": {
   "stablecoin_supply_billion": 16.229,
@@ -76,15 +76,15 @@
   "dex_volume_change_24h_pct": -2.0,
   "fees_24h_million": 13.24,
   "rev_24h_million": 5.82,
-  "avg_fee_per_txn_usd": 0.0353
+  "avg_fee_per_txn_usd": 0.0347
  },
  "rwa": {
-  "tokenized_assets_billion": 1.672,
+  "tokenized_assets_billion": 1.686,
   "rwa_top": {
-   "BlackRock BUIDL": 0.876,
+   "BlackRock BUIDL": 0.886,
    "xStocks": 0.426,
    "Ondo Yield Assets": 0.179,
-   "Hastra": 0.16
+   "Hastra": 0.165
   }
  },
  "news": {
