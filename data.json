@@ -1,16 +1,16 @@
 {
- "collected_at": "2026-08-26T09:48:01.386246+00:00",
+ "collected_at": "2026-08-26T11:48:01.427511+00:00",
  "network": {
-  "slot": 441840547,
-  "block_height": 419889068,
+  "slot": 441860225,
+  "block_height": 419908742,
   "epoch": 1022,
-  "epoch_progress_pct": 77.9,
-  "avg_tps_5h": 3383.0,
-  "max_tps_5h": 4127.0,
-  "est_daily_txns": 292255896,
-  "validators_active": 686,
-  "validators_delinquent": 9,
-  "total_stake_sol_million": 435.0,
+  "epoch_progress_pct": 82.46,
+  "avg_tps_5h": 3555.0,
+  "max_tps_5h": 4025.0,
+  "est_daily_txns": 307189488,
+  "validators_active": 685,
+  "validators_delinquent": 10,
+  "total_stake_sol_million": 434.9,
   "top_validators": [
    {
     "name": "Fd7btgySsrju\u2026",
@@ -65,24 +65,24 @@
   ]
  },
  "economic": {
-  "defi_tvl_billion": 5.6,
-  "sol_price_usd": 96.01,
-  "sol_price_change_24h_pct": -4.36,
-  "sol_market_cap_billion": 56.0
+  "defi_tvl_billion": 5.596,
+  "sol_price_usd": 96.94,
+  "sol_price_change_24h_pct": -1.84,
+  "sol_market_cap_billion": 56.55
  },
  "defi": {
   "stablecoin_supply_billion": 16.229,
-  "dex_volume_24h_billion": 2.949,
-  "dex_volume_change_24h_pct": -1.6,
-  "fees_24h_million": 13.03,
-  "rev_24h_million": 5.74,
-  "avg_fee_per_txn_usd": 0.0446
+  "dex_volume_24h_billion": 2.935,
+  "dex_volume_change_24h_pct": -2.0,
+  "fees_24h_million": 13.13,
+  "rev_24h_million": 5.82,
+  "avg_fee_per_txn_usd": 0.0427
  },
  "rwa": {
-  "tokenized_assets_billion": 1.677,
+  "tokenized_assets_billion": 1.676,
   "rwa_top": {
    "BlackRock BUIDL": 0.876,
-   "xStocks": 0.429,
+   "xStocks": 0.428,
    "Ondo Yield Assets": 0.179,
    "Hastra": 0.163
   }
