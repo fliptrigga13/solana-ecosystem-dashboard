@@ -1,14 +1,14 @@
 # Solana Ecosystem Report
-*Auto-generated: 2026-08-27T00:48:03.021013+00:00*
+*Auto-generated: 2026-08-27T01:48:02.545370+00:00*
 
 ## Network Performance
-- **Slot:** 441,988,040 Â· **Block height:** 420,036,382
-- **Epoch:** 1023 (12.05% complete)
-- **Avg TPS (5h):** 4,389 Â· **Peak:** 4,909
+- **Slot:** 441,997,859 Â· **Block height:** 420,046,185
+- **Epoch:** 1023 (14.32% complete)
+- **Avg TPS (5h):** 4,439 Â· **Peak:** 5,092
 
 ## Validators
-- **Active:** 682 Â· **Delinquent:** 15
-- **Total stake:** 436.1M SOL
+- **Active:** 685 Â· **Delinquent:** 12
+- **Total stake:** 436.7M SOL
 
 | Validator | Stake (M SOL) | Commission |
 |---|---|---|
@@ -24,21 +24,21 @@
 | Awes4Tr6TX8J… | 6.6 | 0% |
 
 ## Economic Indicators
-- **SOL price:** $100.98 (4.68% 24h)
-- **Market cap:** $59.01B
-- **DeFi TVL:** $5.689B
+- **SOL price:** $101.36 (4.53% 24h)
+- **Market cap:** $59.2B
+- **DeFi TVL:** $5.697B
 
 ## DeFi Depth
 - **Stablecoin supply:** $16.229B
-- **DEX volume (24h):** $2.674B (-8.9% 1d)
+- **DEX volume (24h):** $2.491B (-15.1% 1d)
 - **Fees (24h):** $12.99M
-- **REV (24h):** $5.63M
-- **Avg fee per transaction (derived: 24h fees Ã· est. daily txns):** $0.0343
+- **REV (24h):** $5.62M
+- **Avg fee per transaction (derived: 24h fees Ã· est. daily txns):** $0.0339
 
 ## Tokenized Assets on Solana
-- **Top-6 RWA TVL on Solana:** $1.687B
+- **Top-6 RWA TVL on Solana:** $1.688B
   - BlackRock BUIDL: $0.886B
-  - xStocks: $0.429B
+  - xStocks: $0.43B
   - Ondo Yield Assets: $0.179B
   - Hastra: $0.162B
 
