@@ -1,16 +1,16 @@
 {
- "collected_at": "2026-08-27T11:48:01.576664+00:00",
+ "collected_at": "2026-08-27T23:48:03.023632+00:00",
  "network": {
-  "slot": 442096486,
-  "block_height": 420144753,
+  "slot": 442214323,
+  "block_height": 420262510,
   "epoch": 1023,
-  "epoch_progress_pct": 37.15,
-  "avg_tps_5h": 3597.0,
-  "max_tps_5h": 4306.0,
-  "est_daily_txns": 310746192,
-  "validators_active": 686,
-  "validators_delinquent": 11,
-  "total_stake_sol_million": 436.8,
+  "epoch_progress_pct": 64.43,
+  "avg_tps_5h": 4149.0,
+  "max_tps_5h": 4805.0,
+  "est_daily_txns": 358488024,
+  "validators_active": 687,
+  "validators_delinquent": 10,
+  "total_stake_sol_million": 432.9,
   "top_validators": [
    {
     "name": "Fd7btgySsrju\u2026",
@@ -65,30 +65,36 @@
   ]
  },
  "economic": {
-  "defi_tvl_billion": 5.884,
-  "sol_price_usd": 103.91,
-  "sol_price_change_24h_pct": 7.29,
-  "sol_market_cap_billion": 60.69
+  "defi_tvl_billion": 5.947,
+  "sol_price_usd": 109.23,
+  "sol_price_change_24h_pct": 7.62,
+  "sol_market_cap_billion": 63.79
  },
  "defi": {
   "stablecoin_supply_billion": 16.206,
   "dex_volume_24h_billion": 2.352,
   "dex_volume_change_24h_pct": -19.9,
-  "fees_24h_million": 15.04,
-  "rev_24h_million": 6.27,
-  "avg_fee_per_txn_usd": 0.0484
+  "fees_24h_million": 15.17,
+  "rev_24h_million": 6.28,
+  "avg_fee_per_txn_usd": 0.0423
  },
  "rwa": {
-  "tokenized_assets_billion": 1.688,
+  "tokenized_assets_billion": 1.696,
   "rwa_top": {
    "BlackRock BUIDL": 0.886,
-   "xStocks": 0.431,
+   "xStocks": 0.441,
    "Ondo Yield Assets": 0.179,
-   "Hastra": 0.161
+   "Hastra": 0.159
   }
  },
  "news": {
   "items": [
+   {
+    "source": "Decrypt",
+    "title": "Solana Is Having Its Best Month Since 2024\u2014With a Historic Governance Vote on Deck",
+    "link": "https://decrypt.co/376706/solana-best-month-since-2024-historic-governance-vote",
+    "date": "2026-08-27"
+   },
    {
     "source": "Decrypt",
     "title": "Galaxy Opens Retail Crypto-Backed Credit Lines on Bitcoin, Ethereum and Solana",
@@ -130,12 +136,6 @@
     "title": "Helius-stream: a small Rust crate I extracted from a mainnet MEV experiment, sharing for feedback",
     "link": "https://forum.solana.com/t/helius-stream-a-small-rust-crate-i-extracted-from-a-mainnet-mev-experiment-sharing-for-feedback/4810",
     "date": "2026-05-22"
-   },
-   {
-    "source": "Solana Forums",
-    "title": "A Practical Overview of Scheduler Implementations in Solana Validators",
-    "link": "https://forum.solana.com/t/a-practical-overview-of-scheduler-implementations-in-solana-validators/4803",
-    "date": "2026-05-18"
    }
   ],
   "feeds_ok": 2,
