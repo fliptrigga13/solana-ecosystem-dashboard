@@ -1,20 +1,20 @@
 {
- "collected_at": "2026-09-03T22:48:00.837028+00:00",
+ "collected_at": "2026-09-03T23:48:00.670560+00:00",
  "network": {
-  "slot": 444088966,
-  "block_height": 422135528,
-  "epoch": 1027,
-  "epoch_progress_pct": 98.37,
-  "avg_tps_5h": 3539.0,
-  "max_tps_5h": 4283.0,
-  "est_daily_txns": 305801040,
-  "validators_active": 675,
+  "slot": 444100397,
+  "block_height": 422146919,
+  "epoch": 1028,
+  "epoch_progress_pct": 1.02,
+  "avg_tps_5h": 3601.0,
+  "max_tps_5h": 4239.0,
+  "est_daily_txns": 311161008,
+  "validators_active": 674,
   "validators_delinquent": 20,
-  "total_stake_sol_million": 438.0,
+  "total_stake_sol_million": 436.3,
   "top_validators": [
    {
     "name": "Fd7btgySsrju\u2026",
-    "stake_sol_million": 17.3,
+    "stake_sol_million": 17.4,
     "commission": 7
    },
    {
@@ -29,7 +29,7 @@
    },
    {
     "name": "JUPiTERrZqgf\u2026",
-    "stake_sol_million": 11.3,
+    "stake_sol_million": 11.4,
     "commission": 5
    },
    {
@@ -49,7 +49,7 @@
    },
    {
     "name": "EvnRmnMrd69k\u2026",
-    "stake_sol_million": 7.2,
+    "stake_sol_million": 7.4,
     "commission": 7
    },
    {
@@ -65,10 +65,10 @@
   ]
  },
  "economic": {
-  "defi_tvl_billion": 5.973,
-  "sol_price_usd": 104.15,
-  "sol_price_change_24h_pct": 4.53,
-  "sol_market_cap_billion": 60.94
+  "defi_tvl_billion": 5.967,
+  "sol_price_usd": 104.04,
+  "sol_price_change_24h_pct": 4.08,
+  "sol_market_cap_billion": 60.87
  },
  "defi": {
   "stablecoin_supply_billion": 16.015,
@@ -76,14 +76,14 @@
   "dex_volume_change_24h_pct": 5.4,
   "fees_24h_million": 10.54,
   "rev_24h_million": 4.05,
-  "avg_fee_per_txn_usd": 0.0345
+  "avg_fee_per_txn_usd": 0.0339
  },
  "rwa": {
   "tokenized_assets_billion": 1.76,
   "rwa_top": {
    "BlackRock BUIDL": 0.938,
-   "xStocks": 0.463,
-   "Ondo Yield Assets": 0.179,
+   "xStocks": 0.462,
+   "Ondo Yield Assets": 0.18,
    "Hastra": 0.15
   }
  },
