@@ -1,60 +1,60 @@
 {
- "collected_at": "2026-08-28T06:48:05.299130+00:00",
+ "collected_at": "2026-09-03T01:48:01.303092+00:00",
  "network": {
-  "slot": 442283255,
-  "block_height": 420331430,
-  "epoch": 1023,
-  "epoch_progress_pct": 80.38,
-  "avg_tps_5h": 3449.0,
-  "max_tps_5h": 4072.0,
-  "est_daily_txns": 298005672,
-  "validators_active": 689,
-  "validators_delinquent": 9,
-  "total_stake_sol_million": 436.8,
+  "slot": 443849060,
+  "block_height": 421896313,
+  "epoch": 1027,
+  "epoch_progress_pct": 42.84,
+  "avg_tps_5h": 3640.0,
+  "max_tps_5h": 4132.0,
+  "est_daily_txns": 314461584,
+  "validators_active": 677,
+  "validators_delinquent": 18,
+  "total_stake_sol_million": 438.2,
   "top_validators": [
    {
     "name": "Fd7btgySsrju\u2026",
-    "stake_sol_million": 17.1,
+    "stake_sol_million": 17.3,
     "commission": 7
    },
    {
     "name": "HEL1USMZKAL2\u2026",
-    "stake_sol_million": 16.0,
+    "stake_sol_million": 16.3,
     "commission": 0
    },
    {
     "name": "DRpbCBMxVnDK\u2026",
-    "stake_sol_million": 12.3,
+    "stake_sol_million": 12.5,
     "commission": 0
    },
    {
     "name": "JUPiTERrZqgf\u2026",
-    "stake_sol_million": 11.8,
+    "stake_sol_million": 11.3,
     "commission": 5
    },
    {
-    "name": "C8Bey3LKVJHV\u2026",
-    "stake_sol_million": 9.2,
-    "commission": 7
-   },
-   {
     "name": "E1r4Psq84tHf\u2026",
-    "stake_sol_million": 9.1,
+    "stake_sol_million": 9.6,
     "commission": 0
    },
    {
+    "name": "C8Bey3LKVJHV\u2026",
+    "stake_sol_million": 9.3,
+    "commission": 7
+   },
+   {
     "name": "CAo1dCGYrB6N\u2026",
-    "stake_sol_million": 8.9,
+    "stake_sol_million": 9.0,
     "commission": 10
    },
    {
     "name": "EvnRmnMrd69k\u2026",
-    "stake_sol_million": 7.8,
+    "stake_sol_million": 7.2,
     "commission": 7
    },
    {
     "name": "9eGrDohdNTAo\u2026",
-    "stake_sol_million": 7.3,
+    "stake_sol_million": 7.1,
     "commission": 5
    },
    {
@@ -65,47 +65,41 @@
   ]
  },
  "economic": {
-  "defi_tvl_billion": 5.945,
-  "sol_price_usd": 107.56,
-  "sol_price_change_24h_pct": 6.19,
-  "sol_market_cap_billion": 62.83
+  "defi_tvl_billion": 5.694,
+  "sol_price_usd": 100.1,
+  "sol_price_change_24h_pct": 1.11,
+  "sol_market_cap_billion": 58.6
  },
  "defi": {
-  "stablecoin_supply_billion": 16.298,
-  "dex_volume_24h_billion": 3.632,
-  "dex_volume_change_24h_pct": 54.5,
-  "fees_24h_million": 16.24,
-  "rev_24h_million": 7.57,
-  "avg_fee_per_txn_usd": 0.0545
+  "stablecoin_supply_billion": 15.769,
+  "dex_volume_24h_billion": 2.328,
+  "dex_volume_change_24h_pct": 7.2,
+  "fees_24h_million": 12.13,
+  "rev_24h_million": 5.52,
+  "avg_fee_per_txn_usd": 0.0386
  },
  "rwa": {
-  "tokenized_assets_billion": 1.695,
+  "tokenized_assets_billion": 1.687,
   "rwa_top": {
-   "BlackRock BUIDL": 0.886,
-   "xStocks": 0.439,
-   "Ondo Yield Assets": 0.18,
-   "Hastra": 0.159
+   "BlackRock BUIDL": 0.891,
+   "xStocks": 0.434,
+   "Ondo Yield Assets": 0.179,
+   "Hastra": 0.154
   }
  },
  "news": {
   "items": [
    {
     "source": "Decrypt",
-    "title": "Solana Is Having Its Best Month Since 2024\u2014With a Historic Governance Vote on Deck",
-    "link": "https://decrypt.co/376706/solana-best-month-since-2024-historic-governance-vote",
-    "date": "2026-08-27"
+    "title": "Solana Treasury DeFi Development Corp Eyes $20 Million Raise to Buy More SOL",
+    "link": "https://decrypt.co/377068/defi-development-corp-20-million-raise-more-solana",
+    "date": "2026-09-01"
    },
    {
-    "source": "Decrypt",
-    "title": "Galaxy Opens Retail Crypto-Backed Credit Lines on Bitcoin, Ethereum and Solana",
-    "link": "https://decrypt.co/376646/galaxy-crypto-credit-lines-bitcoin-ethereum-solana",
-    "date": "2026-08-26"
-   },
-   {
-    "source": "Decrypt",
-    "title": "Solana Treasury Firm Invites Investors to Look 'Beyond the Price of SOL'",
-    "link": "https://decrypt.co/376619/solana-treasury-sol-data-beyond-price",
-    "date": "2026-08-26"
+    "source": "Solana Forums",
+    "title": "What Can a Landed Solana Transaction Actually Prove About DeFi Execution?",
+    "link": "https://forum.solana.com/t/what-can-a-landed-solana-transaction-actually-prove-about-defi-execution/5036",
+    "date": "2026-08-28"
    },
    {
     "source": "Solana Forums",
@@ -136,6 +130,12 @@
     "title": "Helius-stream: a small Rust crate I extracted from a mainnet MEV experiment, sharing for feedback",
     "link": "https://forum.solana.com/t/helius-stream-a-small-rust-crate-i-extracted-from-a-mainnet-mev-experiment-sharing-for-feedback/4810",
     "date": "2026-05-22"
+   },
+   {
+    "source": "Solana Forums",
+    "title": "A Practical Overview of Scheduler Implementations in Solana Validators",
+    "link": "https://forum.solana.com/t/a-practical-overview-of-scheduler-implementations-in-solana-validators/4803",
+    "date": "2026-05-18"
    }
   ],
   "feeds_ok": 2,
