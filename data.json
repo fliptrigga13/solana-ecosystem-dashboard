@@ -1,16 +1,16 @@
 {
- "collected_at": "2026-09-03T21:48:02.763674+00:00",
+ "collected_at": "2026-09-03T22:48:00.837028+00:00",
  "network": {
-  "slot": 444077557,
-  "block_height": 422124167,
+  "slot": 444088966,
+  "block_height": 422135528,
   "epoch": 1027,
-  "epoch_progress_pct": 95.73,
-  "avg_tps_5h": 3861.0,
-  "max_tps_5h": 4464.0,
-  "est_daily_txns": 333580824,
+  "epoch_progress_pct": 98.37,
+  "avg_tps_5h": 3539.0,
+  "max_tps_5h": 4283.0,
+  "est_daily_txns": 305801040,
   "validators_active": 675,
   "validators_delinquent": 20,
-  "total_stake_sol_million": 437.8,
+  "total_stake_sol_million": 438.0,
   "top_validators": [
    {
     "name": "Fd7btgySsrju\u2026",
@@ -65,10 +65,10 @@
   ]
  },
  "economic": {
-  "defi_tvl_billion": 5.981,
-  "sol_price_usd": 104.97,
-  "sol_price_change_24h_pct": 5.32,
-  "sol_market_cap_billion": 61.43
+  "defi_tvl_billion": 5.973,
+  "sol_price_usd": 104.15,
+  "sol_price_change_24h_pct": 4.53,
+  "sol_market_cap_billion": 60.94
  },
  "defi": {
   "stablecoin_supply_billion": 16.015,
@@ -76,7 +76,7 @@
   "dex_volume_change_24h_pct": 5.4,
   "fees_24h_million": 10.54,
   "rev_24h_million": 4.05,
-  "avg_fee_per_txn_usd": 0.0316
+  "avg_fee_per_txn_usd": 0.0345
  },
  "rwa": {
   "tokenized_assets_billion": 1.76,
@@ -89,12 +89,6 @@
  },
  "news": {
   "items": [
-   {
-    "source": "Decrypt",
-    "title": "Solana Treasury DeFi Development Corp Eyes $20 Million Raise to Buy More SOL",
-    "link": "https://decrypt.co/377068/defi-development-corp-20-million-raise-more-solana",
-    "date": "2026-09-01"
-   },
    {
     "source": "Solana Forums",
     "title": "What Can a Landed Solana Transaction Actually Prove About DeFi Execution?",
@@ -136,6 +130,12 @@
     "title": "A Practical Overview of Scheduler Implementations in Solana Validators",
     "link": "https://forum.solana.com/t/a-practical-overview-of-scheduler-implementations-in-solana-validators/4803",
     "date": "2026-05-18"
+   },
+   {
+    "source": "Solana Forums",
+    "title": "State of tinydancer / light clients on Solana",
+    "link": "https://forum.solana.com/t/state-of-tinydancer-light-clients-on-solana/4762",
+    "date": "2026-05-03"
    }
   ],
   "feeds_ok": 2,
