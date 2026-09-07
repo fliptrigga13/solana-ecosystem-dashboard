@@ -1,10 +1,10 @@
 # Solana Ecosystem Report
-*Auto-generated: 2026-09-07T09:48:03.341595+00:00*
+*Auto-generated: 2026-09-07T10:48:01.869978+00:00*
 
 ## Network Performance
-- **Slot:** 445,034,915 Â· **Block height:** 423,079,185
-- **Epoch:** 1030 (17.34% complete)
-- **Avg TPS (5h):** 3,399 Â· **Peak:** 3,790
+- **Slot:** 445,046,289 Â· **Block height:** 423,090,555
+- **Epoch:** 1030 (19.97% complete)
+- **Avg TPS (5h):** 3,311 Â· **Peak:** 3,690
 
 ## Validators
 - **Active:** 675 Â· **Delinquent:** 13
@@ -24,8 +24,8 @@
 | Awes4Tr6TX8J… | 6.6 | 0% |
 
 ## Economic Indicators
-- **SOL price:** $104.96 (-1.35% 24h)
-- **Market cap:** $61.52B
+- **SOL price:** $105.08 (-1.35% 24h)
+- **Market cap:** $61.6B
 - **DeFi TVL:** $5.925B
 
 ## DeFi Depth
@@ -33,7 +33,7 @@
 - **DEX volume (24h):** $1.961B (4.2% 1d)
 - **Fees (24h):** $10.48M
 - **REV (24h):** $4.25M
-- **Avg fee per transaction (derived: 24h fees Ã· est. daily txns):** $0.0357
+- **Avg fee per transaction (derived: 24h fees Ã· est. daily txns):** $0.0366
 
 ## Tokenized Assets on Solana
 - **Top-6 RWA TVL on Solana:** $1.793B
