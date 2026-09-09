@@ -1,16 +1,16 @@
 {
- "collected_at": "2026-09-09T05:48:00.708372+00:00",
+ "collected_at": "2026-09-09T06:48:00.670453+00:00",
  "network": {
-  "slot": 445535024,
-  "block_height": 423578839,
+  "slot": 445546377,
+  "block_height": 423590176,
   "epoch": 1031,
-  "epoch_progress_pct": 33.11,
-  "avg_tps_5h": 3860.0,
-  "max_tps_5h": 4324.0,
-  "est_daily_txns": 333469320,
-  "validators_active": 676,
-  "validators_delinquent": 11,
-  "total_stake_sol_million": 438.6,
+  "epoch_progress_pct": 35.74,
+  "avg_tps_5h": 3844.0,
+  "max_tps_5h": 4323.0,
+  "est_daily_txns": 332078712,
+  "validators_active": 675,
+  "validators_delinquent": 12,
+  "total_stake_sol_million": 426.1,
   "top_validators": [
    {
     "name": "Fd7btgySsrju\u2026",
@@ -20,11 +20,6 @@
    {
     "name": "HEL1USMZKAL2\u2026",
     "stake_sol_million": 16.3,
-    "commission": 0
-   },
-   {
-    "name": "DRpbCBMxVnDK\u2026",
-    "stake_sol_million": 12.5,
     "commission": 0
    },
    {
@@ -61,14 +56,19 @@
     "name": "Awes4Tr6TX8J\u2026",
     "stake_sol_million": 6.6,
     "commission": 0
+   },
+   {
+    "name": "JD549HsbJHeE\u2026",
+    "stake_sol_million": 6.1,
+    "commission": 0
    }
   ]
  },
  "economic": {
-  "defi_tvl_billion": 5.94,
-  "sol_price_usd": 103.92,
-  "sol_price_change_24h_pct": 0.81,
-  "sol_market_cap_billion": 60.95
+  "defi_tvl_billion": 5.952,
+  "sol_price_usd": 104.6,
+  "sol_price_change_24h_pct": 1.92,
+  "sol_market_cap_billion": 61.31
  },
  "defi": {
   "stablecoin_supply_billion": 16.544,
@@ -76,7 +76,7 @@
   "dex_volume_change_24h_pct": -5.2,
   "fees_24h_million": 16.44,
   "rev_24h_million": 6.63,
-  "avg_fee_per_txn_usd": 0.0493
+  "avg_fee_per_txn_usd": 0.0495
  },
  "rwa": {
   "tokenized_assets_billion": 1.793,
