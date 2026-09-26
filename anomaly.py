@@ -96,9 +96,13 @@ def detect_anomalies(snapshot: dict, history: list) -> list:
 def run(snapshot: dict) -> dict:
     """Append to history, then detect. Returns anomaly report."""
     history = load_history()
-    # don't double-append identical timestamps within same run
+    # don't double-append identical timestamps: a replayed/restarted run
+    # must not record the same snapshot twice.
+    last_ts = history[-1].get("collected_at") if history else None
+    if snapshot.get("collected_at") != last_ts:
+        append_history(snapshot)
+        history.append(snapshot)
     anomalies = detect_anomalies(snapshot, history)
-    append_history(snapshot)
     return {
         "checked_at": datetime.now(timezone.utc).isoformat(),
         "history_size": len(history),

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Generate interactive dark-theme dashboard (single HTML file, Chart.js via CDN)."""
 import json
+import io_safety
 
 snap = json.load(open("data.json"))
 n, e = snap["network"], snap["economic"]
@@ -108,5 +109,5 @@ html = (html
         .replace("__UPGRADES__", json.dumps(UPCOMING_UPDATES))
         .replace("__DATA__", json.dumps(snap)))
 
-open("index.html", "w", encoding="utf-8").write(html)
+io_safety.atomic_write_text("index.html", html)
 print("index.html written,", len(html), "bytes")

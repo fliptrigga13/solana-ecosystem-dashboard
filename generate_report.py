@@ -2,6 +2,7 @@
 """Generate report.md (human-readable) from data.json."""
 import json
 from datetime import datetime
+import io_safety
 
 snap = json.load(open("data.json"))
 n, e = snap["network"], snap["economic"]
@@ -57,5 +58,5 @@ lines += ["", "## Upcoming Network Upgrades"]
 for u in UPCOMING_UPDATES:
     lines.append(f"- **[{u['name']}]({u['url']})** — {u['detail']} · {u['status']}")
 
-open("report.md", "w", encoding="utf-8").write("\n".join(lines))
+io_safety.atomic_write_text("report.md", "\n".join(lines))
 print("report.md written,", len(lines), "lines")

@@ -110,8 +110,10 @@ def collect_economic() -> dict:
         out["sol_price_usd"] = sol.get("usd")
         out["sol_price_change_24h_pct"] = round(sol.get("usd_24h_change", 0), 2)
         out["sol_market_cap_billion"] = round((sol.get("usd_market_cap") or 0) / 1e9, 2)
-    except Exception:
-        pass
+    except Exception as exc:
+        # source_outage: fail loudly with source context. Never swallow a
+        # market-data failure into silent nulls (the Aug 24 pattern).
+        raise RuntimeError(f"CoinGecko price fetch failed: {exc}") from exc
     return out
 
 
@@ -151,11 +153,14 @@ def collect_rwa() -> dict:
     would overcount by ~6x.
     """
     protocols = {p.get("slug"): p for p in _get_json(DEFILLAMA + "/protocols")}
+    # partial_coverage: fail loudly on missing slugs. Silently skipping a
+    # renamed/vanished slug publishes partial RWA coverage as complete.
+    missing = [slug for slug in RWA_SLUGS if slug not in protocols]
+    if missing:
+        raise RuntimeError(f"RWA coverage incomplete — missing slugs: {missing}")
     breakdown, total = {}, 0.0
     for slug in RWA_SLUGS:
-        p = protocols.get(slug)
-        if not p:
-            continue  # slug renamed upstream; skip rather than fail the run
+        p = protocols[slug]
         detail = _get_json(f"{DEFILLAMA}/protocol/{slug}")
         sol_series = ((detail.get("chainTvls") or {}).get("Solana") or {}).get("tvl") or []
         if not sol_series:
