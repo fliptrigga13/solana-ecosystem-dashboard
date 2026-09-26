@@ -34,8 +34,15 @@ def _maybe_autocommit() -> None:
     r = subprocess.run(["git", "commit", "-m", msg], capture_output=True,
                        text=True)
     if r.returncode == 0:  # nonzero = nothing changed since last refresh
-        subprocess.run(["git", "push", "origin", "main"], check=False,
-                       capture_output=True)
+        p = subprocess.run(["git", "push", "origin", "main"],
+                           capture_output=True, text=True)
+        if p.returncode != 0:
+            detail = "\n".join(
+                x for x in (p.stdout.strip(), p.stderr.strip()) if x
+            )
+            raise RuntimeError(
+                "publication rejected: git push failed\n" + detail
+            )
 
 
 def refresh() -> dict:
@@ -54,8 +61,8 @@ def refresh() -> dict:
                 print(f"⚠️ ANOMALY [{a['severity']}] {a['metric']}: "
                       f"{a.get('direction')} {a.get('deviation_pct')}% "
                       f"(current {a['current']} vs baseline {a['baseline']})")
-    print(f"refresh complete | history: {anomaly_report['history_size']} snapshots")
     _maybe_autocommit()
+    print(f"refresh complete | history: {anomaly_report['history_size']} snapshots")
     return anomaly_report
 
 
