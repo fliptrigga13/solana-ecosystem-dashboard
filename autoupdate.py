@@ -26,8 +26,12 @@ def _maybe_autocommit() -> None:
     """
     if os.environ.get("WATCH_AUTOCOMMIT") != "1":
         return
-    subprocess.run(["git", "add", "data.json", "data-history.jsonl",
-                    "index.html", "report.md", "alerts/sent.json"], check=False,
+    # Only add files that exist: git treats one bad pathspec as fatal
+    # and stages nothing, which would silently skip the commit+push.
+    _candidates = ["data.json", "data-history.jsonl",
+                   "index.html", "report.md", "alerts/sent.json"]
+    _existing = [f for f in _candidates if os.path.exists(f)]
+    subprocess.run(["git", "add", *_existing], check=False,
                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     msg = (f"data refresh {datetime.now(timezone.utc):%Y-%m-%dT%H:%MZ} "
            "(hourly watch)")
