@@ -7,6 +7,37 @@ n, e = snap["network"], snap["economic"]
 d, r = snap.get("defi", {}), snap.get("rwa", {})
 from collector import UPCOMING_UPDATES
 
+# --- Sponsorships (monetization) ---
+# sponsors.json is optional; missing/empty file => no sponsored slots rendered.
+# Featured slots are display-only and ALWAYS carry a "Sponsored" disclosure badge.
+try:
+    _sponsors = json.load(open("sponsors.json"))
+except (FileNotFoundError, json.JSONDecodeError):
+    _sponsors = {}
+CONTACT_EMAIL = _sponsors.get("contact_email", "TODO@yourdomain.com")
+FEATURED_VALIDATORS = [v for v in _sponsors.get("validators", []) if v.get("enabled")]
+FEATURED_PROJECTS = [p for p in _sponsors.get("projects", []) if p.get("enabled")]
+SPONSORED_VAL_NAMES = [v["name_match"].lower() for v in FEATURED_VALIDATORS if v.get("name_match")]
+SPONSORED_PROJ_NAMES = [p["name_match"].lower() for p in FEATURED_PROJECTS if p.get("name_match")]
+
+def _featured_val_html():
+    if not FEATURED_VALIDATORS:
+        return ""
+    cards = []
+    for v in FEATURED_VALIDATORS:
+        name = v.get("name_match", "Featured validator")
+        url = v.get("url", "#")
+        tagline = v.get("tagline", "")
+        cards.append(
+            f'<a href="{url}" target="_blank" rel="noopener sponsored" '
+            f'style="text-decoration:none;color:inherit;">'
+            f'<div class="card featured"><span class="badge-sponsored">Sponsored</span>'
+            f'<div style="font-weight:700;">&#9733; {name}</div>'
+            f'<div style="font-size:.8rem;color:var(--muted);margin-top:4px;">{tagline}</div>'
+            f'</div></a>')
+    return ('<div class="card" style="margin-bottom:16px;"><h3>Featured Validators</h3>'
+            '<div class="grid">' + "".join(cards) + "</div></div>")
+
 html = """<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,6 +55,10 @@ html = """<!DOCTYPE html>
   table { width:100%; border-collapse:collapse; }
   th,td { padding:10px; text-align:left; border-bottom:1px solid var(--border); font-size:.85rem;}
   th { color:var(--muted); text-transform:uppercase; font-size:.7rem; }
+  .badge-sponsored { display:inline-block; font-size:.65rem; font-weight:700; letter-spacing:.06em;
+    text-transform:uppercase; color:#0b0f1a; background:#fbbf24; border-radius:4px; padding:2px 6px; margin-bottom:6px; }
+  .featured { border-color:#fbbf24; }
+  .ad-card { border-style:dashed; }
 </style></head><body>
 <h1>🟣 Solana Ecosystem Dashboard</h1>
 <p class="sub">Auto-updated: __TIMESTAMP__</p>
@@ -42,6 +77,7 @@ html = """<!DOCTYPE html>
   <div class="card stat"><div class="v">__VALIDATORS__</div><div class="l">Active validators</div></div>
   <div class="card stat"><div class="v">__DELINQ__</div><div class="l">Delinquent</div></div>
 </div>
+__FEATURED_VALIDATORS__
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
   <div class="card"><h3>Top Validators by Stake</h3>
     <table id="validators"><tr><th>Validator</th><th>Stake (M SOL)</th><th>Commission</th></tr></table></div>
@@ -53,6 +89,10 @@ html = """<!DOCTYPE html>
   <div class="card"><h3>Upcoming Network Upgrades</h3><div id="upgrades"></div></div>
 </div>
 <div class="card" style="margin-top:16px;"><h3>Ecosystem &amp; Community News</h3><div id="news"></div></div>
+<div class="card ad-card" style="margin-top:16px;"><h3>Advertise on this dashboard</h3>
+<div style="font-size:.85rem;color:var(--muted);">Featured validator and project placements available.
+Slots are display-only, never affect rankings or data, and are always labeled <span class="badge-sponsored">Sponsored</span>.
+Contact: __CONTACT_EMAIL__</div></div>
 <script>
 const data = __DATA__;
 const ns = document.getElementById('news');
@@ -64,12 +104,18 @@ const ns = document.getElementById('news');
      </div>`);
 });
 const vt = document.getElementById('validators');
+const sponsoredVals = __SPONSORED_VAL_NAMES__;
 data.network.top_validators.forEach(v => {
-  vt.insertAdjacentHTML('beforeend', `<tr><td>${v.name}</td><td>${v.stake_sol_million.toLocaleString()}</td><td>${v.commission}%</td></tr>`);
+  const isSponsored = sponsoredVals.includes((v.name || '').toLowerCase());
+  const badge = isSponsored ? ' <span class="badge-sponsored">Sponsored</span>' : '';
+  vt.insertAdjacentHTML('beforeend', `<tr><td>${v.name}${badge}</td><td>${v.stake_sol_million.toLocaleString()}</td><td>${v.commission}%</td></tr>`);
 });
 const rt = document.getElementById('rwaTable');
+const sponsoredProjs = __SPONSORED_PROJ_NAMES__;
 Object.entries(data.rwa?.rwa_top || {}).forEach(([name, tvl]) => {
-  rt.insertAdjacentHTML('beforeend', `<tr><td>${name}</td><td>$${tvl.toLocaleString()}</td></tr>`);
+  const isSponsored = sponsoredProjs.includes((name || '').toLowerCase());
+  const badge = isSponsored ? ' <span class="badge-sponsored">Sponsored</span>' : '';
+  rt.insertAdjacentHTML('beforeend', `<tr><td>${name}${badge}</td><td>$${tvl.toLocaleString()}</td></tr>`);
 });
 const up = document.getElementById('upgrades');
 __UPGRADES__.forEach(u => {
@@ -106,7 +152,11 @@ html = (html
         .replace("__VALIDATORS__", f"{n['validators_active']:,}")
         .replace("__DELINQ__", str(n["validators_delinquent"]))
         .replace("__UPGRADES__", json.dumps(UPCOMING_UPDATES))
-        .replace("__DATA__", json.dumps(snap)))
+        .replace("__DATA__", json.dumps(snap))
+        .replace("__FEATURED_VALIDATORS__", _featured_val_html())
+        .replace("__SPONSORED_VAL_NAMES__", json.dumps(SPONSORED_VAL_NAMES))
+        .replace("__SPONSORED_PROJ_NAMES__", json.dumps(SPONSORED_PROJ_NAMES))
+        .replace("__CONTACT_EMAIL__", CONTACT_EMAIL))
 
 open("index.html", "w", encoding="utf-8").write(html)
 print("index.html written,", len(html), "bytes")
