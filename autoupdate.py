@@ -27,7 +27,7 @@ def _maybe_autocommit() -> None:
     if os.environ.get("WATCH_AUTOCOMMIT") != "1":
         return
     subprocess.run(["git", "add", "data.json", "data-history.jsonl",
-                    "index.html", "report.md"], check=False,
+                    "index.html", "report.md", "alerts/sent.json"], check=False,
                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     msg = (f"data refresh {datetime.now(timezone.utc):%Y-%m-%dT%H:%MZ} "
            "(hourly watch)")
@@ -47,6 +47,17 @@ def refresh() -> dict:
     # regenerate human/machine outputs
     exec(open("generate_report.py").read())
     exec(open("generate_dashboard.py").read())
+
+    # monetization: fan out anomaly alerts to enabled subscribers.
+    # Never breaks the refresh: delivery failures are counted inside
+    # alerts/check.py (exit 0), and anything unexpected is caught here.
+    try:
+        from alerts import check as alert_check
+        rc = alert_check.main()
+        if rc != 0:
+            print(f"alerts: check exited {rc} (non-fatal)", file=sys.stderr)
+    except Exception as exc:
+        print(f"alerts: skipped ({type(exc).__name__}: {exc})", file=sys.stderr)
 
     if anomaly_report["anomalies_detected"]:
         for a in anomaly_report["anomalies"]:

@@ -107,9 +107,15 @@ def main() -> int:
         sent = {}
 
     now = datetime.now(timezone.utc)
-    delivered = failed = skipped_filter = skipped_cooldown = 0
+    delivered = failed = skipped_filter = skipped_cooldown = skipped_disabled = 0
 
     for sub in subscribers:
+        # Safety default: a subscriber only receives alerts when explicitly
+        # enabled. Example/placeholder entries ship with enabled=false so a
+        # fresh checkout can never spam placeholder destinations.
+        if not sub.get("enabled"):
+            skipped_disabled += 1
+            continue
         tier = sub.get("tier", "free")
         channel = sub.get("channel")
         destination = sub.get("destination")
@@ -133,7 +139,8 @@ def main() -> int:
     print(
         f"alerts: {len(events)} events, {len(subscribers)} subscribers, "
         f"{delivered} delivered, {failed} failed, "
-        f"{skipped_filter} filtered, {skipped_cooldown} cooldown-skipped"
+        f"{skipped_filter} filtered, {skipped_cooldown} cooldown-skipped, "
+        f"{skipped_disabled} disabled-skipped"
     )
     return 0
 

@@ -1,1 +1,40 @@
-{"_comment":"Alert subscribers. Schema per subscriber: id (string, unique), channel (telegram|email|webhook), destination (telegram chat_id | email address | webhook URL), tier (free|pro|team), rules (list of rule_ids from alerts/rules.py, or [\"*\"] for all), min_severity (INFO|WARNING|CRITICAL — subscriber receives events at or above this). Secrets (bot tokens, SMTP creds) come from environment variables, never from this file.","_rule_ids":["tps_drop","delinquent_spike","price_move","tvl_move","stablecoin_move","dex_volume_spike","fee_spike","rwa_move","epoch_ending"],"subscribers":[{"channel":"telegram","destination":"YOUR_TELEGRAM_CHAT_ID","id":"example-free","min_severity":"WARNING","rules":["tps_drop","delinquent_spike","price_move"],"tier":"free"},{"channel":"webhook","destination":"https://example.com/your-webhook-endpoint","id":"example-pro","min_severity":"INFO","rules":["*"],"tier":"pro"}]}
+{
+  "_comment": "Alert subscribers. Schema per subscriber: id (string, unique), channel (telegram|email|webhook), destination (telegram chat_id | email address | webhook URL), tier (free|pro|team), rules (list of rule_ids from alerts/rules.py, or [\"*\"] for all), min_severity (INFO|WARNING|CRITICAL \u2014 subscriber receives events at or above this). Secrets (bot tokens, SMTP creds) come from environment variables, never from this file. A subscriber only receives alerts when \"enabled\": true (safety default; examples ship disabled).",
+  "_rule_ids": [
+    "tps_drop",
+    "delinquent_spike",
+    "price_move",
+    "tvl_move",
+    "stablecoin_move",
+    "dex_volume_spike",
+    "fee_spike",
+    "rwa_move",
+    "epoch_ending"
+  ],
+  "subscribers": [
+    {
+      "channel": "telegram",
+      "destination": "YOUR_TELEGRAM_CHAT_ID",
+      "id": "example-free",
+      "min_severity": "WARNING",
+      "rules": [
+        "tps_drop",
+        "delinquent_spike",
+        "price_move"
+      ],
+      "tier": "free",
+      "enabled": false
+    },
+    {
+      "channel": "webhook",
+      "destination": "https://example.com/your-webhook-endpoint",
+      "id": "example-pro",
+      "min_severity": "INFO",
+      "rules": [
+        "*"
+      ],
+      "tier": "pro",
+      "enabled": false
+    }
+  ]
+}
