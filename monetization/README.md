@@ -5,6 +5,27 @@ rest of the repo. Nothing here touches the data pipeline's integrity: sponsored
 content is display-only and always disclosed; paid tiers never degrade the free
 public dashboard.
 
+> **Base note:** this branch is based on `main` (e864997) and does **not** include
+> the Step 10 failure-mode repairs (`step10-failure-mode-repairs`, unmerged).
+> If those repairs merge to main, rebase this branch onto the new main.
+
+## Wiring (how it all connects)
+
+- **Alerts** run inside the normal refresh: `autoupdate.refresh()` calls
+  `alerts/check.main()` after the dashboard is generated. Alert failures can
+  never break a refresh (delivery failures are counted, exit 0; anything
+  unexpected is caught and logged).
+- **Safety default:** a subscriber only receives alerts with `"enabled": true`
+  in `alerts/subscribers.json`. Example entries ship disabled, so a fresh
+  checkout can never spam placeholder destinations.
+- `alerts/sent.json` (cooldown state) is included in the hourly-watch autocommit
+  file list so dedupe state persists across runs.
+- **API** serves the repo's own data files by default (`DATA_DIR` defaults to
+  the repo root; override with env). Localhost-only; put a TLS reverse proxy
+  in front.
+- **Sponsorships** render during `generate_dashboard.py`; `sponsors.json` is
+  optional — missing file means no sponsored slots, page builds normally.
+
 ## 1. Validator sponsorships — `sponsors.json` + `generate_dashboard.py`
 
 - Featured validator strip rendered above the organic "Top Validators by Stake"

@@ -21,23 +21,28 @@ FEATURED_PROJECTS = [p for p in _sponsors.get("projects", []) if p.get("enabled"
 SPONSORED_VAL_NAMES = [v["name_match"].lower() for v in FEATURED_VALIDATORS if v.get("name_match")]
 SPONSORED_PROJ_NAMES = [p["name_match"].lower() for p in FEATURED_PROJECTS if p.get("name_match")]
 
-def _featured_val_html():
-    if not FEATURED_VALIDATORS:
-        return ""
-    cards = []
-    for v in FEATURED_VALIDATORS:
-        name = v.get("name_match", "Featured validator")
-        url = v.get("url", "#")
-        tagline = v.get("tagline", "")
-        cards.append(
-            f'<a href="{url}" target="_blank" rel="noopener sponsored" '
-            f'style="text-decoration:none;color:inherit;">'
-            f'<div class="card featured"><span class="badge-sponsored">Sponsored</span>'
-            f'<div style="font-weight:700;">&#9733; {name}</div>'
-            f'<div style="font-size:.8rem;color:var(--muted);margin-top:4px;">{tagline}</div>'
-            f'</div></a>')
-    return ('<div class="card" style="margin-bottom:16px;"><h3>Featured Validators</h3>'
-            '<div class="grid">' + "".join(cards) + "</div></div>")
+# Build featured-validator HTML at top level (not inside a function):
+# this file is exec()'d by autoupdate.refresh(), and functions defined here
+# would resolve globals against autoupdate's module namespace, not this file's
+# exec scope. Top-level sequential code is the file's existing style.
+_featured_cards = []
+for _v in FEATURED_VALIDATORS:
+    _name = _v.get("name_match", "Featured validator")
+    _url = _v.get("url", "#")
+    _tagline = _v.get("tagline", "")
+    _featured_cards.append(
+        f'<a href="{_url}" target="_blank" rel="noopener sponsored" '
+        f'style="text-decoration:none;color:inherit;">'
+        f'<div class="card featured"><span class="badge-sponsored">Sponsored</span>'
+        f'<div style="font-weight:700;">&#9733; {_name}</div>'
+        f'<div style="font-size:.8rem;color:var(--muted);margin-top:4px;">{_tagline}</div>'
+        f'</div></a>')
+if _featured_cards:
+    FEATURED_VALIDATORS_HTML = (
+        '<div class="card" style="margin-bottom:16px;"><h3>Featured Validators</h3>'
+        '<div class="grid">' + "".join(_featured_cards) + "</div></div>")
+else:
+    FEATURED_VALIDATORS_HTML = ""
 
 html = """<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8">
@@ -154,7 +159,7 @@ html = (html
         .replace("__DELINQ__", str(n["validators_delinquent"]))
         .replace("__UPGRADES__", json.dumps(UPCOMING_UPDATES))
         .replace("__DATA__", json.dumps(snap))
-        .replace("__FEATURED_VALIDATORS__", _featured_val_html())
+        .replace("__FEATURED_VALIDATORS__", FEATURED_VALIDATORS_HTML)
         .replace("__SPONSORED_VAL_NAMES__", json.dumps(SPONSORED_VAL_NAMES))
         .replace("__SPONSORED_PROJ_NAMES__", json.dumps(SPONSORED_PROJ_NAMES))
         .replace("__CONTACT_EMAIL__", CONTACT_EMAIL))

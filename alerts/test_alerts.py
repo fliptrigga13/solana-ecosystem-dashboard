@@ -228,6 +228,26 @@ class TestEndToEndDryRun(unittest.TestCase):
             self.assertEqual(check.main(), 0)
         self.assertTrue(os.path.exists(sent))
 
+    def test_disabled_subscribers_are_skipped(self):
+        # Safety default: without enabled=true, no delivery is attempted,
+        # even when events fire.
+        import tempfile
+        tmp = tempfile.mkdtemp()
+        subs = os.path.join(tmp, "subscribers.json")
+        sent = os.path.join(tmp, "sent.json")
+        with open(subs, "w") as f:
+            json.dump({"subscribers": [{
+                "id": "placeholder", "channel": "webhook",
+                "destination": "https://example.com/hook",
+                "tier": "pro", "rules": ["*"], "min_severity": "INFO",
+                # "enabled" absent -> must be skipped
+            }]}, f)
+        with mock.patch.object(check, "SUBSCRIBERS_FILE", subs), \
+             mock.patch.object(check, "SENT_FILE", sent), \
+             mock.patch.object(check.deliver, "send") as msend:
+            self.assertEqual(check.main(), 0)
+            msend.assert_not_called()
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
