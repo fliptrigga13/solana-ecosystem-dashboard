@@ -94,8 +94,15 @@ def _maybe_autocommit() -> None:
                 "publication state unknown: cannot verify previous commit "
                 f"{state['commit_sha'][:8]} (origin unreachable); refusing "
                 "to stack more commits on an uncertain publication")
-    subprocess.run(["git", "add", "data.json", "data-history.jsonl",
-                    "index.html", "report.md", "alerts/sent.json"], check=False,
+    # Autocommit file list: only add files that exist. A missing optional
+    # file (e.g. alerts/sent.json on a checkout without the alerts engine)
+    # must not abort the entire `git add` — git treats one bad pathspec as
+    # fatal and stages nothing, which would silently skip the commit+push
+    # and the publication-state verification below.
+    _candidates = ["data.json", "data-history.jsonl",
+                   "index.html", "report.md", "alerts/sent.json"]
+    _existing = [f for f in _candidates if os.path.exists(f)]
+    subprocess.run(["git", "add", *_existing], check=False,
                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     msg = (f"data refresh {datetime.now(timezone.utc):%Y-%m-%dT%H:%MZ} "
            "(hourly watch)")
