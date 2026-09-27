@@ -37,13 +37,33 @@ no vendor lock-in, fully auditable.
 
 ## 4. Team
 
-TODO: team description. Solo builder with shipped, working, public infrastructure
-(commit history at https://github.com/fliptrigga13/solana-ecosystem-dashboard).
+Solo builder/operator. Shipped, working, public infrastructure with full
+commit history at https://github.com/fliptrigga13/solana-ecosystem-dashboard:
+hourly auto-updating pipeline (Python stdlib only), failure-mode hardening
+(loud source-outage failure, publication state machine, refresh locking,
+atomic writes), a keyed read API with tiered rate limits, and a tiered
+anomaly-alert engine — all tested (API 25/25, alerts 27/27, repair probes
+9/9) and documented in the public repo.
+
+[OWNER: add name/handle + one line on background if desired — optional.]
 
 ## 5. Budget
 
-TODO: total ask + breakdown per milestone. Keep milestones independently shippable
-so partial funding still delivers value.
+**Proposed by Farrow 2026-09-27 — owner adjusts numbers or total before
+submitting.** Anchored on the Foundation's ~$40k average public-good check
+(Foundation CPO, Mar 2026). Milestones are independently shippable so partial
+funding still delivers value.
+
+| # | Milestone | Deliverable | Proposed budget |
+|---|-----------|-------------|-----------------|
+| 1 | Reliability hardening | Failure-mode repairs merged to main and verified in production (work complete; funds final integration + monitoring) | $6,000 |
+| 2 | Public data API (free tier) | Hosted read API over snapshots/history, documented, rate-limited free keys, usage metering | $12,000 |
+| 3 | Alerting for the commons | Hosted hourly alert engine; free-tier anomaly alerts (delinquency spikes, TPS drops) via Telegram/webhook | $10,000 |
+| 4 | Coverage expansion | Additional RWA issuers, per-epoch validator performance, fee-market breakdowns | $12,000 |
+| | **Total ask** | | **$40,000** |
+
+[OWNER: confirm or edit the total and per-milestone split — this is the only
+budget decision needed.]
 
 ## 6. Sustainability
 
