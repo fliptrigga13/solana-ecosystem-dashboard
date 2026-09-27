@@ -100,7 +100,7 @@ def _maybe_autocommit() -> None:
     # fatal and stages nothing, which would silently skip the commit+push
     # and the publication-state verification below.
     _candidates = ["data.json", "data-history.jsonl",
-                   "index.html", "report.md", "alerts/sent.json"]
+                   "index.html", "badge.svg", "report.md", "alerts/sent.json"]
     _existing = [f for f in _candidates if os.path.exists(f)]
     subprocess.run(["git", "add", *_existing], check=False,
                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

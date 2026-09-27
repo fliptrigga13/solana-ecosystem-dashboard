@@ -1,0 +1,43 @@
+# Solana Ecosystem Dashboard
+
+Hourly-updated Solana network statistics dashboard. Public, open data.
+
+- Dashboard: https://fliptrigga13.github.io/solana-ecosystem-dashboard/
+- Source: https://github.com/fliptrigga13/solana-ecosystem-dashboard
+- Raw data: https://fliptrigga13.github.io/solana-ecosystem-dashboard/data.json
+- Full history: data-history.jsonl in the repo (one JSON object per hourly snapshot)
+
+## What it tracks
+
+Network: avg/peak TPS, slot, block height, epoch + progress, active vs delinquent
+validators, fees, Nakamoto coefficient, top-10/top-20 stake share, native staking
+APY estimate. Validator economics (via Stakewiz): stake-weighted avg APY,
+commission, uptime, and stake-weighted client share (Jito-Solana / Agave /
+Firedancer). Economic: SOL price + 24h change. DeFi: TVL, stablecoin supply with
+per-issuer breakdown, DEX 24h volume + change with per-venue breakdown, 24h fees,
+real economic value (REV), avg fee per txn. MEV: Jito MEV tips revenue 24h +
+live tip-floor market. RWA: tokenized real-world assets on Solana. Governance:
+latest SIMD proposals + Agave/Firedancer releases (via GitHub). Plus top
+validators by stake, RWA breakdown, upcoming network upgrades, and ecosystem news.
+
+## API
+
+Free tier: `GET /v1/snapshot`, `GET /v1/metrics?name=<metric>` (60 req/day, key
+required, no card). Pro ($49/mo): full history + anomaly reports. Docs: api/DOCS.md
+in the repo. Keys are SHA-256 hashed server-side.
+
+## Alerts
+
+Free hourly digest alerts (Telegram/email/webhook): TPS drops, delinquency spikes,
+price moves, TVL moves, fee spikes, epoch ending, Nakamoto coefficient drops,
+validator APY moves, MEV revenue moves. Pro: instant delivery.
+
+## Sponsorships
+
+Featured validator ($150/mo) and project/RWA ($250/mo) slots, max 3 per category,
+always labeled Sponsored, never affect rankings. USD or SOL.
+
+## Citing
+
+Solana Ecosystem Dashboard, https://fliptrigga13.github.io/solana-ecosystem-dashboard/,
+accessed YYYY-MM-DD. Every datapoint is traceable to a repo commit.

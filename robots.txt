@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fliptrigga13.github.io/solana-ecosystem-dashboard/sitemap.xml
