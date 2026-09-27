@@ -11,7 +11,7 @@ Base URL: `https://api.yourdomain.com` *(hosting pending — local dev: `http://
 ```bash
 # 1. Get a free key (DM the operator — no card required)
 # 2. Call:
-curl -H "X-API-Key: <redacted> https://api.yourdomain.com/v1/snapshot
+curl -H "X-API-Key: <redacted>" https://api.yourdomain.com/v1/snapshot
 ```
 
 Keys go in the `X-API-Key` header. Only SHA-256 hashes are stored server-side;
@@ -49,21 +49,24 @@ Status codes: `200` ok · `400` bad parameter · `401` missing/invalid/revoked k
 | enterprise | **$499/mo** | everything | unlimited | n/a |
 
 Overage policy (proposed 2026-09-27, market-norm: at/below base unit rate):
-overage is metered, never throttled mid-month without notice — you get an
-email/webhook at 80% and 100% of quota. Enterprise is flat unlimited.
+metered overage is *planned but not yet enforced* — today the pro quota is a
+hard cap like free. When metering ships: no mid-month throttling without
+notice; email/webhook alerts at 80% and 100% of quota. Enterprise is flat
+unlimited.
 
 ## Key lifecycle
 
 - Issue: operator runs `api/mkkey.py --name <client> --tier <tier>`; key printed once.
+- Time-boxed eval keys: `api/mkkey.py --name <client> --tier pro --expires-in-days 14`.
+  Expired keys get `401 {"error": "api key expired"}`; expiry is checked on every request.
 - Rotation: revoke old, issue new. No downtime.
 - Revocation: immediate. Compromised key? Ask and it's dead in seconds.
-- Expiry: time-boxed eval keys available on request.
 
 ## Examples
 
 ```bash
 # Latest snapshot (free tier)
-curl -H "X-API-Key: <redacted> https://api.yourdomain.com/v1/snapshot
+curl -H "X-API-Key: <redacted>" https://api.yourdomain.com/v1/snapshot
 
 # SOL price history as a time series (free tier)
 curl -H "X-API-Key: <redacted> \
@@ -74,7 +77,7 @@ curl -H "X-API-Key: <redacted> \
   "https://api.yourdomain.com/v1/history?limit=50"
 
 # Current anomaly report (pro tier)
-curl -H "X-API-Key: <redacted> https://api.yourdomain.com/v1/anomalies
+curl -H "X-API-Key: <redacted>" https://api.yourdomain.com/v1/anomalies
 ```
 
 ## Data provenance
@@ -82,7 +85,9 @@ curl -H "X-API-Key: <redacted> https://api.yourdomain.com/v1/anomalies
 Every snapshot is committed to the public repo
 (`https://github.com/fliptrigga13/solana-ecosystem-dashboard`):
 `data.json` (latest) + `data-history.jsonl` (full history). The API serves the
-same bytes — audit anything we return against the repo.
+same bytes — audit anything we return against the repo. Per-asset RWA source
+attribution lives in the snapshot at `rwa.rwa_sources` (e.g. `defillama` vs
+`jupiter supply x underlying price; gaps via ticker`).
 
 ## Citing
 

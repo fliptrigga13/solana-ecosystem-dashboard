@@ -256,6 +256,22 @@ class APITestCase(unittest.TestCase):
         self.assertIn("Retry-After", extra)
 
     # -- mkkey -------------------------------------------------------------
+    def test_expired_key_401(self):
+        exp = self.auth.create_key("t-exp", "pro", expires_in_days=1)
+        # force it into the past
+        keys = self.auth.load_keys()
+        kh = self.auth.hash_key(exp)
+        keys[kh]["expires_at"] = "2020-01-01T00:00:00+00:00"
+        import json as _json
+        with open(self.auth.KEYS_FILE, "w") as f:
+            _json.dump(keys, f)
+        status, body, _ = self.call("/v1/snapshot", key=exp)
+        self.assertEqual(status, 401)
+        self.assertIn("expired", body["error"])
+        # a non-expiring key still works
+        self.assertFalse(self.auth.is_expired(
+            self.auth.verify(self.pro_key)))
+
     def test_mkkey_create_list_revoke(self):
         import mkkey
         pt = mkkey.cmd_create("t-cli", "pro")
@@ -268,6 +284,19 @@ class APITestCase(unittest.TestCase):
         self.assertIsNone(self.auth.find_by_name("t-cli"))
         with self.assertRaises(ValueError):
             mkkey.cmd_create("t-bad", "platinum")
+
+    def test_mkkey_expires_in_days(self):
+        import mkkey
+        pt = mkkey.cmd_create("t-eval", "pro", expires_in_days=14)
+        kh = self.auth.hash_key(pt)
+        rec = self.auth.load_keys()[kh]
+        self.assertIsNotNone(rec.get("expires_at"))
+        self.assertFalse(self.auth.is_expired(rec))
+        # invalid values rejected
+        with self.assertRaises(ValueError):
+            mkkey.cmd_create("t-eval2", "pro", expires_in_days=0)
+        with self.assertRaises(ValueError):
+            mkkey.cmd_create("t-eval3", "pro", expires_in_days=-5)
 
 
 if __name__ == "__main__":

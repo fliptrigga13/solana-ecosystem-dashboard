@@ -125,6 +125,8 @@ def dispatch(method: str, path: str, headers: dict, _limiter=None):
         return 401, {"error": "invalid api key"}, {}
     if rec.get("revoked"):
         return 401, {"error": "api key revoked"}, {}
+    if auth.is_expired(rec):
+        return 401, {"error": "api key expired"}, {}
     tier = rec.get("tier")
 
     # ---- tier gating ----
