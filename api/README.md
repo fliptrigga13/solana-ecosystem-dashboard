@@ -55,8 +55,8 @@ is shown exactly once at issuance; deliver it to the customer out of band.
 | Tier | Price | Endpoints | Rate limit |
 |---|---|---|---|
 | free | $0 | snapshot, metrics | 60 req / rolling 24h |
-| pro | **$TODO/mo** | everything | 10,000 req / rolling 24h |
-| enterprise | **$TODO/mo** | everything | unlimited |
+| pro | **$49/mo** | everything | 10,000 req / rolling 24h |
+| enterprise | **$499/mo** | everything | unlimited |
 
 ### Key lifecycle
 
@@ -98,7 +98,7 @@ abuse counters. Exceeding the quota returns `429` with `Retry-After`.
 
 ## TODO (owner)
 
-- [ ] Set pro/enterprise prices (currently `$TODO/mo`)
+- [x] Prices set by owner 2026-09-27: pro $49/mo, enterprise $499/mo (change anytime)
 - [ ] Choose hosting + TLS termination (reverse proxy config)
 - [ ] Key distribution process (how customers receive their one-time key)
 - [ ] Billing integration (e.g. Stripe) + webhook to auto-issue/revoke keys
