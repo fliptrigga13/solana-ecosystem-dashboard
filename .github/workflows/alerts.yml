@@ -1,0 +1,42 @@
+name: hourly-alerts
+
+on:
+  schedule:
+    # 10 minutes past the hour — runs after hourly-update refreshes data.json
+    - cron: '10 * * * *'
+  workflow_dispatch: {}    # manual trigger button
+
+permissions:
+  contents: write          # needed to commit alerts/sent.json cooldown state
+
+concurrency:
+  group: hourly-alerts
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Evaluate rules + deliver alerts
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          SMTP_FROM: ${{ secrets.SMTP_FROM }}
+        run: python alerts/check.py
+
+      - name: Commit cooldown state
+        run: |
+          git config user.name "solana-dashboard-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add alerts/sent.json 2>/dev/null || true
+          git diff --cached --quiet && echo "no cooldown changes" || git commit -m "alert cooldown state $(date -u +%FT%TZ)"
+          git push
