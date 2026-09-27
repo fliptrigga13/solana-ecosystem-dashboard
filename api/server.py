@@ -43,6 +43,14 @@ METRIC_PATHS = {
     "rev_24h_million": ("defi", "rev_24h_million"),
     "avg_fee_per_txn_usd": ("defi", "avg_fee_per_txn_usd"),
     "tokenized_assets_billion": ("rwa", "tokenized_assets_billion"),
+    "nakamoto_coefficient": ("network", "nakamoto_coefficient"),
+    "top10_stake_share_pct": ("network", "top10_stake_share_pct"),
+    "native_apy_estimate_pct": ("network", "native_apy_estimate_pct"),
+    "avg_validator_apy_pct": ("validators", "avg_apy_pct"),
+    "avg_validator_commission_pct": ("validators", "avg_commission_pct"),
+    "jito_client_share_pct": ("validators", "client_share_pct", "jito-solana"),
+    "jito_mev_tips_24h_usd": ("mev", "jito_mev_tips_24h_usd"),
+    "jito_tip_floor_median_sol": ("mev", "jito_tip_floor_median_sol"),
 }
 
 limiter = limits.RateLimiter(os.path.join(API_DIR, "usage.json"))
@@ -74,8 +82,12 @@ def load_history():
 
 
 def _metric_value(snap: dict, name: str):
-    section, key = METRIC_PATHS[name]
-    val = snap.get(section, {}).get(key) if isinstance(snap.get(section), dict) else None
+    path = METRIC_PATHS[name]
+    val = snap
+    for key in path:
+        val = val.get(key) if isinstance(val, dict) else None
+        if val is None:
+            break
     if isinstance(val, bool) or not isinstance(val, (int, float)):
         return None
     return val
