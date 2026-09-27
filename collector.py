@@ -178,12 +178,213 @@ def collect_defi() -> dict:
     return out
 
 
+RWA_FALLBACKS_FILE = "rwa_fallbacks.json"  # resolved relative to this file
+JUPITER_PRICE = "https://lite-api.jup.ag/price/v3"
+ONDO_ASSETS_API = "https://ondo.finance/api/v1/assets"
+
+
+def _rpc_batch_request(payload: list) -> list:
+    """One batch HTTP request with endpoint failover. Returns the raw list."""
+    last_err: Exception | None = None
+    for base in RPC_ENDPOINTS:
+        try:
+            return _get_json(base, payload)
+        except Exception as exc:  # try next endpoint
+            last_err = exc
+    raise RuntimeError(f"RPC batch request failed on all "
+                       f"{len(RPC_ENDPOINTS)} endpoints: {last_err}")
+
+
+def _rpc_batch(calls: list) -> dict:
+    """Many JSON-RPC calls with minimal round-trips. Returns {id: result}.
+
+    Tries chunked batches (10 per request) first, then falls back to
+    sequential single calls with endpoint failover and light pacing.
+    Sequential — not parallel — because public RPCs rate-limit bursts
+    (HTTP 429) far more aggressively than a steady trickle.
+    """
+    out = {}
+    for off in range(0, len(calls), 10):
+        chunk = calls[off:off + 10]
+        payload = [{"jsonrpc": "2.0", "id": off + j, "method": m,
+                    "params": p} for j, (m, p) in enumerate(chunk)]
+        try:
+            for item in _rpc_batch_request(payload):
+                if "error" in item:
+                    raise RuntimeError(f"RPC batch error: {item['error']}")
+                out[item["id"]] = item["result"]
+        except Exception:
+            import time
+            for j, (m, p) in enumerate(chunk):
+                out[off + j] = rpc(m, p)  # endpoint failover inside rpc()
+                time.sleep(0.4)
+    return out
+
+
+def _load_rwa_fallbacks() -> dict:
+    import os
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        RWA_FALLBACKS_FILE)
+    with open(path) as f:
+        return json.load(f)
+
+
+def _yahoo_prices(tickers) -> dict:
+    """ticker -> last daily close via Yahoo v8 (threaded, 8 workers).
+
+    The 'USD' ticker is a sentinel for USD-tracking tokens (Ondo USDon) and
+    maps to 1.0 by definition. Tickers are returned only when a price was
+    actually obtained — absence means the caller must fail loudly.
+    """
+    out, todo = {}, []
+    for t in set(tickers):
+        if not t:
+            continue
+        if t == "USD":
+            out[t] = 1.0
+        else:
+            todo.append(t)
+
+    def fetch(t):
+        sym = t.replace(".", "-")  # Yahoo uses BRK-B, not BRK.B
+        try:
+            d = _get_json(f"https://query1.finance.yahoo.com/v8/finance/chart/"
+                          f"{sym}?interval=1d&range=5d")
+            r = (d.get("chart") or {}).get("result") or []
+            if not r:
+                return t, None
+            quote = ((r[0].get("indicators") or {}).get("quote") or [{}])[0]
+            closes = [c for c in (quote.get("close") or []) if c]
+            if closes:
+                return t, float(closes[-1])
+            mp = (r[0].get("meta") or {}).get("regularMarketPrice")
+            return t, float(mp) if mp else None
+        except Exception:
+            return t, None
+
+    if todo:
+        import concurrent.futures
+        with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
+            for t, px in ex.map(fetch, todo):
+                if px:
+                    out[t] = px
+    return out
+
+
+def _rwa_fallback_value(slug: str, cfg: dict) -> tuple:
+    """Verified per-asset fallback. Returns (value_billion, source_tag).
+
+    Raises RuntimeError on any failure — the caller turns this into a loud,
+    asset-named failure so partial RWA coverage is never published silently.
+    """
+    kind = cfg.get("kind")
+    if kind == "spl_nav":
+        # Single-token fund with a fixed NAV (e.g. BUIDL @ $1).
+        mints = [m["mint"] if isinstance(m, dict) else m for m in cfg["mints"]]
+        results = _rpc_batch([("getTokenSupply", [m]) for m in mints])
+        total = 0.0
+        for i, m in enumerate(mints):
+            v = results[i]["value"]
+            total += int(v["amount"]) / 10 ** v["decimals"]
+        val = total * cfg.get("nav_usd", 1.0) / 1e9
+        src = f"onchain supply x ${cfg.get('nav_usd', 1.0)} NAV"
+    elif kind == "ondo_api":
+        # Issuer-published per-chain TVL, keyless (Ondo pointed integrators here).
+        d = _get_json(ONDO_ASSETS_API)
+        entry = next((a for a in d.get("assets", [])
+                      if a.get("symbol") == cfg["symbol"]), None)
+        if not entry:
+            raise RuntimeError(f"Ondo API: no '{cfg['symbol']}' entry")
+        val = (entry.get("tvlUsd") or {}).get(cfg["chain"], 0) / 1e9
+        src = "issuer ondo.finance/api/v1/assets"
+    elif kind == "vault_balances":
+        # Replicates the DeFiLlama hastra adapter's solanaTvl: balances of the
+        # wYLDS vault token-accounts (wYLDS is pegged 1:1 to USDC).
+        accts = cfg["accounts"]
+        results = _rpc_batch([("getTokenAccountBalance", [a]) for a in accts])
+        total = sum(float(results[i]["value"]["uiAmount"])
+                    for i in range(len(accts)))
+        val = total * cfg.get("usd_per_token", 1.0) / 1e9
+        src = "onchain vault balances (DeFiLlama adapter methodology)"
+    elif kind == "jupiter_basket":
+        # Multi-token stock baskets (xStocks, Ondo GM): 1 token = 1 share, so
+        # value = sum(supply_i x underlying price_i), resolved in tiers:
+        #  1) Jupiter v3 (batched): price + circulating supply in one call.
+        #  2) Mints Jupiter doesn't cover: supply via batched RPC,
+        #     price via the underlying ticker (Yahoo v8).
+        # A token with nonzero supply and no obtainable price fails loudly —
+        # it never silently undercounts the basket.
+        mints = [m["mint"] for m in cfg["mints"]]
+        labels = {m["mint"]: m.get("label", m["mint"]) for m in cfg["mints"]}
+        tickers = {m["mint"]: m.get("ticker") for m in cfg["mints"]}
+        rows = {}  # mint -> [supply|None, price|None]
+        for i in range(0, len(mints), 100):
+            chunk = mints[i:i + 100]
+            d = _get_json(JUPITER_PRICE + "?ids=" + ",".join(chunk))
+            for m in chunk:
+                e = d.get(m) or {}
+                px = (e.get("stockData") or {}).get("price") or e.get("usdPrice")
+                sc = (e.get("scaledUiConfig") or {}).get("circSupplyPrescaled")
+                rows[m] = [float(sc) if sc else None,
+                           float(px) if px else None]
+        missing_supply = [m for m, (s, p) in rows.items() if s is None]
+        if missing_supply:
+            results = _rpc_batch([("getTokenSupply", [m])
+                                  for m in missing_supply])
+            for i, m in enumerate(missing_supply):
+                v = results[i]["value"]
+                rows[m][0] = int(v["amount"]) / 10 ** v["decimals"]
+        missing_price = [m for m, (s, p) in rows.items()
+                         if p is None and s and s > 0]
+        if missing_price:
+            yp = _yahoo_prices(tickers[m] for m in missing_price)
+            bad = []
+            for m in missing_price:
+                t = tickers[m]
+                if t in yp:
+                    rows[m][1] = yp[t]
+                else:
+                    bad.append(f"{labels[m]} (ticker {t})")
+            if bad:
+                raise RuntimeError(
+                    f"no price for {len(bad)} tokens with nonzero supply: "
+                    f"{bad[:5]}")
+        total = sum(s * p for s, p in rows.values() if s and p)
+        val = total / 1e9
+        src = "jupiter supply x underlying price; gaps via ticker"
+    else:
+        raise RuntimeError(f"unknown fallback kind {kind!r}")
+    if not val > 0:
+        raise RuntimeError(f"fallback {kind} returned non-positive value")
+    return val, src
+
+
+def _rwa_defillama_value(slug: str):
+    """Returns (value_billion, 'defillama') or (None, reason) when the
+    DeFiLlama Solana series is missing/empty/non-positive."""
+    detail = _get_json(f"{DEFILLAMA}/protocol/{slug}")
+    sol_series = ((detail.get("chainTvls") or {}).get("Solana") or {}).get("tvl") or []
+    if not sol_series:
+        return None, "no Solana TVL series"
+    val = sol_series[-1].get("totalLiquidityUSD", 0) / 1e9
+    if not val > 0:
+        return None, "non-positive Solana TVL series"
+    return val, "defillama"
+
+
 def collect_rwa() -> dict:
     """Tokenized real-world assets deployed on Solana.
 
-    Uses each protocol's per-chain TVL (chainTvls.Solana), NOT the
-    protocol-total figure — several of these are multi-chain and the total
-    would overcount by ~6x.
+    DeFiLlama per-chain TVL (chainTvls.Solana) is primary — never the
+    protocol-total figure, which would overcount multi-chain protocols ~6x.
+    When DeFiLlama's Solana series for a slug is missing or non-positive
+    (as happened to the Securitize-issued funds and several others), a
+    verified per-asset fallback from rwa_fallbacks.json is used instead.
+
+    Fail-closed: the slug registry gate below stays hard (a slug vanishing
+    from /protocols fails loudly naming it), every asset must resolve to a
+    positive value from *some* source, and the per-asset source is recorded
+    in rwa_sources for auditability.
     """
     protocols = {p.get("slug"): p for p in _get_json(DEFILLAMA + "/protocols")}
     # partial_coverage: fail loudly on missing slugs. Silently skipping a
@@ -191,21 +392,38 @@ def collect_rwa() -> dict:
     missing = [slug for slug in RWA_SLUGS if slug not in protocols]
     if missing:
         raise RuntimeError(f"RWA coverage incomplete — missing slugs: {missing}")
-    breakdown, total = {}, 0.0
+    fallbacks = None  # lazy: only read from disk when a fallback is needed
+    breakdown, total, sources = {}, 0.0, {}
     for slug in RWA_SLUGS:
         p = protocols[slug]
-        detail = _get_json(f"{DEFILLAMA}/protocol/{slug}")
-        sol_series = ((detail.get("chainTvls") or {}).get("Solana") or {}).get("tvl") or []
-        if not sol_series:
-            raise RuntimeError(f"RWA {slug}: no Solana TVL series")
-        val = sol_series[-1].get("totalLiquidityUSD", 0) / 1e9
-        breakdown[p.get("name", slug)] = round(val, 3)
+        name = p.get("name", slug)
+        val, src = _rwa_defillama_value(slug)
+        if val is None:
+            if fallbacks is None:
+                try:
+                    fallbacks = _load_rwa_fallbacks()
+                except Exception as exc:
+                    raise RuntimeError(
+                        f"RWA {slug}: {src} (DeFiLlama); cannot load "
+                        f"fallbacks file: {exc}")
+            cfg = fallbacks.get(slug)
+            if not cfg:
+                raise RuntimeError(
+                    f"RWA {slug}: {src} (DeFiLlama) and no fallback configured")
+            try:
+                val, src = _rwa_fallback_value(slug, cfg)
+            except Exception as exc:
+                raise RuntimeError(
+                    f"RWA {slug}: {src} (DeFiLlama); fallback failed: {exc}")
+        breakdown[name] = round(val, 3)
+        sources[name] = src
         total += val
     if total <= 0:
         raise RuntimeError("RWA sum is zero/empty — source likely broken")
     return {"tokenized_assets_billion": round(total, 3),
             "rwa_top": dict(sorted(breakdown.items(),
-                                   key=lambda kv: -kv[1])[:4])}
+                                   key=lambda kv: -kv[1])[:4]),
+            "rwa_sources": sources}
 
 
 def _client_family(v: dict) -> str:

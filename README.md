@@ -85,6 +85,11 @@ run loudly instead of publishing nulls.
 - DeFiLlama stablecoins API: stablecoin circulating supply on Solana + per-issuer breakdown
 - DeFiLlama overviews: DEX volume, protocol fees/REV, per-chain RWA TVLs,
   per-venue DEX volume, Jito MEV tips revenue
+- RWA fallbacks (when DeFiLlama's per-chain RWA series is empty): on-chain
+  token supply x NAV (BUIDL), Ondo issuer API, vault balances (Hastra),
+  Jupiter token supply x underlying share price (xStocks, Ondo Global Markets),
+  Yahoo Finance underlying closes for price gaps. Per-asset source recorded in
+  each snapshot (`rwa.rwa_sources`).
 - CoinGecko public API: SOL price / market cap
 - Stakewiz public API: validator APY, commission, version, client identity (Jito)
 - Jito bundles API: live tip-floor percentiles

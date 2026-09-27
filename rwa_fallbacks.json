@@ -1,0 +1,1378 @@
+{
+ "_note": "Fallback sources for RWA Solana TVL when DeFiLlama's per-chain series is missing/empty. DeFiLlama stays primary; a fallback is used only when its Solana series is absent or non-positive. If every source fails, collect_rwa() raises loudly (fail-closed).",
+ "blackrock-buidl": {
+  "kind": "spl_nav",
+  "label": "BlackRock BUIDL",
+  "mints": [
+   {
+    "mint": "GyWgeqpy5GueU2YbkE8xqUeVEokCMMCEeUrfbtMw6phr",
+    "label": "BUIDL",
+    "ticker": "USD"
+   }
+  ],
+  "nav_usd": 1.0,
+  "provenance": "BUIDL Solana share-class mint published in Wormhole's Securitize announcement; supply x $1 NAV verified on-chain (~$0.988B, matches prior DeFiLlama $0.992B)"
+ },
+ "ondo-yield-assets": {
+  "kind": "ondo_api",
+  "label": "Ondo USDY",
+  "symbol": "usdy",
+  "chain": "solana",
+  "provenance": "Ondo Finance public keyless assets API (ondo.finance/api/v1/assets), tvlUsd.solana \u2014 issuer-published per-chain TVL"
+ },
+ "xstocks": {
+  "kind": "jupiter_basket",
+  "label": "xStocks",
+  "mints": [
+   {
+    "mint": "Xs151QeqTCiuKtinzfRATnUESM2xTU6V9Wy8Vy538ci",
+    "label": "WMTx",
+    "ticker": "WMT"
+   },
+   {
+    "mint": "Xs2yquAgsHByNzx68WJC55WHjHBvG9JsMB7CWjTLyPy",
+    "label": "DFDVx",
+    "ticker": "DFDV"
+   },
+   {
+    "mint": "Xs3ZFkPYT2BN7qBMqf1j1bfTeTm1rFzEFSsQ1z3wAKU",
+    "label": "AZNx",
+    "ticker": "AZN"
+   },
+   {
+    "mint": "Xs3eBt7uRfJX8QUs4suhyU8p2M6DoUDrJyWBa8LLZsg",
+    "label": "AMZNx",
+    "ticker": "AMZN"
+   },
+   {
+    "mint": "Xs5UJzmCRQ8DWZjskExdSQDnbE6iLkRu2jjrRAB1JSU",
+    "label": "ACNx",
+    "ticker": "ACN"
+   },
+   {
+    "mint": "Xs6B6zawENwAbWVi7w92rjazLuAr5Az59qgWKcNb45x",
+    "label": "Berkshire Hathaway xStock (adapter)",
+    "ticker": "BRK.B"
+   },
+   {
+    "mint": "Xs7ZdzSHLU9ftNJsii5fCeJhoRWSC32SQGzGQtePxNu",
+    "label": "COINx",
+    "ticker": "COIN"
+   },
+   {
+    "mint": "Xs7xXqkcK7K8urEqGg52SECi79dRp2cEKKuYjUePYDw",
+    "label": "CRWDx",
+    "ticker": "CRWD"
+   },
+   {
+    "mint": "Xs8S1uUs1zvS2p7iwtsG3b6fkhpvmwz4GYU3gWAmWHZ",
+    "label": "QQQx",
+    "ticker": "QQQ"
+   },
+   {
+    "mint": "Xs8drBWy3Sd5QY3aifG9kt9KFs2K3PGZmx7jWrsrk57",
+    "label": "TMOx",
+    "ticker": "TMO"
+   },
+   {
+    "mint": "XsApJFV9MAktqnAc6jqzsHVujxkGm9xcSUffaBoYLKC",
+    "label": "MAx",
+    "ticker": "MA"
+   },
+   {
+    "mint": "XsAtbqkAP1HJxy7hFDeq7ok6yM43DQ9mQ1Rh861X8rw",
+    "label": "PFEx",
+    "ticker": "PFE"
+   },
+   {
+    "mint": "XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN",
+    "label": "GOOGLx",
+    "ticker": "GOOGL"
+   },
+   {
+    "mint": "XsDgw22qRLTv5Uwuzn6T63cW69exG41T6gwQhEK22u2",
+    "label": "MDTx",
+    "ticker": "MDT"
+   },
+   {
+    "mint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+    "label": "TSLAx",
+    "ticker": "TSLA"
+   },
+   {
+    "mint": "XsEH7wWfJJu2ZT3UCFeVfALnVA6CP5ur7Ee11KmzVpL",
+    "label": "NFLXx",
+    "ticker": "NFLX"
+   },
+   {
+    "mint": "XsGVi5eo1Dh2zUpic4qACcjuWGjNv8GCt3dm5XcX6Dn",
+    "label": "JNJx",
+    "ticker": "JNJ"
+   },
+   {
+    "mint": "XsGtpmjhmC8kyjVSWL4VicGu36ceq9u55PTgF8bhGv6",
+    "label": "OPENx",
+    "ticker": "OPEN"
+   },
+   {
+    "mint": "XsHtf5RpxsQ7jeJ9ivNewouZKJHbPxhPoEy6yYvULr7",
+    "label": "ABTx",
+    "ticker": "ABT"
+   },
+   {
+    "mint": "XsMAqkcKsUewDrzVkait4e5u4y8REgtyS7jWgCpLV2C",
+    "label": "JPMx",
+    "ticker": "JPM"
+   },
+   {
+    "mint": "XsNNMt7WTNA2sV3jrb1NNfNgapxRF5i4i6GcnTRRHts",
+    "label": "CVXx",
+    "ticker": "CVX"
+   },
+   {
+    "mint": "XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ",
+    "label": "MSTRx",
+    "ticker": "MSTR"
+   },
+   {
+    "mint": "XsPdAVBi8Zc1xvv53k4JcMrQaEDTgkGqKYeh7AYgPHV",
+    "label": "APPx",
+    "ticker": "APP"
+   },
+   {
+    "mint": "XsRbLZthfABAPAfumWNEJhPyiKDW6TvDVeAeW7oKqA2",
+    "label": "HONx",
+    "ticker": "HON"
+   },
+   {
+    "mint": "XsSr8anD1hkvNMu8XQiVcmiaTP7XGvYu7Q58LdmtE8Z",
+    "label": "LINx",
+    "ticker": "LIN"
+   },
+   {
+    "mint": "XsYdjDjNUygZ7yGKfQaB6TxLh2gC6RRjzLtLAGJrhzV",
+    "label": "PGx",
+    "ticker": "PG"
+   },
+   {
+    "mint": "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu",
+    "label": "METAx",
+    "ticker": "META"
+   },
+   {
+    "mint": "XsaBXg8dU5cPM6ehmVctMkVqoiRG2ZjMo1cyBJ3AykQ",
+    "label": "KOx",
+    "ticker": "KO"
+   },
+   {
+    "mint": "XsaHND8sHyfMfsWPj6kSdd5VwvCayZvjYgKmmcNL5qh",
+    "label": "XOMx",
+    "ticker": "XOM"
+   },
+   {
+    "mint": "XsaQTCgebC2KPbf27KUhdv5JFvHhQ4GDAPURwrEhAzb",
+    "label": "AMBRx",
+    "ticker": "AMBR"
+   },
+   {
+    "mint": "XsbEhLAtcf6HdfpFZ5xEMdqW8nfAvcsP5bdudRLJzJp",
+    "label": "AAPLx",
+    "ticker": "AAPL"
+   },
+   {
+    "mint": "Xsba6tUnSjDae2VcopDB6FGGDaxRrewFCDa5hKn5vT3",
+    "label": "PMx",
+    "ticker": "PM"
+   },
+   {
+    "mint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "label": "NVDAx",
+    "ticker": "NVDA"
+   },
+   {
+    "mint": "XsczbcQ3zfcgAEt9qHQES8pxKAVG5rujPSHQEXi4kaN",
+    "label": "CRMx",
+    "ticker": "CRM"
+   },
+   {
+    "mint": "Xseo8tgCZfkHxWS9xbFYeKFyMSbWEvZGFV1Gh53GtCV",
+    "label": "DHRx",
+    "ticker": "DHR"
+   },
+   {
+    "mint": "Xsf9mBktVB9BSU5kf4nHxPq5hCBJ2j2ui3ecFGxPRGc",
+    "label": "GMEx",
+    "ticker": "GME"
+   },
+   {
+    "mint": "XsfAzPzYrYjd4Dpa9BU3cusBsvWfVB9gBcyGC87S57n",
+    "label": "NVOx",
+    "ticker": "NVO"
+   },
+   {
+    "mint": "XsgSaSvNSqLTtFuyWPBhK9196Xb9Bbdyjj4fH3cPJGo",
+    "label": "AVGOx",
+    "ticker": "AVGO"
+   },
+   {
+    "mint": "XsgaUyp4jd1fNBCxgtTKkW64xnnhQcvgaxzsbAq5ZD1",
+    "label": "GSx",
+    "ticker": "GS"
+   },
+   {
+    "mint": "XshPgPdXFRWB8tP1j82rebb2Q9rPgGX37RuqzohmArM",
+    "label": "INTCx",
+    "ticker": "INTC"
+   },
+   {
+    "mint": "XsjFwUPiLofddX5cWFHW35GCbXcSu1BCUGfxoQAQjeL",
+    "label": "ORCLx",
+    "ticker": "ORCL"
+   },
+   {
+    "mint": "XsjQP3iMAaQ3kQScQKthQpx9ALRbjKAjQtHg6TFomoc",
+    "label": "TQQQx",
+    "ticker": "TQQQ"
+   },
+   {
+    "mint": "XsnQnU7AdbRZYe2akqqpibDdXjkieGFfSkbkjX1Sd1X",
+    "label": "MRKx",
+    "ticker": "MRK"
+   },
+   {
+    "mint": "Xsnuv4omNoHozR6EEW5mXkw8Nrny5rB3jVfLqi6gKMH",
+    "label": "LLYx",
+    "ticker": "LLY"
+   },
+   {
+    "mint": "XsoBhf2ufR8fTyNSjqfU71DYGaE6Z3SUGAidpzriAA4",
+    "label": "PLTRx",
+    "ticker": "PLTR"
+   },
+   {
+    "mint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+    "label": "SPYx",
+    "ticker": "SPY"
+   },
+   {
+    "mint": "XspwhyYPdWVM8XBHZnpS9hgyag9MKjLRyE3tVfmCbSr",
+    "label": "IBMx",
+    "ticker": "IBM"
+   },
+   {
+    "mint": "XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX",
+    "label": "MSFTx",
+    "ticker": "MSFT"
+   },
+   {
+    "mint": "XsqBC5tcVQLYt8wqGCHRnAUUecbRYXoJCReD6w7QEKp",
+    "label": "TBLLx",
+    "ticker": "TBLL"
+   },
+   {
+    "mint": "XsqE9cRRpzxcGKDXj1BJ7Xmg4GRhZoyY1KpmGSxAWT2",
+    "label": "MCDx",
+    "ticker": "MCD"
+   },
+   {
+    "mint": "XsqgsbXwWogGJsNcVZ3TyVouy2MbTkfCFhCGGGcQZ2p",
+    "label": "Vx",
+    "ticker": "V"
+   },
+   {
+    "mint": "Xsr3pdLQyXvDJBFgpR5nexCEZwXvigb8wbPYp4YoNFf",
+    "label": "CSCOx",
+    "ticker": "CSCO"
+   },
+   {
+    "mint": "XsssYEQjzxBCFgvYFFNuhJFBeHNdLWYeUSP8F45cDr9",
+    "label": "VTIx",
+    "ticker": "VTI"
+   },
+   {
+    "mint": "XsueG8BtpquVJX9LVLLEGuViXUungE6WmK5YZ3p3bd1",
+    "label": "CRCLx",
+    "ticker": "CRCL"
+   },
+   {
+    "mint": "XsuxRGDzbLjnJ72v74b7p9VY6N66uYgTCyfwwRjVCJA",
+    "label": "MRVLx",
+    "ticker": "MRVL"
+   },
+   {
+    "mint": "Xsv99frTRUeornyvCfvhnDesQDWuvns1M852Pez91vF",
+    "label": "PEPx",
+    "ticker": "PEP"
+   },
+   {
+    "mint": "Xsv9hRk1z5ystj9MhnA7Lq4vjSsLwzL2nxrwmwtD3re",
+    "label": "GLDx",
+    "ticker": "GLD"
+   },
+   {
+    "mint": "XsvKCaNsxg2GN8jjUmq71qukMJr7Q1c5R2Mk9P8kcS8",
+    "label": "CMCSAx",
+    "ticker": "CMCSA"
+   },
+   {
+    "mint": "XsvNBAYkrDRNhA7wPHQfX3ZUXZyZLdnCQDfHZ56bzpg",
+    "label": "HOODx",
+    "ticker": "HOOD"
+   },
+   {
+    "mint": "XswbinNKyPmzTa5CskMbCPvMW6G5CMnZXZEeQSSQoie",
+    "label": "ABBVx",
+    "ticker": "ABBV"
+   },
+   {
+    "mint": "XswsQk4duEQmCbGzfqUUWYmi7pV7xpJ9eEmLHXCaEQP",
+    "label": "BACx",
+    "ticker": "BAC"
+   },
+   {
+    "mint": "XszjVtyhowGjSC5odCqBpW1CtXXwXjYokymrk7fGKD3",
+    "label": "HDx",
+    "ticker": "HD"
+   },
+   {
+    "mint": "XszvaiXGPwvk2nwb3o9C1CX4K6zH8sez11E6uyup6fe",
+    "label": "UNHx",
+    "ticker": "UNH"
+   }
+  ],
+  "provenance": "Mint registry: Solana Foundation xStocks case study (62) + DeFiLlama xstocks adapter (40); prices: Jupiter v3 stockData (underlying 1:1 share price)"
+ },
+ "hastra": {
+  "kind": "vault_balances",
+  "label": "Hastra",
+  "accounts": [
+   "HH1hSzaBKvBDf7GWD1mw557Q8LwBPHHE63WEu6BURS8X",
+   "FvkbfMm98jefJWrqkvXvsSZ9RFaRBae8k6c1jaYA5vY3",
+   "GtWPVP3KPTJC8z9wPLAop4mPp9jZiRKzL8deDD4PfQ7C"
+  ],
+  "usd_per_token": 1.0,
+  "provenance": "Replicates DeFiLlama hastra adapter solanaTvl: vaulted wYLDS balances (wYLDS pegged 1:1 USDC per DeFiLlama methodology)"
+ },
+ "ondo-global-markets": {
+  "kind": "jupiter_basket",
+  "label": "Ondo Global Markets",
+  "mints": [
+   {
+    "mint": "9wYZetvT8J2ptfsRca5gzLBGvcUug38mp9yT3xaondo",
+    "label": "AALon",
+    "ticker": "AAL"
+   },
+   {
+    "mint": "123mYEnRLM2LLYsJW3K6oyYh8uP1fngj732iG638ondo",
+    "label": "AAPLon",
+    "ticker": "AAPL"
+   },
+   {
+    "mint": "MFerpBVGKZh2jXN7cbJdXRXQTp6j6pbSnSZrfWrondo",
+    "label": "ABBVon",
+    "ticker": "ABBV"
+   },
+   {
+    "mint": "128qNYovdGv2YqayErcJgU7gDwbNVX1VuoxbtWz8ondo",
+    "label": "ABNBon",
+    "ticker": "ABNB"
+   },
+   {
+    "mint": "129gRoHKhVg7CvPMrqVsEB4uYZo6zV4yDZX6NBg9ondo",
+    "label": "ABTon",
+    "ticker": "ABT"
+   },
+   {
+    "mint": "KcCVQxG9LhFYP5o9DWFKTFgFShPPQkDEemVbiFyondo",
+    "label": "ACHRon",
+    "ticker": "ACHR"
+   },
+   {
+    "mint": "12LxMMJYVSf4LoeqjFE47BQQNRciaH9E3nbDfjH4ondo",
+    "label": "ACNon",
+    "ticker": "ACN"
+   },
+   {
+    "mint": "12Rh6JhfW4X5fKP16bbUdb4pcVCKDHFB48x8GG33ondo",
+    "label": "ADBEon",
+    "ticker": "ADBE"
+   },
+   {
+    "mint": "LmTMwmZLNZszn3qpjmnbhfP12U4qWDivaEBwSBSondo",
+    "label": "ADIon",
+    "ticker": "ADI"
+   },
+   {
+    "mint": "13qTjKx53y6LKGGStiKeieGbnVx3fx1bbwopKFb3ondo",
+    "label": "AGGon",
+    "ticker": "AGG"
+   },
+   {
+    "mint": "7eRX747PSbVtGVx3qD5UFdkNM2BfTy86ikUiCMhondo",
+    "label": "AMATon",
+    "ticker": "AMAT"
+   },
+   {
+    "mint": "C9xNaNujcF1a5fidWAAFReFYqhLRVbyk4yPyGqzondo",
+    "label": "AMCon",
+    "ticker": "AMC"
+   },
+   {
+    "mint": "14diAn5z8kjrKwSC8WLqvBqqe5YmihJhjxRxd8Z6ondo",
+    "label": "AMDon",
+    "ticker": "AMD"
+   },
+   {
+    "mint": "SS6AEWhzRrxhL2cXzKKjhFt3rCzmHHGKmFyugDTondo",
+    "label": "AMGNon",
+    "ticker": "AMGN"
+   },
+   {
+    "mint": "14Tqdo8V1FhzKsE3W2pFsZCzYPQxxupXRcqw9jv6ondo",
+    "label": "AMZNon",
+    "ticker": "AMZN"
+   },
+   {
+    "mint": "Cq6QtvHpXbJWtFaiMhUDtHy8YVZ95gcD1oZ1cohondo",
+    "label": "ANETon",
+    "ticker": "ANET"
+   },
+   {
+    "mint": "14VXAhoa1R74vi1ZuiQyGLJrnDMfoFBPJSCpGVz3ondo",
+    "label": "APOon",
+    "ticker": "APO"
+   },
+   {
+    "mint": "14Z8rQQe2Aza33YgEUmj3g3QGNz8DXLiFPuCnsD1ondo",
+    "label": "APPon",
+    "ticker": "APP"
+   },
+   {
+    "mint": "15SsCZqCsM9fZGhTmP4rdJTPT9WGZKazDSsgeQ8ondo",
+    "label": "ARMon",
+    "ticker": "ARM"
+   },
+   {
+    "mint": "1eLZPRsn8bAKmoxsqDMH9Q2m2k7GMNp6RLSQGm8ondo",
+    "label": "ASMLon",
+    "ticker": "ASML"
+   },
+   {
+    "mint": "1FWZtdWN7y38BSXGzbs8D6Shk88oL9atDNgbVz9ondo",
+    "label": "AVGOon",
+    "ticker": "AVGO"
+   },
+   {
+    "mint": "1WxT6NdK7uqpfXuKpALxL2n3f7Rq61XXeHA8UM4ondo",
+    "label": "AXPon",
+    "ticker": "AXP"
+   },
+   {
+    "mint": "1zvb9ELBFShBCWKEk5jRTJAaPAwtVt7quEXx1X4ondo",
+    "label": "BABAon",
+    "ticker": "BABA"
+   },
+   {
+    "mint": "Wk8gC6iTNp8dqd4ghkJ3h1giiUnyhykwHh7tYWjondo",
+    "label": "BACon",
+    "ticker": "BAC"
+   },
+   {
+    "mint": "1YVZ4LGpq8CAhpdpm3mgy7GgPb83gJczCpxLUQ3ondo",
+    "label": "BAon",
+    "ticker": "BA"
+   },
+   {
+    "mint": "YXE7mph6XhsgnyezkMEcTuohSuWhbLWfwx2Hh6mondo",
+    "label": "BBAIon",
+    "ticker": "BBAI"
+   },
+   {
+    "mint": "54CoRF2FYMZNJg9tS36xq5BUcLZ7rju1r59jGc2ondo",
+    "label": "BIDUon",
+    "ticker": "BIDU"
+   },
+   {
+    "mint": "14kLsQVmc64qZexYuR4XGop9y8BeMkd77pJUm1Rhondo",
+    "label": "BILIon",
+    "ticker": "BILI"
+   },
+   {
+    "mint": "mhZ69E1vDnAsQJXAwarLYSX5tmgeMajXBJ2rXAcondo",
+    "label": "BINCon",
+    "ticker": "BINC"
+   },
+   {
+    "mint": "5H1VpMzRuoNtRbPTRCz35ETtEUtnkt8hJuQb9v7ondo",
+    "label": "BLKon",
+    "ticker": "BLK"
+   },
+   {
+    "mint": "A9PFmw9Hu8zzxDUoU351pio1E1XWBWBfWnjT9qoondo",
+    "label": "BLSHon",
+    "ticker": "BLSH"
+   },
+   {
+    "mint": "MYXqkDYbzr7vjXAz2BapR4AiYRXzoikGirrLoRzondo",
+    "label": "BMNRon",
+    "ticker": "BMNR"
+   },
+   {
+    "mint": "bgJWGuQxyoyFeXwzYZKBmoujVdatGFYPNFnv1a6ondo",
+    "label": "BTGOon",
+    "ticker": "BTGO"
+   },
+   {
+    "mint": "cBnVXDyZgaaLZM18wAmqsUKnRUFAEJWbq6VuUoaondo",
+    "label": "BTGon",
+    "ticker": "BTG"
+   },
+   {
+    "mint": "doPqjCxi6UkANkvMz5fSuYGEo5PGppVpTZMeB5vondo",
+    "label": "BZon",
+    "ticker": "BZ"
+   },
+   {
+    "mint": "AErxJJxGbc9cZzZoZepN62BNfg5RXns8tmEc3Zpondo",
+    "label": "CATon",
+    "ticker": "CAT"
+   },
+   {
+    "mint": "7NWHifsBnn9DimUeNnsHdEXkTZhXmJTiXxcCngBondo",
+    "label": "CEGon",
+    "ticker": "CEG"
+   },
+   {
+    "mint": "WNZBSkNBNP3Ct1pcFn6Fu4sZQFhnu48EsM9voCEondo",
+    "label": "CIFRon",
+    "ticker": "CIFR"
+   },
+   {
+    "mint": "t71FyTYHVkPAb5g48adDHmkVxXYbUuP2eq6jDZLondo",
+    "label": "CLOAon",
+    "ticker": "CLOA"
+   },
+   {
+    "mint": "ucQ3VfWAx9pkCN4Kg84zE56FtB4FJN2kQH4ArYYondo",
+    "label": "CLOIon",
+    "ticker": "CLOI"
+   },
+   {
+    "mint": "5owVsVFSHACQuippFYdLp3qWRobp2EGcwxMmsr6ondo",
+    "label": "CMGon",
+    "ticker": "CMG"
+   },
+   {
+    "mint": "R2uDbMtmHq5xSS5SserrovdRKdpiqnVBCd2AHLhondo",
+    "label": "COFon",
+    "ticker": "COF"
+   },
+   {
+    "mint": "5u6KDiNJXxX4rGMfYT4BApZQC5CuDNrG6MHkwp1ondo",
+    "label": "COINon",
+    "ticker": "COIN"
+   },
+   {
+    "mint": "X7j77hTmjZJbepkXXBcsEapM8qNgdfihkFj6CZ5ondo",
+    "label": "COPXon",
+    "ticker": "COPX"
+   },
+   {
+    "mint": "X68p9qTpEMkR1TLpXUP2ZJo8PG4Qge2Y2ZLdjA2ondo",
+    "label": "COPon",
+    "ticker": "COP"
+   },
+   {
+    "mint": "6btaz134wjHkR8sqhAYrtSM6tavftfxnRvnyMd8ondo",
+    "label": "COSTon",
+    "ticker": "COST"
+   },
+   {
+    "mint": "NKyzy31w2J7odLb2CW3Ft4fpKXkW3LBt1pvpkVLondo",
+    "label": "CPNGon",
+    "ticker": "CPNG"
+   },
+   {
+    "mint": "6xHEyem9hmkGtVq6XGCiQUGpPsHBaoYuYdFNZa5ondo",
+    "label": "CRCLon",
+    "ticker": "CRCL"
+   },
+   {
+    "mint": "7D7ukbcnUNYt7Et5vtsDZhAy28MKu9pkHka1Hp9ondo",
+    "label": "CRMon",
+    "ticker": "CRM"
+   },
+   {
+    "mint": "cdKfoNjbXgnSuxvoajhtH3uixfZhq1YXhQsS1Rwondo",
+    "label": "CRWDon",
+    "ticker": "CRWD"
+   },
+   {
+    "mint": "7DWcZE1uVc8m2mf9pV8KNov28ET7HsvHkhrhgr9ondo",
+    "label": "CSCOon",
+    "ticker": "CSCO"
+   },
+   {
+    "mint": "FGmUDXqA3AbWfo5b3NUcsvwoUFCF4tr9ea6uercondo",
+    "label": "CVNAon",
+    "ticker": "CVNA"
+   },
+   {
+    "mint": "7tgKziACteG26VjV5xKufojKxwTgCFyTwmWUmz5ondo",
+    "label": "CVXon",
+    "ticker": "CVX"
+   },
+   {
+    "mint": "PjtfUiw6Hwd8PZ94EcUw8mBSYxp7SjjzSLeNTDKondo",
+    "label": "Con",
+    "ticker": "C"
+   },
+   {
+    "mint": "83P1gCFBZfGRCwJuBt9juxJKEsZwejJoG66eTZ6ondo",
+    "label": "DASHon",
+    "ticker": "DASH"
+   },
+   {
+    "mint": "td1aY5AvYQuwGD75qNq9aPipMexraN9mQXJwqifondo",
+    "label": "DBCon",
+    "ticker": "DBC"
+   },
+   {
+    "mint": "CqQyAZjB9LGFTG95eiadGTkfhd9QA12ProeKsQmondo",
+    "label": "DEon",
+    "ticker": "DE"
+   },
+   {
+    "mint": "gnoSQSNTNZHViqVfxCcPDVxcRA29mrJL7C6JqYLondo",
+    "label": "DGRWon",
+    "ticker": "DGRW"
+   },
+   {
+    "mint": "mJf1xT3suXtkXBCfZcE9oUUuyxkvSgqYBWiX7v1ondo",
+    "label": "DISon",
+    "ticker": "DIS"
+   },
+   {
+    "mint": "12J2LD3tuLfdiVKnWZMHRMrbnXDY9rM4yqVLUa5yondo",
+    "label": "DNNon",
+    "ticker": "DNN"
+   },
+   {
+    "mint": "916SDKz7y5ZcEZC9CtnQ5Djs1Y8Yv3UAPb6bak8ondo",
+    "label": "EEMon",
+    "ticker": "EEM"
+   },
+   {
+    "mint": "AbvryMGnaba9oADMZk8Vp2Av6MtczsncGyfWaC4ondo",
+    "label": "EFAon",
+    "ticker": "EFA"
+   },
+   {
+    "mint": "aheEdmuryJU8ymy8LjYheZH5i2BW1UMsfuWQKD2ondo",
+    "label": "EQIXon",
+    "ticker": "EQIX"
+   },
+   {
+    "mint": "ZmHxc6Gt27RJKxD2ay6UL4n9yQ7mKAq4XZQUeVhondo",
+    "label": "FIGRon",
+    "ticker": "FIGR"
+   },
+   {
+    "mint": "aLDdFsr3VTUQaHFK6yNvQxztvxQ8nxW4AMuSGC7ondo",
+    "label": "FIGon",
+    "ticker": "FIG"
+   },
+   {
+    "mint": "ivBnfPTyuHDNWmMSnbavckhJK6SHZW8h77nZKsEondo",
+    "label": "FTGCon",
+    "ticker": "FTGC"
+   },
+   {
+    "mint": "Ao5rKFRQ54W3DKSAtqfhBRPNHewwWRLNLao2JL9ondo",
+    "label": "FUTUon",
+    "ticker": "FUTU"
+   },
+   {
+    "mint": "5hT2o25X9tGXipwhLckaUdgnxrZ6Y8eiUwdhpLeondo",
+    "label": "Fon",
+    "ticker": "F"
+   },
+   {
+    "mint": "NrTdGMA3ujUvWXkwXyZKnhoByb32KTjRh5Vo47yondo",
+    "label": "GEMIon",
+    "ticker": "GEMI"
+   },
+   {
+    "mint": "aTBfDuLRqYHBiG82bHA7DzwjSDTFre2dRtGH3S5ondo",
+    "label": "GEon",
+    "ticker": "GE"
+   },
+   {
+    "mint": "hWfiw4mcxT8rnNFkk6fsCQSxoxgZ9yVhB6tyeVcondo",
+    "label": "GLDon",
+    "ticker": "GLD"
+   },
+   {
+    "mint": "aznKt8v32CwYMEcTcB4bGTv8DXWStCpHrcCtyy7ondo",
+    "label": "GMEon",
+    "ticker": "GME"
+   },
+   {
+    "mint": "bbahNA5vT9WJeYft8tALrH1LXWffjwqVoUbqYa1ondo",
+    "label": "GOOGLon",
+    "ticker": "GOOGL"
+   },
+   {
+    "mint": "m9GcsVgdjaL3KsdtSFHimnhtsUMpTHkjtwEG4Tzondo",
+    "label": "GRABon",
+    "ticker": "GRAB"
+   },
+   {
+    "mint": "Gc1aT3ay7FXL3qdAW7cNSXYPDsGavy7qiACuxwxondo",
+    "label": "GRNDon",
+    "ticker": "GRND"
+   },
+   {
+    "mint": "BchJRy2snmhJZf3rQ9LJ3ePs2BGfYgfvQNo31d2ondo",
+    "label": "GSon",
+    "ticker": "GS"
+   },
+   {
+    "mint": "MtEXKVN3Pcggy8MPA3eJr15H6SK3RXheScqj9qtondo",
+    "label": "HDon",
+    "ticker": "HD"
+   },
+   {
+    "mint": "bdh3njeo19d2TBLAKTGvCWdSoArfVw8uZBAJHY4ondo",
+    "label": "HIMSon",
+    "ticker": "HIMS"
+   },
+   {
+    "mint": "BVdXGvmgi6A9oAiwWvBvP76fyTqcCNRJMM7zMN6ondo",
+    "label": "HOODon",
+    "ticker": "HOOD"
+   },
+   {
+    "mint": "c5ug15fwZRfQhhVa6LHscFY33ebVDHcVCezYpj7ondo",
+    "label": "HYGon",
+    "ticker": "HYG"
+   },
+   {
+    "mint": "M77ZvkZ8zW5udRbuJCbuwSwavRa7bGAZYMTwru8ondo",
+    "label": "IAUon",
+    "ticker": "IAU"
+   },
+   {
+    "mint": "C8bZkgSxXkyT1RgxByp2teJ24hgimPLoyEYoNa9ondo",
+    "label": "IBMon",
+    "ticker": "IBM"
+   },
+   {
+    "mint": "C9J9vZ8N79GzzxFoRkPWCkGtMKU8akg4FhUk4r9ondo",
+    "label": "IEFAon",
+    "ticker": "IEFA"
+   },
+   {
+    "mint": "cdVNL7wK8mf1UCDqM6zdrziRv4hmvqWhXeTcck2ondo",
+    "label": "IEMGon",
+    "ticker": "IEMG"
+   },
+   {
+    "mint": "cfPLN9WXD2BTkbZhRZMVXPmVSiRo44hJWRtnaC8ondo",
+    "label": "IJHon",
+    "ticker": "IJH"
+   },
+   {
+    "mint": "cJpUMp5R7rZ6fGeLHbHhrRuJzK9mkyKDjZqNpT3ondo",
+    "label": "INTCon",
+    "ticker": "INTC"
+   },
+   {
+    "mint": "CozoH5HBTyyeYSQxHcWpGzd4Sq5XBaKzBzvTtN3ondo",
+    "label": "INTUon",
+    "ticker": "INTU"
+   },
+   {
+    "mint": "13QHuepdhtJ3urNsV9i1hdL8nQoca2G7ZaLzb5FYondo",
+    "label": "IRENon",
+    "ticker": "IREN"
+   },
+   {
+    "mint": "1MGRpPrkhEsCm2GCWD3rsvEU77xTTLAzfKXeFgFondo",
+    "label": "ISRGon",
+    "ticker": "ISRG"
+   },
+   {
+    "mint": "CPWkMURVvcnX8hGjqCTb8i5LkzV3VSvyk7SeJi8ondo",
+    "label": "ITOTon",
+    "ticker": "ITOT"
+   },
+   {
+    "mint": "CqW2pd6dCPG9xKZfAsTovzDsMmAGKJSDBNcwM96ondo",
+    "label": "IVVon",
+    "ticker": "IVV"
+   },
+   {
+    "mint": "dSHPFuMMjZqt7xDYGWrexXTSkdEZAiZngqymQF2ondo",
+    "label": "IWFon",
+    "ticker": "IWF"
+   },
+   {
+    "mint": "dvj2kKFSyjpnyYSYppgFdAEVfgjMEoQGi9VaV23ondo",
+    "label": "IWMon",
+    "ticker": "IWM"
+   },
+   {
+    "mint": "DX7g7WNjDpVzNK9CG81v7wb6ZbiNzYfkdzH2Xs5ondo",
+    "label": "IWNon",
+    "ticker": "IWN"
+   },
+   {
+    "mint": "KZtqx9BJbpcGY7vdzhqPXM3ECKChxE5YhXaDiwRondo",
+    "label": "JAAAon",
+    "ticker": "JAAA"
+   },
+   {
+    "mint": "E1aUS5nyv7kaBzdQzPVJW5zfaMgoUJpKYzdnFS2ondo",
+    "label": "JDon",
+    "ticker": "JD"
+   },
+   {
+    "mint": "KUXt7LzHWSQXp5eyqMZRxWjAP6yM8BUh4LRHwiwondo",
+    "label": "JNJon",
+    "ticker": "JNJ"
+   },
+   {
+    "mint": "E5Gczsavxcomqf6Cw1sGCKLabL1xYD2FzKxVoB4ondo",
+    "label": "JPMon",
+    "ticker": "JPM"
+   },
+   {
+    "mint": "149o8ppQf9SzKCKXZ4v3dzHkwumvtQSRzSEkr29uondo",
+    "label": "KLACon",
+    "ticker": "KLAC"
+   },
+   {
+    "mint": "e6G4pfFcrdKxJuZ4YXixRFfMbpMvgXG2Mjcus71ondo",
+    "label": "KOon",
+    "ticker": "KO"
+   },
+   {
+    "mint": "Edik9MoFp8LAXS9HNu2gRFyihwYqDqv4ZmNmVT9ondo",
+    "label": "LINon",
+    "ticker": "LIN"
+   },
+   {
+    "mint": "v12TwfofSbvVqQ5N5KGG4d3J8rtEi4BjGfn2apyondo",
+    "label": "LIon",
+    "ticker": "LI"
+   },
+   {
+    "mint": "eGGxZwNSfuNKRqQLKaz2hc4QkA2mau7skyxPdj7ondo",
+    "label": "LLYon",
+    "ticker": "LLY"
+   },
+   {
+    "mint": "EoReHwUnGGekbXFHLj5rbCVKiwWqu32GrETMfw4ondo",
+    "label": "LMTon",
+    "ticker": "LMT"
+   },
+   {
+    "mint": "edLdFJVVR532qhcrNTJjLAmhmyV7NsctbWVokMBondo",
+    "label": "LOWon",
+    "ticker": "LOW"
+   },
+   {
+    "mint": "wFJoeEYpKg9oRhyJy6BWTT3J95gmXBLvoeikDQNondo",
+    "label": "LRCXon",
+    "ticker": "LRCX"
+   },
+   {
+    "mint": "ETCJUmuhs5aY62xgEVWCZ5JR8KPdeXUaJz3LuC5ondo",
+    "label": "MARAon",
+    "ticker": "MARA"
+   },
+   {
+    "mint": "EsVHcyRxXFJCLMiuYLWhoDygrNe1BJGpYeZ17X7ondo",
+    "label": "MAon",
+    "ticker": "MA"
+   },
+   {
+    "mint": "EUbJjmDt8JA222M91bVLZs211siZ2jzbFArH9N3ondo",
+    "label": "MCDon",
+    "ticker": "MCD"
+   },
+   {
+    "mint": "EWwdgGshGngcMpDV34pWZRSu5bkAuiKuKTTHKQ8ondo",
+    "label": "MELIon",
+    "ticker": "MELI"
+   },
+   {
+    "mint": "fDxs5y12E7x7jBwCKBXGqt71uJmCWsAQ3Srkte6ondo",
+    "label": "METAon",
+    "ticker": "META"
+   },
+   {
+    "mint": "XwFm5GiKPVTvPiEbQpdc6vJbFEpsUXRMf6TcSxnondo",
+    "label": "MPon",
+    "ticker": "MP"
+   },
+   {
+    "mint": "bn1fb8dwzafGePqNPrM8m8cbAKQiFqeEPuZkPySondo",
+    "label": "MRKon",
+    "ticker": "MRK"
+   },
+   {
+    "mint": "14VP7DvCAdBCc5XGNZkPt6zhtPzJrWWS64Koxtxyondo",
+    "label": "MRNAon",
+    "ticker": "MRNA"
+   },
+   {
+    "mint": "FovBwhoV5KQjZCdhoM6jgXYwXLX3F8vgAfvmLH7ondo",
+    "label": "MRVLon",
+    "ticker": "MRVL"
+   },
+   {
+    "mint": "FRmH6iRkMr33DLG6zVLR7EM4LojBFAuq6NtFzG6ondo",
+    "label": "MSFTon",
+    "ticker": "MSFT"
+   },
+   {
+    "mint": "FSz4ouiqXpHuGPcpacZfTzbMjScoj5FfzHkiyu2ondo",
+    "label": "MSTRon",
+    "ticker": "MSTR"
+   },
+   {
+    "mint": "R3ywbVQ5t8LNmjQsn2Ngv43dSqyZscQwNag9G3Eondo",
+    "label": "MTZon",
+    "ticker": "MTZ"
+   },
+   {
+    "mint": "Fz9edBpaURPPzpKVRR1A8PENYDEgHqwx5D5th28ondo",
+    "label": "MUon",
+    "ticker": "MU"
+   },
+   {
+    "mint": "t7eN6cGwRMFaZvsNW2SmVwkedmHtDdrxA4ycNE5ondo",
+    "label": "NEEon",
+    "ticker": "NEE"
+   },
+   {
+    "mint": "g4KnPrxPLeeKkwvDmZFMtYQPM64eHeShbD55vK6ondo",
+    "label": "NFLXon",
+    "ticker": "NFLX"
+   },
+   {
+    "mint": "V8LRV7kWjrx6Prke9oHEHNUiR122BVtyuPciTCTondo",
+    "label": "NIKLon",
+    "ticker": "NIKL"
+   },
+   {
+    "mint": "yQ37dFiGAbzrb2FRAEhGNzRy5zFfoYGWYhAepFEondo",
+    "label": "NIOon",
+    "ticker": "NIO"
+   },
+   {
+    "mint": "g646pcdG2Rt5DH9WZzL7VVnVDWCCMTTrnktwE74ondo",
+    "label": "NKEon",
+    "ticker": "NKE"
+   },
+   {
+    "mint": "G7pTVoSECz5RQWubEnTP7AC83KHUsSyoiqYR1R2ondo",
+    "label": "NOWon",
+    "ticker": "NOW"
+   },
+   {
+    "mint": "YeK2TdPtGLAme3Phg4pb1GBN2YxKgX5UNVyD4asondo",
+    "label": "NTESon",
+    "ticker": "NTES"
+   },
+   {
+    "mint": "gEGtLTPNQ7jcg25zTetkbmF7teoDLcrfTnQfmn2ondo",
+    "label": "NVDAon",
+    "ticker": "NVDA"
+   },
+   {
+    "mint": "GeV7S8vjP8qdYZpdGv2Xi6e7MUMCk8NAAp2z7g5ondo",
+    "label": "NVOon",
+    "ticker": "NVO"
+   },
+   {
+    "mint": "m6oDLvJT7rY7M1TxuLWP3pWmAPg2cCWDQR1NKiEondo",
+    "label": "OKLOon",
+    "ticker": "OKLO"
+   },
+   {
+    "mint": "7qy1j4Mechfyr6uAST3djH4vk4kiEYC2cjEytXdondo",
+    "label": "ONDSon",
+    "ticker": "ONDS"
+   },
+   {
+    "mint": "13qtwy5fZi9Przz14pzo9xqFSr8QHmLyUpUCvP1xondo",
+    "label": "ONon",
+    "ticker": "ON"
+   },
+   {
+    "mint": "ou1uE526v7zmUYP2qCb2LJgfXAyWAtWS9SETtr8ondo",
+    "label": "OPENon",
+    "ticker": "OPEN"
+   },
+   {
+    "mint": "gbHFTMkuMQUy5xrgoCBdaQ2XYvNyjWAYcnRPh9Condo",
+    "label": "OPRAon",
+    "ticker": "OPRA"
+   },
+   {
+    "mint": "GmDADFpfwjfzZq9MfCafMDTS69MgVjtzD7Fd9a4ondo",
+    "label": "ORCLon",
+    "ticker": "ORCL"
+   },
+   {
+    "mint": "ThwGDsXZ6iKubWuEQjmDxGwF3bUERDGbBXvcbjFondo",
+    "label": "OSCRon",
+    "ticker": "OSCR"
+   },
+   {
+    "mint": "1GNFMryQ6c9ZpMhgNimmsbtgYM21qnBJgRAFoNiondo",
+    "label": "OXYon",
+    "ticker": "OXY"
+   },
+   {
+    "mint": "P7hTXnKk2d2DyqWnefp5BSroE1qjjKpKxg9SxQqondo",
+    "label": "PALLon",
+    "ticker": "PALL"
+   },
+   {
+    "mint": "M7hVQomhw4Q2D2op3HvBrZjHu9SryjNvD5haEZ1ondo",
+    "label": "PANWon",
+    "ticker": "PANW"
+   },
+   {
+    "mint": "GRciFCqJ5y2hbiD6U5mGkohY65BZTXGuGUrCqf7ondo",
+    "label": "PBRon",
+    "ticker": "PBR"
+   },
+   {
+    "mint": "UP5s1srLaHDc4SwJqLPa3A48x5R7ofN3hZWxWEZondo",
+    "label": "PCGon",
+    "ticker": "PCG"
+   },
+   {
+    "mint": "M6agiXbNgy8Xon9ngiW4ZDPbMFcNCTMkMMkshZyondo",
+    "label": "PDBCon",
+    "ticker": "PDBC"
+   },
+   {
+    "mint": "PnjETBCLC318DRejo9cMQKAmET9PvW8AEFGWMNtondo",
+    "label": "PDDon",
+    "ticker": "PDD"
+   },
+   {
+    "mint": "gud6b3fYekjhMG5F818BALwbg2vt4JKoow59Md9ondo",
+    "label": "PEPon",
+    "ticker": "PEP"
+   },
+   {
+    "mint": "Gwh9fPsX1qWATXy63vNaJnAFfwebWQtZaVmPko6ondo",
+    "label": "PFEon",
+    "ticker": "PFE"
+   },
+   {
+    "mint": "GZ8v4NdSG7CTRZqHMgNsTPRULeVi8CpdWd9wZY8ondo",
+    "label": "PGon",
+    "ticker": "PG"
+   },
+   {
+    "mint": "sxyg1VTSzy5zYANUK7hntNtmFAWoXGJq95AcHuVondo",
+    "label": "PINSon",
+    "ticker": "PINS"
+   },
+   {
+    "mint": "HfsnTS5qtdStwec9DfBrunRqnAMYMMz1kjv9Hu9ondo",
+    "label": "PLTRon",
+    "ticker": "PLTR"
+   },
+   {
+    "mint": "TnfswqdE1jAJ8sfnf5J7kSVLEH1cfpAYZ8MWmKfondo",
+    "label": "PLUGon",
+    "ticker": "PLUG"
+   },
+   {
+    "mint": "qKtU9A7ij34XmtxaSzYfxCpkgAZzzFsqnUb2kW2ondo",
+    "label": "PSQon",
+    "ticker": "PSQ"
+   },
+   {
+    "mint": "hM7B3UQTTR81mS27SxDDPzBbjejmo8fnpFjzgv9ondo",
+    "label": "PYPLon",
+    "ticker": "PYPL"
+   },
+   {
+    "mint": "hqJXutLF6f7DxStrWCrnZDfXzbNTZmvi3KheVi6ondo",
+    "label": "QBTSon",
+    "ticker": "QBTS"
+   },
+   {
+    "mint": "hrmX7MV5hifoaBVjnrdpz698yABxrbBNAcWtWo9ondo",
+    "label": "QCOMon",
+    "ticker": "QCOM"
+   },
+   {
+    "mint": "HrYNm6jTQ71LoFphjVKBTdAE4uja7WsmLG8VxB8ondo",
+    "label": "QQQon",
+    "ticker": "QQQ"
+   },
+   {
+    "mint": "HXFrTf9v9NdjGUTnx4sojR3Cf92hoBsQFUxKTN7ondo",
+    "label": "RDDTon",
+    "ticker": "RDDT"
+   },
+   {
+    "mint": "tiitb2Z1HtpB2DpVr6V7tdCFS3jmTinLeuGj9EVondo",
+    "label": "REMXon",
+    "ticker": "REMX"
+   },
+   {
+    "mint": "dwEPNKQab3iwRmjGvZPXhAmws1W5NsQGwuXwi8oondo",
+    "label": "RGTIon",
+    "ticker": "RGTI"
+   },
+   {
+    "mint": "i6f3DvZBuLpnGSqS8x6WPeStJ7jNe5KewD6afD5ondo",
+    "label": "RIOTon",
+    "ticker": "RIOT"
+   },
+   {
+    "mint": "AXRsYFt7TXNQ3DcY6BkvRgPV6VsYMURyDtaeudjondo",
+    "label": "RIVNon",
+    "ticker": "RIVN"
+   },
+   {
+    "mint": "12BvLZtzjdssAycxPeBQUjukhmgQpULAvy6SroYdondo",
+    "label": "RTXon",
+    "ticker": "RTX"
+   },
+   {
+    "mint": "iLDu2jjp2i3Uqc2Vm7K7GLiUj3hR4Un49MtD7c4ondo",
+    "label": "SBETon",
+    "ticker": "SBET"
+   },
+   {
+    "mint": "iPFqjcZQTNMNXA4kbShbMhfAVD8yr8Uq9UtXMV6ondo",
+    "label": "SBUXon",
+    "ticker": "SBUX"
+   },
+   {
+    "mint": "cnc6M1zXLdrGR5LAQVcaJDfgezMiVWNtGQsVy1Kondo",
+    "label": "SCHWon",
+    "ticker": "SCHW"
+   },
+   {
+    "mint": "HjrN6ChZK2QRL6hMXayjGPLFvxhgjwKEy135VRjondo",
+    "label": "SGOVon",
+    "ticker": "SGOV"
+   },
+   {
+    "mint": "ivdDracs2s7jCP698dJXKSEQdVrNj9hasJL1Uq1ondo",
+    "label": "SHOPon",
+    "ticker": "SHOP"
+   },
+   {
+    "mint": "iy11ytbSGcUnrjE6Lfv78TFqxKyUESfku1FugS9ondo",
+    "label": "SLVon",
+    "ticker": "SLV"
+   },
+   {
+    "mint": "jLca79XzcewRuBZyaJxVxuKpUHcEix1X4CP1RP9ondo",
+    "label": "SMCIon",
+    "ticker": "SMCI"
+   },
+   {
+    "mint": "a2cXfonVgQ6cKB4Lm8YZsPry39VZSA562bwmRSiondo",
+    "label": "SNAPon",
+    "ticker": "SNAP"
+   },
+   {
+    "mint": "JmFLCBwoNvcXy6B2VqABg6m784ubkXpaEx3p7S5ondo",
+    "label": "SNOWon",
+    "ticker": "SNOW"
+   },
+   {
+    "mint": "mqL8yXQpeSvc7NgrAtLLPtRvUiWyLoG5RWLv16iondo",
+    "label": "SOFIon",
+    "ticker": "SOFI"
+   },
+   {
+    "mint": "vE2qArmjto6VfeMngyGAnzp2ipLYeXsxiARDnnXondo",
+    "label": "SOUNon",
+    "ticker": "SOUN"
+   },
+   {
+    "mint": "aKzjn2ZdWySSGPSSDTY2HUpcSCmemSahTXihrpyondo",
+    "label": "SOon",
+    "ticker": "SO"
+   },
+   {
+    "mint": "JrTYw7A9jihX5TwpRStYviEbsYf2X2VJpZ13719ondo",
+    "label": "SPGIon",
+    "ticker": "SPGI"
+   },
+   {
+    "mint": "jzCvs2Pk8tDcfsFRqnEMjurgaQW4iQfEkandUR8ondo",
+    "label": "SPOTon",
+    "ticker": "SPOT"
+   },
+   {
+    "mint": "k18WJUULWheRkSpSquYGdNNmtuE2Vbw1hpuUi92ondo",
+    "label": "SPYon",
+    "ticker": "SPY"
+   },
+   {
+    "mint": "D1tu7Fnm3cCpKyyPXrqm5GXShPqMj7a2SEjjq9fondo",
+    "label": "SQQQon",
+    "ticker": "SQQQ"
+   },
+   {
+    "mint": "9PMjLqd8zPdKkJUXarnit5t7tPL3cCscwHzy7ATondo",
+    "label": "TCOMon",
+    "ticker": "TCOM"
+   },
+   {
+    "mint": "k6BPp2Xmf2TYgrZiUyWfUoZBKeqaDbvPoAVgSx2ondo",
+    "label": "TIPon",
+    "ticker": "TIP"
+   },
+   {
+    "mint": "RTb54gpqAx6RpLAHRGnqQ3ciQ845CHqhg21ZzEJondo",
+    "label": "TLNon",
+    "ticker": "TLN"
+   },
+   {
+    "mint": "KaSLSWByKy6b9FrCYXPEJoHmLpuFZtTCJk1F1Z9ondo",
+    "label": "TLTon",
+    "ticker": "TLT"
+   },
+   {
+    "mint": "T699bgtXQw4CJ59rQ4VzLsupVQUzoL5RmuhHnKrondo",
+    "label": "TMOon",
+    "ticker": "TMO"
+   },
+   {
+    "mint": "pDY4GPJfZcNETPG7myXeafQfgJqqVkn81bMYDyfondo",
+    "label": "TMUSon",
+    "ticker": "TMUS"
+   },
+   {
+    "mint": "kbmF7ERJWMaaDswMprrH9gHSLya5D2RMBNgKqg3ondo",
+    "label": "TMon",
+    "ticker": "TM"
+   },
+   {
+    "mint": "14W1itEkV7k1W819mLSknFTaMmkCtPokbF2tRkPUondo",
+    "label": "TQQQon",
+    "ticker": "TQQQ"
+   },
+   {
+    "mint": "KeGv7bsfR4MheC1CkmnAVceoApjrkvBhHYjWb67ondo",
+    "label": "TSLAon",
+    "ticker": "TSLA"
+   },
+   {
+    "mint": "keybg184d4vyXeQdFqs4o99YsMg7xBthxTJ6Ky3ondo",
+    "label": "TSMon",
+    "ticker": "TSM"
+   },
+   {
+    "mint": "81xLFvCzFaUM3KDxSHC75pXu3RPCeSeCbmGBY8aondo",
+    "label": "TXNon",
+    "ticker": "TXN"
+   },
+   {
+    "mint": "WKMZummev5UcXz5nNKQZvTD6QjNSM2X58uwmDReondo",
+    "label": "Ton",
+    "ticker": "T"
+   },
+   {
+    "mint": "KJNeFW3kk3ycPjXpC6cbuyckjeYHacc2ekhtAi5ondo",
+    "label": "UBERon",
+    "ticker": "UBER"
+   },
+   {
+    "mint": "kPBGL8vAwKN3UGmr9cjkM2dU79SC3nzTC9yu7F8ondo",
+    "label": "UNHon",
+    "ticker": "UNH"
+   },
+   {
+    "mint": "o6U1Sm6Vd7EofMyCrL28mrp2QLzgYGgjveHiEQ5ondo",
+    "label": "USFRon",
+    "ticker": "USFR"
+   },
+   {
+    "mint": "rpydAzWdCy85HEmoQkH5PVxYtDYQWjmLxgHHadxondo",
+    "label": "USOon",
+    "ticker": "USO"
+   },
+   {
+    "mint": "MkN2TZSYTFBdMRLf9EVcfhstTwnazH8knd9hpepondo",
+    "label": "VRTon",
+    "ticker": "VRT"
+   },
+   {
+    "mint": "h6MW8GFpfzxFa1JNn6hZNnBF3t4fj9SHAXKy6LXondo",
+    "label": "VSTon",
+    "ticker": "VST"
+   },
+   {
+    "mint": "jCCU4GwukjNxAXJowG2S4KCrr5g6YyUB61WHYvGondo",
+    "label": "VTIon",
+    "ticker": "VTI"
+   },
+   {
+    "mint": "KuiYLPVq65qixD9TgvxBC576C4gG6vVTCdbh2zFondo",
+    "label": "VTVon",
+    "ticker": "VTV"
+   },
+   {
+    "mint": "igu1coP6n3GPaWmbd8J9Z7UAyLpV254uQFFNfydondo",
+    "label": "VZon",
+    "ticker": "VZ"
+   },
+   {
+    "mint": "kxEW4oJL75K37VeXaZF1ynbHQATQwhECQKN1374ondo",
+    "label": "Von",
+    "ticker": "V"
+   },
+   {
+    "mint": "L6ZE5qCpVVSqLePz64CrwkgyWoPF9M7tB8BeFH4ondo",
+    "label": "WFCon",
+    "ticker": "WFC"
+   },
+   {
+    "mint": "LZddqAqKqJW9oMZSjTxCUmbmzBRQtv9gMkD9hZ3ondo",
+    "label": "WMTon",
+    "ticker": "WMT"
+   },
+   {
+    "mint": "exYfSJt6Fgfhfnp3bAD4roYy97hLF9npjYaLyEXondo",
+    "label": "WULFon",
+    "ticker": "WULF"
+   },
+   {
+    "mint": "qCYD74QnXzd9pzv6pGHQKJVwoibL6sNcPQDnpDiondo",
+    "label": "XOMon",
+    "ticker": "XOM"
+   },
+   {
+    "mint": "BWxe2FVciUbwrCUZQPUKiREBh5LmVa5AiUqNLAkondo",
+    "label": "XYZon",
+    "ticker": "XYZ"
+   },
+   {
+    "mint": "ZPFtoCe7WWqG4N3ZFRccS8T9SMBeHsd1Vmgv2i7ondo",
+    "label": "USDon",
+    "ticker": "USD"
+   }
+  ],
+  "provenance": "Mint registry: DeFiLlama ondo-global-markets adapter solana config (203 tokens); prices: Jupiter v3 stockData"
+ }
+}
