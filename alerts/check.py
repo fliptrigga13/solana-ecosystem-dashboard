@@ -121,6 +121,7 @@ def main() -> int:
         destination = sub.get("destination")
         if not channel or not destination:
             continue
+        wanted = []
         for event in events:
             if not subscriber_wants(sub, event):
                 skipped_filter += 1
@@ -128,12 +129,25 @@ def main() -> int:
             if not should_send(sent, tier, event, now):
                 skipped_cooldown += 1
                 continue
-            ok = deliver.send(channel, destination, event)
-            if ok:
-                delivered += 1
-                sent[dedupe_key(tier, event)] = now.isoformat()
-            else:
-                failed += 1
+            wanted.append(event)
+        if tier == "free":
+            # Free tier: hourly digest cadence — one combined message per run
+            # instead of one message per event.
+            if wanted:
+                if deliver.send_digest(channel, destination, wanted):
+                    delivered += 1
+                    for event in wanted:
+                        sent[dedupe_key(tier, event)] = now.isoformat()
+                else:
+                    failed += 1
+        else:
+            # Pro/Team: instant per-event delivery.
+            for event in wanted:
+                if deliver.send(channel, destination, event):
+                    delivered += 1
+                    sent[dedupe_key(tier, event)] = now.isoformat()
+                else:
+                    failed += 1
 
     atomic_write_json(SENT_FILE, sent)
     print(

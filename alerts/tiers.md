@@ -36,5 +36,5 @@ launching. Everything else (limits, cooldowns, channels) is implemented in
 - [ ] Decide hosting + cron schedule for `alerts/check.py` (recommended: hourly)
 - [ ] Decide payment provider + signup flow for Pro/Team (tiers are enforced
       by the `tier` field in `subscribers.json`; there is no billing code yet)
-- [ ] Free-tier digest batching: currently each event is delivered
-      individually; a true combined hourly digest email/message is future work
+- [x] Free-tier digest batching — DONE 2026-09-27: one combined digest
+      message per run (deliver.send_digest); 11 new tests, 38/38 green
