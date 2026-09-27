@@ -1,10 +1,10 @@
 # Alert subscription tiers
 
-Prices below are placeholders — **TODO (owner): set real prices** before
+Prices set by owner 2026-09-27 — change anytime. (Was: TODO placeholder.)
 launching. Everything else (limits, cooldowns, channels) is implemented in
 `alerts/check.py`.
 
-## Free — $TODO/mo (currently $0)
+## Free — $0/mo
 
 - 1 delivery channel (telegram, email, or webhook)
 - WARNING and CRITICAL only (no INFO, e.g. no epoch-ending notices)
@@ -12,7 +12,7 @@ launching. Everything else (limits, cooldowns, channels) is implemented in
   means a repeat of the same rule+severity is not resent for 7 days)
 - Subscriber picks which rules to follow, or all (`"*"`)
 
-## Pro — $TODO/mo
+## Pro — $19/mo
 
 - Everything in Free, plus:
 - All severities including INFO
@@ -20,7 +20,7 @@ launching. Everything else (limits, cooldowns, channels) is implemented in
 - All three channels: telegram + email + webhook (one destination each)
 - 1-hour cooldown dedupe (repeats of the same rule+severity resend after 1h)
 
-## Team — $TODO/mo
+## Team — $99/mo
 
 - Everything in Pro, plus:
 - Multiple destinations per channel (e.g. several chat IDs / emails)
