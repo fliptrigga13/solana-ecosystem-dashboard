@@ -2,6 +2,23 @@
 <html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Solana Ecosystem Dashboard</title>
+<meta name="description" content="Hourly-updated Solana network stats: TPS, validators, Nakamoto coefficient, validator APY, client diversity, SOL price, DeFi TVL, stablecoins, DEX volume by venue, Jito MEV, RWA. Free API + alerts.">
+<link rel="canonical" href="https://fliptrigga13.github.io/solana-ecosystem-dashboard/">
+<meta property="og:title" content="Solana Ecosystem Dashboard">
+<meta property="og:description" content="Hourly-updated Solana network stats: TPS, Nakamoto coefficient, validator APY, DEX venues, Jito MEV, stablecoin issuers, RWA. Free API + alerts.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://fliptrigga13.github.io/solana-ecosystem-dashboard/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Solana Ecosystem Dashboard">
+<meta name="twitter:description" content="Hourly-updated Solana network stats. Free API + alerts for validators and builders.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Dataset","name":"Solana Ecosystem Dashboard",
+ "description":"Hourly snapshots of Solana network health: TPS, fees, validators, Nakamoto coefficient, validator APY and client diversity, SOL price, DeFi TVL, stablecoins, DEX volume by venue, Jito MEV tips, tokenized real-world assets, SIMD governance.",
+ "url":"https://fliptrigga13.github.io/solana-ecosystem-dashboard/",
+ "keywords":["Solana","blockchain","validator","DeFi","TVL","cryptocurrency","Nakamoto coefficient","MEV","DEX volume","staking APY","stablecoin"],
+ "temporalCoverage":"2026-07-02/..","measurementTechnique":"automated hourly collection",
+ "distribution":[{"@type":"DataDownload","contentUrl":"https://fliptrigga13.github.io/solana-ecosystem-dashboard/data.json","encodingFormat":"application/json"}]}
+</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   :root { --bg:#0b0f1a; --card:#111827; --border:#1f2937; --brand:#9945FF; --green:#14F195; --text:#e2e8f0; --muted:#94a3b8;}
@@ -15,8 +32,12 @@
   table { width:100%; border-collapse:collapse; }
   th,td { padding:10px; text-align:left; border-bottom:1px solid var(--border); font-size:.85rem;}
   th { color:var(--muted); text-transform:uppercase; font-size:.7rem; }
+  .badge-sponsored { display:inline-block; font-size:.65rem; font-weight:700; letter-spacing:.06em;
+    text-transform:uppercase; color:#0b0f1a; background:#fbbf24; border-radius:4px; padding:2px 6px; margin-bottom:6px; }
+  .featured { border-color:#fbbf24; }
+  .ad-card { border-style:dashed; }
 </style></head><body>
-<h1>ðŸŸ£ Solana Ecosystem Dashboard</h1>
+<h1>🟣 Solana Ecosystem Dashboard</h1>
 <p class="sub">Auto-updated: 2026-09-10T14:48:01.697912+00:00</p>
 <div class="grid">
   <div class="card stat"><div class="v">4,470.0</div><div class="l">Avg TPS (5h)</div></div>
@@ -32,7 +53,12 @@
   <div class="card stat"><div class="v">$0.04</div><div class="l">Avg fee / txn (derived)</div></div>
   <div class="card stat"><div class="v">677</div><div class="l">Active validators</div></div>
   <div class="card stat"><div class="v">12</div><div class="l">Delinquent</div></div>
+  <div class="card stat"><div class="v">—</div><div class="l">Nakamoto coefficient</div></div>
+  <div class="card stat"><div class="v">—%</div><div class="l">Jito client share (stake)</div></div>
+  <div class="card stat"><div class="v">—%</div><div class="l">Avg validator APY</div></div>
+  <div class="card stat"><div class="v">$—K</div><div class="l">Jito MEV tips 24h (—%)</div></div>
 </div>
+
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
   <div class="card"><h3>Top Validators by Stake</h3>
     <table id="validators"><tr><th>Validator</th><th>Stake (M SOL)</th><th>Commission</th></tr></table></div>
@@ -43,7 +69,33 @@
     <table id="rwaTable"><tr><th>Asset</th><th>TVL on Solana ($B)</th></tr></table></div>
   <div class="card"><h3>Upcoming Network Upgrades</h3><div id="upgrades"></div></div>
 </div>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px;">
+  <div class="card"><h3>DEX Volume by Venue (24h)</h3>
+    <table id="dexTable"><tr><th>Venue</th><th>Volume 24h ($M)</th></tr></table></div>
+  <div class="card"><h3>Stablecoin Issuers on Solana</h3>
+    <table id="stableTable"><tr><th>Issuer</th><th>Supply ($B)</th></tr></table></div>
+</div>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px;">
+  <div class="card"><h3>Client Diversity (stake-weighted)</h3><canvas id="clientChart"></canvas>
+    <div style="font-size:.72rem;color:var(--muted);margin-top:8px;">Top-10 stake share: —% · Top-20: —%</div></div>
+  <div class="card"><h3>Governance &amp; Client Releases</h3><div id="governance"></div></div>
+</div>
 <div class="card" style="margin-top:16px;"><h3>Ecosystem &amp; Community News</h3><div id="news"></div></div>
+<div class="card ad-card" style="margin-top:16px;"><h3>Advertise on this dashboard</h3>
+<div style="font-size:.85rem;color:var(--muted);">Featured validator and project placements available.
+Slots are display-only, never affect rankings or data, and are always labeled <span class="badge-sponsored">Sponsored</span>.
+Contact: TODO@yourdomain.com</div></div>
+<div class="card" style="margin-top:16px;"><h3>Builders</h3>
+<div style="font-size:.85rem;color:var(--muted);">
+&#128241; <b>Free alerts</b> — hourly Telegram / email / webhook digests on TPS drops, price moves, delinquency spikes.
+&nbsp; <b>API</b> — <span style="font-family:monospace;">GET /v1/snapshot</span> free tier, pro from $49/mo.
+&nbsp; Embed this dashboard on your site:<br>
+<span style="font-family:monospace;font-size:.75rem;">&lt;a href="https://fliptrigga13.github.io/solana-ecosystem-dashboard/"&gt;&lt;img src="https://fliptrigga13.github.io/solana-ecosystem-dashboard/badge.svg" alt="Solana Ecosystem Dashboard"&gt;&lt;/a&gt;</span>
+</div></div>
+<footer style="margin-top:24px;color:var(--muted);font-size:.75rem;text-align:center;">
+Solana Ecosystem Dashboard · data: <a href="data.json" style="color:var(--muted);">data.json</a> ·
+history: <a href="https://github.com/fliptrigga13/solana-ecosystem-dashboard" style="color:var(--muted);">GitHub</a>
+</footer>
 <script>
 const data = {"collected_at": "2026-09-10T14:48:01.697912+00:00", "network": {"slot": 445910492, "block_height": 423953857, "epoch": 1032, "epoch_progress_pct": 20.02, "avg_tps_5h": 4470.0, "max_tps_5h": 5113.0, "est_daily_txns": 386204568, "validators_active": 677, "validators_delinquent": 12, "total_stake_sol_million": 439.1, "top_validators": [{"name": "Fd7btgySsrju\u2026", "stake_sol_million": 17.4, "commission": 7}, {"name": "HEL1USMZKAL2\u2026", "stake_sol_million": 16.3, "commission": 0}, {"name": "DRpbCBMxVnDK\u2026", "stake_sol_million": 12.5, "commission": 0}, {"name": "JUPiTERrZqgf\u2026", "stake_sol_million": 11.4, "commission": 5}, {"name": "E1r4Psq84tHf\u2026", "stake_sol_million": 9.6, "commission": 0}, {"name": "C8Bey3LKVJHV\u2026", "stake_sol_million": 9.3, "commission": 7}, {"name": "CAo1dCGYrB6N\u2026", "stake_sol_million": 9.0, "commission": 10}, {"name": "EvnRmnMrd69k\u2026", "stake_sol_million": 7.3, "commission": 7}, {"name": "9eGrDohdNTAo\u2026", "stake_sol_million": 6.9, "commission": 5}, {"name": "Awes4Tr6TX8J\u2026", "stake_sol_million": 6.6, "commission": 0}]}, "economic": {"defi_tvl_billion": 5.813, "sol_price_usd": 100.2, "sol_price_change_24h_pct": -3.35, "sol_market_cap_billion": 58.75}, "defi": {"stablecoin_supply_billion": 16.492, "dex_volume_24h_billion": 3.0, "dex_volume_change_24h_pct": 10.7, "fees_24h_million": 15.44, "rev_24h_million": 6.73, "avg_fee_per_txn_usd": 0.04}, "rwa": {"tokenized_assets_billion": 1.78, "rwa_top": {"BlackRock BUIDL": 0.992, "xStocks": 0.43, "Ondo Yield Assets": 0.18, "Hastra": 0.149}}, "news": {"items": [{"source": "Solana Forums", "title": "What Can a Landed Solana Transaction Actually Prove About DeFi Execution?", "link": "https://forum.solana.com/t/what-can-a-landed-solana-transaction-actually-prove-about-defi-execution/5036", "date": "2026-08-28"}, {"source": "Solana Forums", "title": "Decreasing number of validators, centralizing steak, and overall network health / resilience under extreme events", "link": "https://forum.solana.com/t/decreasing-number-of-validators-centralizing-steak-and-overall-network-health-resilience-under-extreme-events/5026", "date": "2026-08-12"}, {"source": "Solana Forums", "title": "I lost a significant ammout of solona by mistake to offcurve account", "link": "https://forum.solana.com/t/i-lost-a-significant-ammout-of-solona-by-mistake-to-offcurve-account/4944", "date": "2026-07-04"}, {"source": "Solana Forums", "title": "Steak Proposal - A Solana Proposal For Memecoins", "link": "https://forum.solana.com/t/steak-proposal-a-solana-proposal-for-memecoins/4937", "date": "2026-07-02"}, {"source": "Solana Forums", "title": "SIMD-0550: Proposal to Double Disinflation", "link": "https://forum.solana.com/t/simd-0550-proposal-to-double-disinflation/4874", "date": "2026-06-02"}, {"source": "Solana Forums", "title": "Helius-stream: a small Rust crate I extracted from a mainnet MEV experiment, sharing for feedback", "link": "https://forum.solana.com/t/helius-stream-a-small-rust-crate-i-extracted-from-a-mainnet-mev-experiment-sharing-for-feedback/4810", "date": "2026-05-22"}, {"source": "Solana Forums", "title": "A Practical Overview of Scheduler Implementations in Solana Validators", "link": "https://forum.solana.com/t/a-practical-overview-of-scheduler-implementations-in-solana-validators/4803", "date": "2026-05-18"}, {"source": "Solana Forums", "title": "State of tinydancer / light clients on Solana", "link": "https://forum.solana.com/t/state-of-tinydancer-light-clients-on-solana/4762", "date": "2026-05-03"}], "feeds_ok": 2, "errors": []}};
 const ns = document.getElementById('news');
@@ -51,16 +103,22 @@ const ns = document.getElementById('news');
   ns.insertAdjacentHTML('beforeend',
     `<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:.85rem;">
        <a href="${item.link}" target="_blank" rel="noopener" style="color:#e2e8f0;text-decoration:none;">${item.title}</a>
-       <span style="font-size:.72rem;color:#94a3b8;margin-left:6px;">${item.source}${item.date ? ' Â· ' + item.date : ''}</span>
+       <span style="font-size:.72rem;color:#94a3b8;margin-left:6px;">${item.source}${item.date ? ' · ' + item.date : ''}</span>
      </div>`);
 });
 const vt = document.getElementById('validators');
+const sponsoredVals = [];
 data.network.top_validators.forEach(v => {
-  vt.insertAdjacentHTML('beforeend', `<tr><td>${v.name}</td><td>${v.stake_sol_million.toLocaleString()}</td><td>${v.commission}%</td></tr>`);
+  const isSponsored = sponsoredVals.includes((v.name || '').toLowerCase());
+  const badge = isSponsored ? ' <span class="badge-sponsored">Sponsored</span>' : '';
+  vt.insertAdjacentHTML('beforeend', `<tr><td>${v.name}${badge}</td><td>${v.stake_sol_million.toLocaleString()}</td><td>${v.commission}%</td></tr>`);
 });
 const rt = document.getElementById('rwaTable');
+const sponsoredProjs = [];
 Object.entries(data.rwa?.rwa_top || {}).forEach(([name, tvl]) => {
-  rt.insertAdjacentHTML('beforeend', `<tr><td>${name}</td><td>$${tvl.toLocaleString()}</td></tr>`);
+  const isSponsored = sponsoredProjs.includes((name || '').toLowerCase());
+  const badge = isSponsored ? ' <span class="badge-sponsored">Sponsored</span>' : '';
+  rt.insertAdjacentHTML('beforeend', `<tr><td>${name}${badge}</td><td>$${tvl.toLocaleString()}</td></tr>`);
 });
 const up = document.getElementById('upgrades');
 [{"name": "Alpenglow", "detail": "Votor consensus + Rotor propagation; finality ~12.8s \u2192 ~150ms", "status": "Mainnet target Q3 2026 \u00b7 BLS/VAT prereq live since Jul 22, 2026", "url": "https://solana.com/upgrades/alpenglow"}, {"name": "SIMD-0525 \u00b7 Reduced Slot Times", "detail": "Slot time 400ms \u2192 200ms in four feature-gated steps", "status": "Step 1 activated on testnet Aug 5, 2026", "url": "https://solana.com/upgrades/reduced-slot-times"}].forEach(u => {
@@ -68,6 +126,36 @@ const up = document.getElementById('upgrades');
     `<div style="margin-bottom:12px;"><a href="${u.url}" target="_blank" rel="noopener" style="color:#14F195;text-decoration:none;font-weight:600;">${u.name}</a>
      <div style="font-size:.8rem;color:#e2e8f0;margin-top:2px;">${u.detail}</div>
      <div style="font-size:.72rem;color:#94a3b8;">${u.status}</div></div>`);
+});
+const dx = document.getElementById('dexTable');
+(data.dex_venues?.venues || []).forEach(x => {
+  dx.insertAdjacentHTML('beforeend', `<tr><td>${x.name}</td><td>$${x.volume_24h_million.toLocaleString()}</td></tr>`);
+});
+const st = document.getElementById('stableTable');
+(data.stablecoin_issuers?.issuers || []).forEach(x => {
+  st.insertAdjacentHTML('beforeend', `<tr><td>${x.name}</td><td>$${x.supply_billion.toLocaleString()}</td></tr>`);
+});
+const gv = document.getElementById('governance');
+(data.governance?.latest_simds || []).forEach(s => {
+  const stateColor = s.state === 'open' ? '#14F195' : '#94a3b8';
+  gv.insertAdjacentHTML('beforeend',
+    `<div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:.85rem;">
+       <a href="https://github.com/solana-foundation/solana-improvement-documents/pull/${s.number}" target="_blank" rel="noopener" style="color:#e2e8f0;text-decoration:none;">SIMD-${s.number}: ${s.title}</a>
+       <span style="font-size:.72rem;color:${stateColor};margin-left:6px;">${s.state}</span></div>`);
+});
+const rel = data.governance?.client_releases || {};
+Object.entries({agave: 'Agave', firedancer: 'Firedancer'}).forEach(([key, label]) => {
+  const r = rel[key];
+  if (r) gv.insertAdjacentHTML('beforeend',
+    `<div style="font-size:.8rem;color:#94a3b8;margin-top:8px;">${label} latest: <b style="color:#e2e8f0;">${r.tag}</b> · ${r.published}</div>`);
+});
+const cs = data.validators?.client_share_pct || {};
+new Chart(document.getElementById('clientChart'), {
+  type: 'doughnut',
+  data: { labels: Object.keys(cs),
+    datasets: [{ data: Object.values(cs),
+      backgroundColor: ['#9945FF', '#14F195', '#fbbf24', '#38bdf8'] }]},
+  options: { plugins:{legend:{labels:{color:'#94a3b8', boxWidth:12}}} }
 });
 new Chart(document.getElementById('stakeChart'), {
   type: 'bar',

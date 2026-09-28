@@ -14,8 +14,54 @@ import json
 from datetime import datetime, timezone
 import collector
 import anomaly
+import io_safety
 
 MAX_CONSECUTIVE_FAILURES = 3  # loop mode: go loud (nonzero exit) after this many
+
+# Local operational state only — never git-added, never published.
+PUBLICATION_STATE_FILE = "publication-state.json"
+
+
+def _load_publication_state() -> dict:
+    try:
+        with open(PUBLICATION_STATE_FILE, encoding="utf-8") as f:
+            data = json.load(f)
+            return data if isinstance(data, dict) else {}
+    except (OSError, ValueError):
+        return {}
+
+
+def _save_publication_state(state: dict) -> None:
+    state = dict(state)
+    state["updated_at"] = datetime.now(timezone.utc).isoformat()
+    io_safety.atomic_write_text(
+        PUBLICATION_STATE_FILE, json.dumps(state, indent=1) + "\n")
+
+
+def _remote_head() -> str | None:
+    """SHA of origin/main, or None if the remote is unreachable."""
+    try:
+        r = subprocess.run(["git", "ls-remote", "origin", "refs/heads/main"],
+                           capture_output=True, text=True, timeout=60)
+    except (subprocess.SubprocessError, OSError):
+        return None
+    if r.returncode != 0:
+        return None
+    parts = r.stdout.strip().split()
+    return parts[0] if parts else None
+
+
+def _resolve_unknown(state: dict) -> dict:
+    """Settle a previous UNKNOWN publication via ls-remote."""
+    sha = state.get("commit_sha")
+    remote = _remote_head()
+    if remote is None:
+        return state  # still UNKNOWN; caller fails loudly
+    state["publication_state"] = "ACCEPTED" if sha and remote == sha \
+        else "REJECTED"
+    state["verified_remote_sha"] = remote
+    _save_publication_state(state)
+    return state
 
 
 def _maybe_autocommit() -> None:
@@ -23,40 +69,123 @@ def _maybe_autocommit() -> None:
 
     Used by the local hourly watch (Task Scheduler) so GitHub Pages keeps
     updating even while Actions is unavailable; off by default for CI.
+
+    lost_ack: a push with an ambiguous outcome (nonzero exit, lost
+    response, killed process) is never trusted or distrusted blindly.
+    publication-state.json records UNKNOWN until `git ls-remote` confirms
+    the commit on origin/main (ACCEPTED) or rules it out (REJECTED).
     """
     if os.environ.get("WATCH_AUTOCOMMIT") != "1":
         return
-    subprocess.run(["git", "add", "data.json", "data-history.jsonl",
-                    "index.html", "report.md"], check=False,
+    # Settle any previous run's ambiguous publication first: never
+    # double-publish blindly, never claim success blindly.
+    state = _load_publication_state()
+    if state.get("publication_state") == "UNKNOWN" and state.get("commit_sha"):
+        state = _resolve_unknown(state)
+        if state["publication_state"] == "ACCEPTED":
+            print(f"note: previous publication {state['commit_sha'][:8]} "
+                  "confirmed on origin/main", flush=True)
+        elif state["publication_state"] == "REJECTED":
+            print(f"warning: previous publication {state['commit_sha'][:8]} "
+                  "not found on origin/main; retrying with a fresh commit",
+                  flush=True)
+        else:
+            raise RuntimeError(
+                "publication state unknown: cannot verify previous commit "
+                f"{state['commit_sha'][:8]} (origin unreachable); refusing "
+                "to stack more commits on an uncertain publication")
+    # Autocommit file list: only add files that exist. A missing optional
+    # file (e.g. alerts/sent.json on a checkout without the alerts engine)
+    # must not abort the entire `git add` — git treats one bad pathspec as
+    # fatal and stages nothing, which would silently skip the commit+push
+    # and the publication-state verification below.
+    _candidates = ["data.json", "data-history.jsonl",
+                   "index.html", "badge.svg", "report.md", "alerts/sent.json"]
+    _existing = [f for f in _candidates if os.path.exists(f)]
+    subprocess.run(["git", "add", *_existing], check=False,
                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     msg = (f"data refresh {datetime.now(timezone.utc):%Y-%m-%dT%H:%MZ} "
            "(hourly watch)")
     r = subprocess.run(["git", "commit", "-m", msg], capture_output=True,
                        text=True)
     if r.returncode == 0:  # nonzero = nothing changed since last refresh
-        subprocess.run(["git", "push", "origin", "main"], check=False,
-                       capture_output=True)
+        sha = subprocess.run(["git", "rev-parse", "HEAD"],
+                             capture_output=True, text=True).stdout.strip()
+        _save_publication_state({"commit_sha": sha,
+                                 "publication_state": "UNKNOWN",
+                                 "verified_remote_sha": None})
+        p = subprocess.run(["git", "push", "origin", "main"],
+                           capture_output=True, text=True)
+        remote = _remote_head()
+        if remote == sha:
+            # Verifiably published — even if the push exit code disagrees
+            # (the lost-ack case: push landed, response lost).
+            _save_publication_state({"commit_sha": sha,
+                                     "publication_state": "ACCEPTED",
+                                     "verified_remote_sha": remote})
+            if p.returncode != 0:
+                print(f"note: push exited {p.returncode} but commit "
+                      f"{sha[:8]} confirmed on origin/main (ack lost)",
+                      flush=True)
+        elif remote is None:
+            # Origin unreachable for verification — stay UNKNOWN, fail loud.
+            raise RuntimeError(
+                "publication state unknown: pushed "
+                f"{sha[:8]} but origin unreachable for verification; "
+                "not claiming success")
+        elif p.returncode != 0:
+            _save_publication_state({"commit_sha": sha,
+                                     "publication_state": "REJECTED",
+                                     "verified_remote_sha": remote})
+            detail = "\n".join(
+                x for x in (p.stdout.strip(), p.stderr.strip()) if x
+            )
+            raise RuntimeError(
+                "publication rejected: git push failed\n" + detail
+            )
+        else:
+            # Push claimed success but the remote disagrees — contradictory.
+            # Stay UNKNOWN and fail loud rather than lie either way.
+            raise RuntimeError(
+                "publication state unknown: push succeeded but origin/main "
+                f"is {remote[:8]}, not {sha[:8]}")
 
 
 def refresh() -> dict:
-    snap = collector.collect_all()
-    json.dump(snap, open("data.json", "w"), indent=1)
+    # replay_concurrency_restart: one refresh at a time; a second
+    # concurrent run fails loudly instead of interleaving outputs.
+    with io_safety.refresh_lock():
+        snap = collector.collect_all()
+        io_safety.atomic_write_json("data.json", snap)
 
-    anomaly_report = anomaly.run(snap)
+        anomaly_report = anomaly.run(snap)
 
-    # regenerate human/machine outputs
-    exec(open("generate_report.py").read())
-    exec(open("generate_dashboard.py").read())
+        # regenerate human/machine outputs
+        exec(open("generate_report.py").read())
+        exec(open("generate_dashboard.py").read())
 
-    if anomaly_report["anomalies_detected"]:
-        for a in anomaly_report["anomalies"]:
-            if a.get("metric") != "*":
-                print(f"⚠️ ANOMALY [{a['severity']}] {a['metric']}: "
-                      f"{a.get('direction')} {a.get('deviation_pct')}% "
-                      f"(current {a['current']} vs baseline {a['baseline']})")
-    print(f"refresh complete | history: {anomaly_report['history_size']} snapshots")
-    _maybe_autocommit()
-    return anomaly_report
+        # monetization: fan out anomaly alerts to enabled subscribers.
+        # Runs after outputs are generated, before autocommit so the
+        # cooldown state (alerts/sent.json) is committed with this run.
+        # Never breaks the refresh: delivery failures are counted inside
+        # alerts/check.py, and anything unexpected is caught here.
+        try:
+            from alerts import check as alert_check
+            rc = alert_check.main()
+            if rc != 0:
+                print(f"alerts: check exited {rc} (non-fatal)", file=sys.stderr)
+        except Exception as exc:
+            print(f"alerts: skipped ({type(exc).__name__}: {exc})", file=sys.stderr)
+
+        if anomaly_report["anomalies_detected"]:
+            for a in anomaly_report["anomalies"]:
+                if a.get("metric") != "*":
+                    print(f"⚠️ ANOMALY [{a['severity']}] {a['metric']}: "
+                          f"{a.get('direction')} {a.get('deviation_pct')}% "
+                          f"(current {a['current']} vs baseline {a['baseline']})")
+        _maybe_autocommit()
+        print(f"refresh complete | history: {anomaly_report['history_size']} snapshots")
+        return anomaly_report
 
 
 if __name__ == "__main__":

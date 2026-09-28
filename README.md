@@ -1,11 +1,19 @@
 # Solana Ecosystem Dashboard
 
+![hourly](https://fliptrigga13.github.io/solana-ecosystem-dashboard/badge.svg)
+![license](https://img.shields.io/badge/license-MIT-green)
+
 Automated, zero-API-key Solana ecosystem monitor. Produces an interactive
-dark-theme dashboard, Markdown report, and JSON snapshot — refreshing on a
-configurable schedule.
+dark-theme dashboard, Markdown report, and JSON snapshot — refreshing hourly.
 
 **Built for:** Superteam Canada bounty — *"Develop Solana Ecosystem
 Auto-Updating Report & Interactive Dashboard"* (1,000 USDG)
+
+> **For validators & builders:** free hourly alert digests (Telegram/email/
+> webhook) and a paid data API (`/v1/snapshot` free tier · pro $49/mo ·
+> enterprise $499/mo). Featured validator/project slots from $150/mo.
+> Details: [`api/DOCS.md`](api/DOCS.md), [`alerts/tiers.md`](alerts/tiers.md),
+> [`sponsors.json`](sponsors.json).
 
 ## Quick start
 
@@ -42,7 +50,18 @@ Outputs after each cycle:
 
 **Network:** avg/peak TPS (5h window), slot, block height, epoch progress,
 active validators, delinquent validators, total stake, top-10 validators by
-stake with commission rates.
+stake with commission rates, Nakamoto coefficient, top-10/top-20 stake share,
+native staking APY estimate.
+
+**Validator economics (Stakewiz):** stake-weighted avg APY, commission, uptime,
+and client share — Jito-Solana vs Agave vs Firedancer.
+
+**MEV:** Jito MEV tips revenue 24h + live tip-floor market (median landed tip).
+
+**Market structure:** per-venue DEX volume (PumpSwap, Orca, Raydium, …),
+per-issuer stablecoin supply (USDC, USDT, USDGO, USD1, …).
+
+**Governance:** latest SIMD proposals + Agave/Firedancer releases via GitHub.
 
 **Economic & DeFi:** SOL price + 24h change, market cap, DeFi TVL,
 stablecoin supply, 24h DEX volume, 24h fees, 24h REV, derived avg fee per
@@ -54,17 +73,27 @@ upcoming-upgrades panel (Alpenglow, SIMD-0525).
 
 **Anomaly detection:** rolling-baseline checks with severity levels —
 TPS ±30%, delinquent surge >100%, SOL price ±10%, TVL ±15%, stablecoins ±5%,
-DEX volume ±50%, fees/REV ±60%, RWA TVL ±10%. Missing core metrics fail the
+DEX volume ±50%, fees/REV ±60%, RWA TVL ±10%, Nakamoto ±10%, validator APY ±15%,
+MEV tips ±50%. Missing core metrics fail the
 run loudly instead of publishing nulls.
 
 ## Data sources (all free, no API keys)
 
 - Solana public RPC: `getEpochInfo`, `getRecentPerformanceSamples`,
-  `getVoteAccounts`, `getTokenSupply`
+  `getVoteAccounts`, `getTokenSupply`, `getInflationRate`
 - DeFiLlama public API: DeFi TVL
-- DeFiLlama stablecoins API: stablecoin circulating supply on Solana
-- DeFiLlama overviews: DEX volume, protocol fees/REV, per-chain RWA TVLs
+- DeFiLlama stablecoins API: stablecoin circulating supply on Solana + per-issuer breakdown
+- DeFiLlama overviews: DEX volume, protocol fees/REV, per-chain RWA TVLs,
+  per-venue DEX volume, Jito MEV tips revenue
+- RWA fallbacks (when DeFiLlama's per-chain RWA series is empty): on-chain
+  token supply x NAV (BUIDL), Ondo issuer API, vault balances (Hastra),
+  Jupiter token supply x underlying share price (xStocks, Ondo Global Markets),
+  Yahoo Finance underlying closes for price gaps. Per-asset source recorded in
+  each snapshot (`rwa.rwa_sources`).
 - CoinGecko public API: SOL price / market cap
+- Stakewiz public API: validator APY, commission, version, client identity (Jito)
+- Jito bundles API: live tip-floor percentiles
+- GitHub REST API (unauthenticated): SIMD proposals, Agave/Firedancer releases
 - News RSS: forum.solana.com/latest.rss + decrypt.co/feed (Solana-filtered)
 
 ## Architecture

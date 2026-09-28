@@ -1,0 +1,29 @@
+{
+  "_comment": "Sponsorship configuration for the Solana Ecosystem Dashboard. Featured slots are ALWAYS rendered with a visible 'Sponsored' disclosure badge. Prices set by owner 2026-09-27; change anytime. Example entries have enabled=false; set enabled=true to activate.",
+  "contact_email": "TODO@yourdomain.com",
+  "pricing": {
+    "note": "Featured slots never affect rankings or data. Placement is display-only, above the organic table, always labeled Sponsored. Max 3 featured slots per category — scarcity is public.",
+    "project_featured_usd_per_month": 250,
+    "validator_featured_usd_per_month": 150,
+    "max_featured_slots_per_category": 3,
+    "payment_options": ["USD (manual invoice until billing rails land)", "SOL (on-chain, no invoice needed)"]
+  },
+  "projects": [
+    {
+      "enabled": false,
+      "name_match": "Example RWA Project",
+      "tagline": "Tokenized treasuries on Solana.",
+      "tier": "featured",
+      "url": "https://example.com"
+    }
+  ],
+  "validators": [
+    {
+      "enabled": false,
+      "name_match": "Example Validator",
+      "tagline": "0% commission, bare-metal infra.",
+      "tier": "featured",
+      "url": "https://example.com"
+    }
+  ]
+}

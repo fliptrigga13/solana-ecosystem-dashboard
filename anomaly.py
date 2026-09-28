@@ -22,6 +22,11 @@ THRESHOLDS = {
     "fees_24h_million": 0.60,            # 60% fee move (congestion/lull signal)
     "rev_24h_million": 0.60,             # 60% REV move
     "tokenized_assets_billion": 0.10,    # 10% RWA TVL move (mint/redeem events)
+    # deep-data metrics (Sept 2026): Nakamoto drops signal centralization
+    # risk; MEV revenue is volatile; APY moves reflect commission/inflation shifts
+    "nakamoto_coefficient": 0.10,       # 10% Nakamoto move (~2 validators)
+    "avg_validator_apy_pct": 0.15,      # 15% APY move
+    "jito_mev_tips_24h_usd": 0.50,      # 50% MEV revenue move
 }
 
 
@@ -49,6 +54,7 @@ def _flat_metrics(snap: dict) -> dict:
     """Flatten nested snapshot into comparable scalar metrics."""
     n, e = snap.get("network", {}), snap.get("economic", {})
     d, r = snap.get("defi", {}), snap.get("rwa", {})
+    val_sec, mev_sec = snap.get("validators", {}), snap.get("mev", {})
     return {
         "avg_tps_5h": n.get("avg_tps_5h"),
         "validators_delinquent": n.get("validators_delinquent"),
@@ -59,6 +65,9 @@ def _flat_metrics(snap: dict) -> dict:
         "fees_24h_million": d.get("fees_24h_million"),
         "rev_24h_million": d.get("rev_24h_million"),
         "tokenized_assets_billion": r.get("tokenized_assets_billion"),
+        "nakamoto_coefficient": n.get("nakamoto_coefficient"),
+        "avg_validator_apy_pct": val_sec.get("avg_apy_pct"),
+        "jito_mev_tips_24h_usd": mev_sec.get("jito_mev_tips_24h_usd"),
     }
 
 
@@ -96,9 +105,13 @@ def detect_anomalies(snapshot: dict, history: list) -> list:
 def run(snapshot: dict) -> dict:
     """Append to history, then detect. Returns anomaly report."""
     history = load_history()
-    # don't double-append identical timestamps within same run
+    # don't double-append identical timestamps: a replayed/restarted run
+    # must not record the same snapshot twice.
+    last_ts = history[-1].get("collected_at") if history else None
+    if snapshot.get("collected_at") != last_ts:
+        append_history(snapshot)
+        history.append(snapshot)
     anomalies = detect_anomalies(snapshot, history)
-    append_history(snapshot)
     return {
         "checked_at": datetime.now(timezone.utc).isoformat(),
         "history_size": len(history),
