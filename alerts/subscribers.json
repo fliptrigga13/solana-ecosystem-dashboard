@@ -9,6 +9,7 @@
     "dex_volume_spike",
     "fee_spike",
     "rwa_move",
+    "finality_spike",
     "epoch_ending"
   ],
   "subscribers": [

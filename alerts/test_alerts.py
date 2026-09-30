@@ -107,6 +107,13 @@ class TestRules(unittest.TestCase):
         for rule_id, spec in rules.RULE_DEFS.items():
             self.assertIn(spec["metric"], anomaly.THRESHOLDS)
 
+    def test_subscribers_doc_rule_ids_match(self):
+        # alerts/subscribers.json documents the built-in rule ids for
+        # subscribers picking rules — it must not drift from rules.py.
+        with open(os.path.join(HERE, "subscribers.json")) as f:
+            doc = json.load(f)
+        self.assertEqual(set(doc["_rule_ids"]), set(rules.rule_ids()))
+
     def test_finality_spike_fires_warning(self):
         history = make_history(finality={"finality_estimate_s": 12.8})
         snap = make_snapshot(finality={"finality_estimate_s": 30.0})  # +134%
