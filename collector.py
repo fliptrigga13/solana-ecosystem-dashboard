@@ -641,6 +641,61 @@ def fetch_news() -> dict:
             "errors": errors}
 
 
+def collect_finality() -> dict:
+    """Measured finalization lag: processed-tip slot minus finalized slot.
+
+    Regime-agnostic by design — it measures the *observed* gap between the
+    chain tip and the highest supermajority-finalized slot, converted to
+    seconds with the measured slot cadence from getRecentPerformanceSamples.
+    Under TowerBFT (pre-Alpenglow) this is ~32 slots / ~12.8s (one voting
+    round); under Alpenglow/Votor it should collapse toward ~0.1-0.3s.
+    No consensus-version detection is needed, so the metric stays
+    meaningful across the upgrade.
+
+    Fail-closed: raises RuntimeError on any bad/missing data — a
+    plausible-looking fabricated finality number must never be published.
+    """
+    perf = rpc("getRecentPerformanceSamples", [30])
+    slot_secs = []
+    for s in perf:
+        ns, secs = s.get("numSlots"), s.get("samplePeriodSecs")
+        if (isinstance(ns, (int, float)) and not isinstance(ns, bool)
+                and isinstance(secs, (int, float)) and not isinstance(secs, bool)
+                and ns > 0 and secs > 0):
+            slot_secs.append(secs / ns)
+    if len(slot_secs) < 5:
+        raise RuntimeError(
+            f"finality: only {len(slot_secs)}/30 usable slot-cadence samples")
+    avg_slot_s = sum(slot_secs) / len(slot_secs)
+    if not 0.01 < avg_slot_s < 10:
+        raise RuntimeError(
+            f"finality: implausible avg slot time {avg_slot_s:.3f}s")
+    tip = rpc("getSlot", [{"commitment": "processed"}])
+    fin = rpc("getSlot")  # default commitment: finalized
+    for name, val in (("processed tip", tip), ("finalized", fin)):
+        if not isinstance(val, int) or isinstance(val, bool) or val <= 0:
+            raise RuntimeError(f"finality: bad {name} slot: {val!r}")
+    lag_slots = tip - fin
+    if lag_slots < 0:
+        raise RuntimeError(
+            f"finality: finalized slot {fin} ahead of processed tip {tip}")
+    if lag_slots > 5000:
+        raise RuntimeError(
+            f"finality: implausible lag {lag_slots} slots "
+            f"(tip {tip}, finalized {fin}) — node likely stale")
+    return {
+        "finalized_slot": fin,
+        "tip_slot": tip,
+        "finality_lag_slots": lag_slots,
+        "avg_slot_time_s": round(avg_slot_s, 3),
+        # lag 0 would mean tip == finalized (provider quirk): the publish
+        # gate requires > 0, so this never ships as "0.0s finality".
+        "finality_estimate_s": round(lag_slots * avg_slot_s, 2),
+        "method": "processed-tip slot minus finalized slot, "
+                  "x measured slot cadence",
+    }
+
+
 def collect_all() -> dict:
     snapshot = {"collected_at": datetime.now(timezone.utc).isoformat(),
                 "network": collect_network(), "economic": collect_economic(),
@@ -650,6 +705,7 @@ def collect_all() -> dict:
                 "stablecoin_issuers": collect_stablecoin_issuers(),
                 "mev": collect_mev(),
                 "governance": collect_governance(),
+                "finality": collect_finality(),
                 "news": fetch_news()}
     # Derived metric: average fee per transaction (24h fees ÷ est. daily txns).
     txns = snapshot["network"].get("est_daily_txns")
@@ -669,7 +725,7 @@ UPCOMING_UPDATES = [
     # Facts verified 2026-08-25 against solana.com/upgrades pages.
     {"name": "Alpenglow",
      "detail": "Votor consensus + Rotor propagation; finality ~12.8s → ~150ms",
-     "status": "Mainnet target Q3 2026 · BLS/VAT prereq live since Jul 22, 2026",
+     "status": "Devnet + testnet live Sep 25, 2026 · no mainnet date yet",
      "url": "https://solana.com/upgrades/alpenglow"},
     {"name": "SIMD-0525 · Reduced Slot Times",
      "detail": "Slot time 400ms → 200ms in four feature-gated steps",
@@ -687,6 +743,7 @@ def assert_snapshot_complete(snapshot: dict) -> None:
     """
     n, e = snapshot["network"], snapshot["economic"]
     d, r = snapshot.get("defi", {}), snapshot.get("rwa", {})
+    f = snapshot.get("finality", {})
     required = {
         "network.slot": n.get("slot"),
         "network.block_height": n.get("block_height"),
@@ -701,6 +758,7 @@ def assert_snapshot_complete(snapshot: dict) -> None:
         "defi.fees_24h_million": d.get("fees_24h_million"),
         "defi.rev_24h_million": d.get("rev_24h_million"),
         "rwa.tokenized_assets_billion": r.get("tokenized_assets_billion"),
+        "finality.finality_estimate_s": f.get("finality_estimate_s"),
     }
     missing = [k for k, v in required.items()
                if not isinstance(v, (int, float)) or isinstance(v, bool)

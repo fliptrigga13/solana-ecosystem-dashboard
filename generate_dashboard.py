@@ -11,6 +11,7 @@ dv = snap.get("dex_venues", {})
 si = snap.get("stablecoin_issuers", {})
 mev = snap.get("mev", {})
 gov = snap.get("governance", {})
+fin = snap.get("finality", {})
 from collector import UPCOMING_UPDATES
 
 # --- Sponsorships (monetization) ---
@@ -53,7 +54,7 @@ html = """<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Solana Ecosystem Dashboard</title>
-<meta name="description" content="Hourly-updated Solana network stats: TPS, validators, Nakamoto coefficient, validator APY, client diversity, SOL price, DeFi TVL, stablecoins, DEX volume by venue, Jito MEV, RWA. Free API + alerts.">
+<meta name="description" content="Hourly-updated Solana network stats: TPS, finality, validators, Nakamoto coefficient, validator APY, client diversity, SOL price, DeFi TVL, stablecoins, DEX volume by venue, Jito MEV, RWA. Free API + alerts.">
 <link rel="canonical" href="https://fliptrigga13.github.io/solana-ecosystem-dashboard/">
 <meta property="og:title" content="Solana Ecosystem Dashboard">
 <meta property="og:description" content="Hourly-updated Solana network stats: TPS, Nakamoto coefficient, validator APY, DEX venues, Jito MEV, stablecoin issuers, RWA. Free API + alerts.">
@@ -94,6 +95,7 @@ html = """<!DOCTYPE html>
   <div class="card stat"><div class="v">__AVG_TPS__</div><div class="l">Avg TPS (5h)</div></div>
   <div class="card stat"><div class="v">__MAX_TPS__</div><div class="l">Peak TPS</div></div>
   <div class="card stat"><div class="v">__EPOCH_PCT__%</div><div class="l">Epoch __EPOCH__ progress</div></div>
+  <div class="card stat"><div class="v">__FINALITY__s</div><div class="l">Finality (measured)</div></div>
   <div class="card stat"><div class="v">$__SOL_PRICE__</div><div class="l">SOL price (24h: __SOL_CHG__%)</div></div>
   <div class="card stat"><div class="v">$__DEFI_TVL__B</div><div class="l">DeFi TVL</div></div>
   <div class="card stat"><div class="v">$__STABLES__B</div><div class="l">Stablecoin supply</div></div>
@@ -223,6 +225,7 @@ html = (html
         .replace("__MAX_TPS__", f"{n['max_tps_5h']:,}")
         .replace("__EPOCH_PCT__", str(n["epoch_progress_pct"]))
         .replace("__EPOCH__", str(n["epoch"]))
+        .replace("__FINALITY__", str(fin.get("finality_estimate_s") or "—"))
         .replace("__SOL_PRICE__", str(e.get("sol_price_usd") or "—"))
         .replace("__SOL_CHG__", str(e.get("sol_price_change_24h_pct") or "—"))
         .replace("__DEFI_TVL__", str(e.get("defi_tvl_billion") or "—"))
