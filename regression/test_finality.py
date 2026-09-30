@@ -193,6 +193,50 @@ check("gate: negative finality -> RuntimeError",
       t_gate_rejects_negative_finality)
 
 
+def t_nonlist_perf_raises():
+    try:
+        run_finality(None, tip=10, fin=5)
+    except RuntimeError as e:
+        assert "performance-samples payload" in str(e), e
+        return
+    raise AssertionError("no RuntimeError")
+check("fail-closed: non-list perf payload -> RuntimeError",
+      t_nonlist_perf_raises)
+
+
+def t_nondict_samples_skipped_then_raise():
+    try:
+        run_finality([None] * 30, tip=10, fin=5)
+    except RuntimeError as e:
+        assert "slot-cadence" in str(e), e
+        return
+    raise AssertionError("no RuntimeError")
+check("fail-closed: non-dict samples skipped -> 0 usable -> RuntimeError",
+      t_nondict_samples_skipped_then_raise)
+
+
+def t_bool_tip_raises():
+    try:
+        run_finality(good_samples(), tip=True, fin=5)
+    except RuntimeError as e:
+        assert "bad processed tip slot" in str(e), e
+        return
+    raise AssertionError("no RuntimeError")
+check("fail-closed: bool tip slot -> RuntimeError (locks bool guard)",
+      t_bool_tip_raises)
+
+
+def t_dashboard_unit_not_glued():
+    # Regression: the card template once read "__FINALITY__s", which rendered
+    # a stray "—s" when the section was missing. The unit must travel with
+    # the value, never glued to the placeholder.
+    src = open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            "..", "generate_dashboard.py")).read()
+    assert "__FINALITY__s" not in src, "unit glued to placeholder"
+check("dashboard: no unit glued to __FINALITY__ placeholder",
+      t_dashboard_unit_not_glued)
+
+
 print()
 for status, name in results:
     print(f"{status} {name}")

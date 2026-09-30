@@ -656,8 +656,13 @@ def collect_finality() -> dict:
     plausible-looking fabricated finality number must never be published.
     """
     perf = rpc("getRecentPerformanceSamples", [30])
+    if not isinstance(perf, list):
+        raise RuntimeError(
+            f"finality: bad performance-samples payload: {type(perf).__name__}")
     slot_secs = []
     for s in perf:
+        if not isinstance(s, dict):
+            continue
         ns, secs = s.get("numSlots"), s.get("samplePeriodSecs")
         if (isinstance(ns, (int, float)) and not isinstance(ns, bool)
                 and isinstance(secs, (int, float)) and not isinstance(secs, bool)
