@@ -33,14 +33,16 @@ def run_finality(samples, tip, fin):
     with mock.patch.object(collector, "rpc") as m:
         def side(method, params=None):
             if method == "getRecentPerformanceSamples":
-                return samples
+                # collect_all() fetches this once and shares it; collect_finality
+                # must never fetch its own copy (redundant RPC, skewed window).
+                raise AssertionError("redundant getRecentPerformanceSamples call")
             if method == "getSlot":
                 if params and params[0].get("commitment") == "processed":
                     return tip
                 return fin
             raise AssertionError(f"unexpected RPC {method}")
         m.side_effect = side
-        return collector.collect_finality()
+        return collector.collect_finality(samples)
 
 
 # ---------------------------------------------------------------- happy path
@@ -235,6 +237,42 @@ def t_dashboard_unit_not_glued():
     assert "__FINALITY__s" not in src, "unit glued to placeholder"
 check("dashboard: no unit glued to __FINALITY__ placeholder",
       t_dashboard_unit_not_glued)
+
+
+def t_network_accepts_shared_samples():
+    # collect_network takes the once-fetched perf payload — it must never
+    # issue its own getRecentPerformanceSamples (the redundancy nit).
+    with mock.patch.object(collector, "rpc") as m:
+        def side(method, params=None):
+            if method == "getRecentPerformanceSamples":
+                raise AssertionError("redundant getRecentPerformanceSamples call")
+            if method == "getEpochInfo":
+                return {"absoluteSlot": 10, "blockHeight": 9, "epoch": 1,
+                        "slotIndex": 1, "slotsInEpoch": 100}
+            if method == "getTokenSupply":
+                return {"value": {"amount": "1000000000"}}
+            if method == "getVoteAccounts":
+                return {"current": [], "delinquent": []}
+            if method == "getInflationRate":
+                return {"total": 0.05}
+            raise AssertionError(f"unexpected RPC {method}")
+        m.side_effect = side
+        n = collector.collect_network(good_samples())
+    assert n["slot"] == 10, n
+    assert n["avg_tps_5h"] == 10000, n  # 10M txns / 1000s from shared samples
+check("network: accepts shared perf samples, no redundant fetch",
+      t_network_accepts_shared_samples)
+
+
+def t_finality_uses_named_lag_cap():
+    # The stale-node bound must be a named, documented constant — not a
+    # magic number buried in the check.
+    assert collector.FINALITY_MAX_LAG_SLOTS == 5000
+    src = open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            "..", "collector.py")).read()
+    assert "if lag_slots > 5000" not in src, "magic 5000 cap still inline"
+check("finality: stale-node bound is a named constant, no magic number",
+      t_finality_uses_named_lag_cap)
 
 
 print()

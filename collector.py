@@ -29,6 +29,13 @@ NEWS_FEEDS = [
      "filter": "solana"},  # industry feed, Solana mentions only
 ]
 NEWS_MAX_ITEMS = 8
+# Max plausible processed-tip/finalized-slot lag for the finality metric.
+# A node whose own finalized slot trails its processed tip by more than this
+# is stale or misbehaving — fail closed rather than publish a huge
+# fabricated-looking finality number. Slot-denominated (not seconds) so the
+# bound stays meaningful across the TowerBFT -> Alpenglow cadence change
+# (5000 slots ~= 33 min at 0.4s/slot, ~= 12.5 min at 0.15s/slot).
+FINALITY_MAX_LAG_SLOTS = 5000
 # Top RWA protocols on Solana whose per-chain TVL we track (verified slugs).
 RWA_SLUGS = ["blackrock-buidl", "ondo-yield-assets", "xstocks",
              "hastra", "ondo-global-markets", "invesco-ustb"]
@@ -60,9 +67,17 @@ def rpc(method: str, params: list | None = None) -> dict:
                        f"for {method}: {last_err}")
 
 
-def collect_network() -> dict:
+def collect_network(perf) -> dict:
+    """Network + validator metrics.
+
+    perf: the getRecentPerformanceSamples payload, fetched once by
+    collect_all() and shared with collect_finality() so both sections
+    derive from the same window (one fewer RPC call, no skew).
+    """
+    if not isinstance(perf, list):
+        raise RuntimeError(
+            f"network: bad performance-samples payload: {type(perf).__name__}")
     epoch = rpc("getEpochInfo")
-    perf = rpc("getRecentPerformanceSamples", [60])  # last ~60 x 5min samples
     tps_samples = []
     for s in perf:
         if s.get("numTransactions") and s.get("samplePeriodSecs"):
@@ -641,12 +656,15 @@ def fetch_news() -> dict:
             "errors": errors}
 
 
-def collect_finality() -> dict:
+def collect_finality(perf) -> dict:
     """Measured finalization lag: processed-tip slot minus finalized slot.
+
+    perf: the getRecentPerformanceSamples payload, fetched once by
+    collect_all() and shared with collect_network() (see above).
 
     Regime-agnostic by design — it measures the *observed* gap between the
     chain tip and the highest supermajority-finalized slot, converted to
-    seconds with the measured slot cadence from getRecentPerformanceSamples.
+    seconds with the measured slot cadence from the shared samples.
     Under TowerBFT (pre-Alpenglow) this is ~32 slots / ~12.8s (one voting
     round); under Alpenglow/Votor it should collapse toward ~0.1-0.3s.
     No consensus-version detection is needed, so the metric stays
@@ -655,7 +673,6 @@ def collect_finality() -> dict:
     Fail-closed: raises RuntimeError on any bad/missing data — a
     plausible-looking fabricated finality number must never be published.
     """
-    perf = rpc("getRecentPerformanceSamples", [30])
     if not isinstance(perf, list):
         raise RuntimeError(
             f"finality: bad performance-samples payload: {type(perf).__name__}")
@@ -670,7 +687,7 @@ def collect_finality() -> dict:
             slot_secs.append(secs / ns)
     if len(slot_secs) < 5:
         raise RuntimeError(
-            f"finality: only {len(slot_secs)}/30 usable slot-cadence samples")
+            f"finality: only {len(slot_secs)}/{len(perf)} usable slot-cadence samples")
     avg_slot_s = sum(slot_secs) / len(slot_secs)
     if not 0.01 < avg_slot_s < 10:
         raise RuntimeError(
@@ -684,7 +701,7 @@ def collect_finality() -> dict:
     if lag_slots < 0:
         raise RuntimeError(
             f"finality: finalized slot {fin} ahead of processed tip {tip}")
-    if lag_slots > 5000:
+    if lag_slots > FINALITY_MAX_LAG_SLOTS:
         raise RuntimeError(
             f"finality: implausible lag {lag_slots} slots "
             f"(tip {tip}, finalized {fin}) — node likely stale")
@@ -702,15 +719,19 @@ def collect_finality() -> dict:
 
 
 def collect_all() -> dict:
+    # Performance samples are fetched once and shared: collect_network and
+    # collect_finality derive from the same window (one fewer RPC call and
+    # no skew between the two sections).
+    perf = rpc("getRecentPerformanceSamples", [60])  # last ~60 x 5min samples
     snapshot = {"collected_at": datetime.now(timezone.utc).isoformat(),
-                "network": collect_network(), "economic": collect_economic(),
+                "network": collect_network(perf), "economic": collect_economic(),
                 "defi": collect_defi(), "rwa": collect_rwa(),
                 "validators": collect_validators(),
                 "dex_venues": collect_dex_venues(),
                 "stablecoin_issuers": collect_stablecoin_issuers(),
                 "mev": collect_mev(),
                 "governance": collect_governance(),
-                "finality": collect_finality(),
+                "finality": collect_finality(perf),
                 "news": fetch_news()}
     # Derived metric: average fee per transaction (24h fees ÷ est. daily txns).
     txns = snapshot["network"].get("est_daily_txns")
