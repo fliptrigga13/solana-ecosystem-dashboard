@@ -24,7 +24,11 @@ TIERS = ("free", "pro", "enterprise")
 
 # Requests per rolling 24h window. None = unlimited.
 TIER_QUOTAS = {
-    "free": 60,
+    # Free tier raised 2026-09-30 (was 60/day): competitor intel showed
+    # 60 req/day is the stingiest free tier in the market (Helius 1M/mo,
+    # Alchemy ~1.1M/mo free) — too tight for real evaluation. 1,000/day
+    # is still far below competitors but enough for a genuine trial.
+    "free": 1000,
     "pro": 10000,
     "enterprise": None,
 }

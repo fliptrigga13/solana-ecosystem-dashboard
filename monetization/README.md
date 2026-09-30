@@ -59,7 +59,7 @@ public dashboard.
   (free+), `/v1/history?limit=N`, `/v1/anomalies` (pro+). Localhost-only by design;
   run behind a TLS reverse proxy.
 - `api/auth.py` + `api/mkkey.py`: API keys, SHA-256 hashes only in `keys.json`,
-  plaintext shown once at issuance. Tiers: free 60 req/day, pro 10k req/day,
+  plaintext shown once at issuance. Tiers: free 1k req/day, pro 10k req/day,
   enterprise unlimited.
 - `api/limits.py`: rolling-24h sliding window, persisted to `usage.json`.
 - 29/29 tests pass (`python3 api/test_api.py`). Full docs in `api/README.md`.

@@ -219,6 +219,11 @@ class APITestCase(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(body["count"], 8)
 
+    def test_free_quota_floor(self):
+        # Business decision 2026-09-30 (competitor intel): the free tier must
+        # allow a genuine evaluation — never regress to a token quota.
+        self.assertGreaterEqual(self.auth.TIER_QUOTAS["free"], 1000)
+
     # -- routing -------------------------------------------------------------
     def test_unknown_path_404(self):
         status, body, _ = self.server.dispatch("GET", "/nope", {})
