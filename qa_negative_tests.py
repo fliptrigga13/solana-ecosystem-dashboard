@@ -26,6 +26,7 @@ base = {
              "dex_volume_24h_billion": 2.9,
              "fees_24h_million": 14.4, "rev_24h_million": 5.7},
     "rwa": {"tokenized_assets_billion": 1.6},
+    "finality": {"finality_estimate_s": 12.8},
     "news": {"items": [{"source": "t", "title": "x", "link": "https://a.b",
                         "date": "2026-08-25"}], "feeds_ok": 1, "errors": []},
 }
@@ -38,6 +39,7 @@ gated_keys = [
     "defi.stablecoin_supply_billion", "defi.dex_volume_24h_billion",
     "defi.fees_24h_million", "defi.rev_24h_million",
     "rwa.tokenized_assets_billion",
+    "finality.finality_estimate_s",
 ]
 
 results = []
