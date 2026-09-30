@@ -51,6 +51,8 @@ METRIC_PATHS = {
     "jito_client_share_pct": ("validators", "client_share_pct", "jito-solana"),
     "jito_mev_tips_24h_usd": ("mev", "jito_mev_tips_24h_usd"),
     "jito_tip_floor_median_sol": ("mev", "jito_tip_floor_median_sol"),
+    "finality_estimate_s": ("finality", "finality_estimate_s"),
+    "finality_lag_slots": ("finality", "finality_lag_slots"),
 }
 
 limiter = limits.RateLimiter(os.path.join(API_DIR, "usage.json"))

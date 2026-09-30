@@ -107,6 +107,39 @@ class TestRules(unittest.TestCase):
         for rule_id, spec in rules.RULE_DEFS.items():
             self.assertIn(spec["metric"], anomaly.THRESHOLDS)
 
+    def test_finality_spike_fires_warning(self):
+        history = make_history(finality={"finality_estimate_s": 12.8})
+        snap = make_snapshot(finality={"finality_estimate_s": 30.0})  # +134%
+        anomalies = anomaly.detect_anomalies(snap, history)
+        events = rules.evaluate(snap, history, anomalies)
+        f = [e for e in events if e["rule_id"] == "finality_spike"]
+        self.assertEqual(len(f), 1)
+        self.assertEqual(f[0]["severity"], "WARNING")  # 134% < 2x100%
+        self.assertEqual(f[0]["metric"], "finality_estimate_s")
+        self.assertEqual(f[0]["title"], "Finality spike detected")
+
+    def test_finality_spike_fires_critical(self):
+        history = make_history(finality={"finality_estimate_s": 12.8})
+        snap = make_snapshot(finality={"finality_estimate_s": 45.0})  # +252%
+        anomalies = anomaly.detect_anomalies(snap, history)
+        events = rules.evaluate(snap, history, anomalies)
+        f = [e for e in events if e["rule_id"] == "finality_spike"]
+        self.assertEqual(len(f), 1)
+        self.assertEqual(f[0]["severity"], "CRITICAL")  # 252% >= 2x100%
+
+    def test_finality_drop_does_not_fire(self):
+        # Alpenglow transition: 12.8s -> 0.15s is a 98.8% *drop* — good news.
+        # It stays below the 100% anomaly threshold entirely, and the rule is
+        # spike-only by design, so nothing pages anyone.
+        history = make_history(finality={"finality_estimate_s": 12.8})
+        snap = make_snapshot(finality={"finality_estimate_s": 0.15})
+        anomalies = anomaly.detect_anomalies(snap, history)
+        self.assertFalse([a for a in anomalies
+                          if a.get("metric") == "finality_estimate_s"])
+        events = rules.evaluate(snap, history, anomalies)
+        self.assertFalse([e for e in events
+                          if e["rule_id"] == "finality_spike"])
+
 
 class TestFiltering(unittest.TestCase):
     def _event(self, rule_id="tps_drop", severity="WARNING"):

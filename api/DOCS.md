@@ -34,7 +34,8 @@ Metric names for `/v1/metrics`: `avg_tps_5h`, `max_tps_5h`, `epoch`,
 `rev_24h_million`, `avg_fee_per_txn_usd`, `tokenized_assets_billion`,
 `nakamoto_coefficient`, `top10_stake_share_pct`, `native_apy_estimate_pct`,
 `avg_validator_apy_pct`, `avg_validator_commission_pct`, `jito_client_share_pct`,
-`jito_mev_tips_24h_usd`, `jito_tip_floor_median_sol`.
+`jito_mev_tips_24h_usd`, `jito_tip_floor_median_sol`, `finality_estimate_s`,
+`finality_lag_slots`.
 
 Status codes: `200` ok · `400` bad parameter · `401` missing/invalid/revoked key ·
 `403` tier insufficient · `404` unknown path · `405` non-GET ·

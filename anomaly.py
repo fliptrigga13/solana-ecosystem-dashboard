@@ -27,6 +27,12 @@ THRESHOLDS = {
     "nakamoto_coefficient": 0.10,       # 10% Nakamoto move (~2 validators)
     "avg_validator_apy_pct": 0.15,      # 15% APY move
     "jito_mev_tips_24h_usd": 0.50,      # 50% MEV revenue move
+    # finality: a 100% increase over baseline (e.g. 12.8s -> ~26s) means
+    # slots are seriously failing to finalize — real consensus degradation.
+    # Drop direction is filtered at the alert-rule layer (see
+    # alerts/rules.py): the Alpenglow transition (12.8s -> ~0.15s) is a
+    # 99% *drop* and good news, not an anomaly to page anyone about.
+    "finality_estimate_s": 1.0,
 }
 
 
@@ -55,6 +61,7 @@ def _flat_metrics(snap: dict) -> dict:
     n, e = snap.get("network", {}), snap.get("economic", {})
     d, r = snap.get("defi", {}), snap.get("rwa", {})
     val_sec, mev_sec = snap.get("validators", {}), snap.get("mev", {})
+    fin = snap.get("finality", {})
     return {
         "avg_tps_5h": n.get("avg_tps_5h"),
         "validators_delinquent": n.get("validators_delinquent"),
@@ -68,6 +75,7 @@ def _flat_metrics(snap: dict) -> dict:
         "nakamoto_coefficient": n.get("nakamoto_coefficient"),
         "avg_validator_apy_pct": val_sec.get("avg_apy_pct"),
         "jito_mev_tips_24h_usd": mev_sec.get("jito_mev_tips_24h_usd"),
+        "finality_estimate_s": fin.get("finality_estimate_s"),
     }
 
 

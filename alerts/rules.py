@@ -24,6 +24,10 @@ RULE_DEFS = {
     "dex_volume_spike": {"metric": "dex_volume_24h_billion",   "directions": ("spike",)},
     "fee_spike":        {"metric": "fees_24h_million",         "directions": ("spike",)},
     "rwa_move":         {"metric": "tokenized_assets_billion", "directions": ("drop", "spike")},
+    # Spike-only by design: a finality *drop* is the Alpenglow upgrade
+    # working (12.8s -> ~0.15s), not something to alert on. A spike means
+    # the chain is failing to finalize — page-worthy.
+    "finality_spike":   {"metric": "finality_estimate_s",    "directions": ("spike",)},
 }
 
 TITLES = {
@@ -35,6 +39,7 @@ TITLES = {
     "dex_volume_spike": "DEX volume spike",
     "fee_spike": "Fee spike",
     "rwa_move": "Tokenized-assets (RWA) move",
+    "finality_spike": "Finality spike detected",
     "epoch_ending": "Epoch ending soon",
 }
 
