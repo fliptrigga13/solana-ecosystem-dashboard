@@ -1,6 +1,6 @@
 {
   "_comment": "Sponsorship configuration for the Solana Ecosystem Dashboard. Featured slots are ALWAYS rendered with a visible 'Sponsored' disclosure badge. Prices set by owner 2026-09-27; change anytime. Example entries have enabled=false; set enabled=true to activate.",
-  "contact_email": "TODO@yourdomain.com",
+  "contact_email": "Flipperspectives@gmail.com",
   "pricing": {
     "note": "Featured slots never affect rankings or data. Placement is display-only, above the organic table, always labeled Sponsored. Max 3 featured slots per category — scarcity is public.",
     "project_featured_usd_per_month": 250,
