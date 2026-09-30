@@ -7,6 +7,7 @@ import io_safety
 snap = json.load(open("data.json"))
 n, e = snap["network"], snap["economic"]
 d, r = snap.get("defi", {}), snap.get("rwa", {})
+fin = snap.get("finality", {})
 from collector import UPCOMING_UPDATES
 
 lines = [
@@ -17,6 +18,12 @@ lines = [
     f"- **Slot:** {n['slot']:,} · **Block height:** {n['block_height']:,}",
     f"- **Epoch:** {n['epoch']} ({n['epoch_progress_pct']}% complete)",
     f"- **Avg TPS (5h):** {n['avg_tps_5h']:,.0f} · **Peak:** {n['max_tps_5h']:,.0f}",
+]
+if isinstance(fin.get("finality_estimate_s"), (int, float)):
+    lines.append(
+        f"- **Finality (measured):** {fin['finality_estimate_s']}s "
+        f"({fin.get('finality_lag_slots', '?')} slots lag)")
+lines += [
     "",
     "## Validators",
     f"- **Active:** {n['validators_active']:,} · **Delinquent:** {n['validators_delinquent']}",
