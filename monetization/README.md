@@ -48,7 +48,7 @@ public dashboard.
 - `alerts/check.py`: hourly CLI. Per-subscriber rule + severity filtering, per-tier
   cooldown dedupe via `alerts/sent.json` (free 7d / pro 1h / team 15m).
 - `alerts/tiers.md`: Free / Pro / Team definitions.
-- 41/41 tests pass (`python3 alerts/test_alerts.py`).
+- 42/42 tests pass (`python3 alerts/test_alerts.py`).
 - **Owner TODO:** prices in `tiers.md`; `TELEGRAM_BOT_TOKEN`; `SMTP_*` env vars;
   cron schedule for `check.py`; real subscribers in `subscribers.json`;
   billing/signup flow (Stripe).
