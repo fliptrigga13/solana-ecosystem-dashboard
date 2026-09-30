@@ -38,6 +38,7 @@ def make_snapshot(i):
                  "dex_volume_24h_billion": 3.0, "dex_volume_change_24h_pct": 10.0},
         "rwa": {"tokenized_assets_billion": 1.78,
                 "rwa_top": {"Hastra": 0.149}},
+        "finality": {"finality_estimate_s": 12.8, "finality_lag_slots": 32},
         "news": {"items": [], "feeds_ok": 1, "errors": []},
     }
 
@@ -202,6 +203,19 @@ class APITestCase(unittest.TestCase):
     def test_metrics_skips_sparse_snapshots(self):
         # avg_fee_per_txn_usd only exists in the 8 full snapshots
         status, body, _ = self.call("/v1/metrics?name=avg_fee_per_txn_usd")
+        self.assertEqual(status, 200)
+        self.assertEqual(body["count"], 8)
+
+    def test_metrics_finality_estimate(self):
+        # finality section only exists in the 8 full snapshots (sparse
+        # old-format lines are skipped, not treated as zero)
+        status, body, _ = self.call("/v1/metrics?name=finality_estimate_s")
+        self.assertEqual(status, 200)
+        self.assertEqual(body["count"], 8)
+        self.assertTrue(all(p["v"] == 12.8 for p in body["points"]))
+
+    def test_metrics_finality_lag_slots(self):
+        status, body, _ = self.call("/v1/metrics?name=finality_lag_slots")
         self.assertEqual(status, 200)
         self.assertEqual(body["count"], 8)
 

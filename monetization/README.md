@@ -38,15 +38,17 @@ public dashboard.
 
 ## 2. Alert subscriptions — `alerts/`
 
-- `alerts/rules.py`: 9 rules on top of `anomaly.py` (tps_drop, delinquent_spike,
+- `alerts/rules.py`: 10 rules on top of `anomaly.py` (tps_drop, delinquent_spike,
   price_move, tvl_move, stablecoin_move, dex_volume_spike, fee_spike, rwa_move,
-  epoch_ending). Thresholds reused from `anomaly.THRESHOLDS` — drift breaks tests.
+  finality_spike, epoch_ending). Thresholds reused from `anomaly.THRESHOLDS` — drift breaks tests.
+  `finality_spike` is spike-only by design: a finality *drop* is the Alpenglow
+  upgrade working (12.8s → ~0.15s), not a page-worthy event.
 - `alerts/deliver.py`: Telegram / email / webhook backends. Never raise; failures
   return False and are logged.
 - `alerts/check.py`: hourly CLI. Per-subscriber rule + severity filtering, per-tier
   cooldown dedupe via `alerts/sent.json` (free 7d / pro 1h / team 15m).
 - `alerts/tiers.md`: Free / Pro / Team definitions.
-- 26/26 tests pass (`python3 alerts/test_alerts.py`).
+- 42/42 tests pass (`python3 alerts/test_alerts.py`).
 - **Owner TODO:** prices in `tiers.md`; `TELEGRAM_BOT_TOKEN`; `SMTP_*` env vars;
   cron schedule for `check.py`; real subscribers in `subscribers.json`;
   billing/signup flow (Stripe).
@@ -60,7 +62,7 @@ public dashboard.
   plaintext shown once at issuance. Tiers: free 60 req/day, pro 10k req/day,
   enterprise unlimited.
 - `api/limits.py`: rolling-24h sliding window, persisted to `usage.json`.
-- 25/25 tests pass (`python3 api/test_api.py`). Full docs in `api/README.md`.
+- 29/29 tests pass (`python3 api/test_api.py`). Full docs in `api/README.md`.
 - **Owner TODO:** pro/enterprise prices; hosting + TLS; key distribution process;
   Stripe billing webhook for auto issue/revoke.
 
