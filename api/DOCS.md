@@ -45,7 +45,7 @@ Status codes: `200` ok · `400` bad parameter · `401` missing/invalid/revoked k
 
 | Tier | Price | Endpoints | Quota (rolling 24h) | Overage |
 |---|---|---|---|---|
-| free | $0 | snapshot, metrics | 60 requests | hard cap — upgrade for more |
+| free | $0 | snapshot, metrics | 1,000 requests | hard cap — upgrade for more |
 | pro | **$49/mo** | everything | 10,000 requests | $0.15 per 1,000 requests beyond quota, billed monthly |
 | enterprise | **$499/mo** | everything | unlimited | n/a |
 
@@ -54,6 +54,12 @@ metered overage is *planned but not yet enforced* — today the pro quota is a
 hard cap like free. When metering ships: no mid-month throttling without
 notice; email/webhook alerts at 80% and 100% of quota. Enterprise is flat
 unlimited.
+
+Positioning: this is a **curated Solana ecosystem data API** (network stats,
+validator economics, DeFi/RWA depth, MEV, finality, anomalies) — not raw RPC
+throughput. Compare it against data APIs (Birdeye-style), not node providers:
+the quotas are sized for enriched requests, and each response carries
+pre-computed metrics no raw RPC returns.
 
 ## Key lifecycle
 

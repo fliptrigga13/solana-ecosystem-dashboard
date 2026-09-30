@@ -54,7 +54,7 @@ is shown exactly once at issuance; deliver it to the customer out of band.
 
 | Tier | Price | Endpoints | Rate limit |
 |---|---|---|---|
-| free | $0 | snapshot, metrics | 60 req / rolling 24h |
+| free | $0 | snapshot, metrics | 1,000 req / rolling 24h |
 | pro | **$49/mo** | everything | 10,000 req / rolling 24h |
 | enterprise | **$499/mo** | everything | unlimited |
 
