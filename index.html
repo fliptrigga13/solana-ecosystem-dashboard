@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Solana Ecosystem Dashboard</title>
-<meta name="description" content="Hourly-updated Solana network stats: TPS, validators, Nakamoto coefficient, validator APY, client diversity, SOL price, DeFi TVL, stablecoins, DEX volume by venue, Jito MEV, RWA. Free API + alerts.">
+<meta name="description" content="Hourly-updated Solana network stats: TPS, finality, validators, Nakamoto coefficient, validator APY, client diversity, SOL price, DeFi TVL, stablecoins, DEX volume by venue, Jito MEV, RWA. Free API + alerts.">
 <link rel="canonical" href="https://fliptrigga13.github.io/solana-ecosystem-dashboard/">
 <meta property="og:title" content="Solana Ecosystem Dashboard">
 <meta property="og:description" content="Hourly-updated Solana network stats: TPS, Nakamoto coefficient, validator APY, DEX venues, Jito MEV, stablecoin issuers, RWA. Free API + alerts.">
@@ -43,6 +43,7 @@
   <div class="card stat"><div class="v">4,470.0</div><div class="l">Avg TPS (5h)</div></div>
   <div class="card stat"><div class="v">5,113.0</div><div class="l">Peak TPS</div></div>
   <div class="card stat"><div class="v">20.02%</div><div class="l">Epoch 1032 progress</div></div>
+  <div class="card stat"><div class="v">—</div><div class="l">Finality (measured)</div></div>
   <div class="card stat"><div class="v">$100.2</div><div class="l">SOL price (24h: -3.35%)</div></div>
   <div class="card stat"><div class="v">$5.813B</div><div class="l">DeFi TVL</div></div>
   <div class="card stat"><div class="v">$16.492B</div><div class="l">Stablecoin supply</div></div>
@@ -84,7 +85,7 @@
 <div class="card ad-card" style="margin-top:16px;"><h3>Advertise on this dashboard</h3>
 <div style="font-size:.85rem;color:var(--muted);">Featured validator and project placements available.
 Slots are display-only, never affect rankings or data, and are always labeled <span class="badge-sponsored">Sponsored</span>.
-Contact: TODO@yourdomain.com</div></div>
+Contact: Flipperspectives@gmail.com</div></div>
 <div class="card" style="margin-top:16px;"><h3>Builders</h3>
 <div style="font-size:.85rem;color:var(--muted);">
 &#128241; <b>Free alerts</b> — hourly Telegram / email / webhook digests on TPS drops, price moves, delinquency spikes.
@@ -121,7 +122,7 @@ Object.entries(data.rwa?.rwa_top || {}).forEach(([name, tvl]) => {
   rt.insertAdjacentHTML('beforeend', `<tr><td>${name}${badge}</td><td>$${tvl.toLocaleString()}</td></tr>`);
 });
 const up = document.getElementById('upgrades');
-[{"name": "Alpenglow", "detail": "Votor consensus + Rotor propagation; finality ~12.8s \u2192 ~150ms", "status": "Mainnet target Q3 2026 \u00b7 BLS/VAT prereq live since Jul 22, 2026", "url": "https://solana.com/upgrades/alpenglow"}, {"name": "SIMD-0525 \u00b7 Reduced Slot Times", "detail": "Slot time 400ms \u2192 200ms in four feature-gated steps", "status": "Step 1 activated on testnet Aug 5, 2026", "url": "https://solana.com/upgrades/reduced-slot-times"}].forEach(u => {
+[{"name": "Alpenglow", "detail": "Votor consensus + Rotor propagation; finality ~12.8s \u2192 ~150ms", "status": "Devnet + testnet live Sep 25, 2026 \u00b7 no mainnet date yet", "url": "https://solana.com/upgrades/alpenglow"}, {"name": "SIMD-0525 \u00b7 Reduced Slot Times", "detail": "Slot time 400ms \u2192 200ms in four feature-gated steps", "status": "Step 1 activated on testnet Aug 5, 2026", "url": "https://solana.com/upgrades/reduced-slot-times"}].forEach(u => {
   up.insertAdjacentHTML('beforeend',
     `<div style="margin-bottom:12px;"><a href="${u.url}" target="_blank" rel="noopener" style="color:#14F195;text-decoration:none;font-weight:600;">${u.name}</a>
      <div style="font-size:.8rem;color:#e2e8f0;margin-top:2px;">${u.detail}</div>
