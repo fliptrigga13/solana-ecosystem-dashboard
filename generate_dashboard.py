@@ -135,8 +135,9 @@ __FEATURED_VALIDATORS__
 </div>
 <div class="card" style="margin-top:16px;"><h3>Ecosystem &amp; Community News</h3><div id="news"></div></div>
 <div class="card ad-card" style="margin-top:16px;"><h3>Advertise on this dashboard</h3>
-<div style="font-size:.85rem;color:var(--muted);">Featured validator and project placements available.
+<div style="font-size:.85rem;color:var(--muted);">Featured validator ($150/mo) and project ($250/mo) placements available.
 Slots are display-only, never affect rankings or data, and are always labeled <span class="badge-sponsored">Sponsored</span>.
+<a href="sponsors.html" style="color:var(--green);font-weight:700;">See rates &amp; claim a slot →</a><br>
 Contact: __CONTACT_EMAIL__</div></div>
 <div class="card" style="margin-top:16px;"><h3>Builders</h3>
 <div style="font-size:.85rem;color:var(--muted);">
